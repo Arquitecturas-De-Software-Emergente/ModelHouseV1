@@ -1,57 +1,106 @@
 <template>
-    <div class="business-detail" v-if="business">
-      <h1>{{ business.name }}</h1>
+  <div class="business-detail" v-if="business">
+    <div class="business-summary">
       <div class="business-logo">
         <img :src="business.logo" alt="Logo de la empresa" />
       </div>
-      <p>{{ business.description }}</p>
       <div class="business-rating">
-        <p>Rating: {{ business.review }}/ 5 estrellas</p>
+        <Rating-v v-model="business.review" :cancel="false" :stars="5"></Rating-v>
       </div>
-      <div class="business-location">
-        <i class="fas fa-map-marker"></i>
-        <p>{{ business.address }}</p>
+      <h1>{{ business.name }}</h1>
+      <p>Teléfono: {{ business.phone }}</p>
+      <p>Categoría: {{ business.category }}</p>
+      <router-link to ="/request-form">
+      <button class="send-button">Enviar</button>
+      </router-link>
+    </div>
+    <div class="business-details">
+      <h2>About Us</h2>
+      <p>{{ business.aboutUs }}</p>
+      <h2>Especialización</h2>
+      <p>{{ business.especialization }}</p>
+      <h2>Projects</h2>
+      <div class="project-carousel">
+        <!-- Agrega un carrusel de imágenes aquí -->
       </div>
     </div>
-  </template>
-  
-  <script>
-  import { BusinessDetailService } from "../service/business-detail.service";
-  export default {
-    name: "Business-Conent-Page",
-    data() {
-      return {
-        business: null, 
-      };
-    },
-    created() {
-    const businessService = new BusinessDetailService(); 
-    businessService.getBusinessByID(this.$route.params.id).then(response => {
-      this.business = response.data;
-    }).catch(error => {
-      console.error("Error al obtener los detalles del negocio", error);
-    });
-  },
+  </div>
+</template>
 
-  };
-  </script>
-  
-  <style scoped>
-  /* Agrega estilos CSS para personalizar la apariencia del detalle del negocio según tus necesidades */
-  .business-detail {
-    /* Estilos para el contenedor principal */
+<script>
+import { BusinessDetailService } from '../service/business-detail.service'
+export default {
+  name: 'Business-Conent-Page',
+  data() {
+    return {
+      business: null
+    }
+  },
+  created() {
+    const businessService = new BusinessDetailService()
+    businessService
+      .getBusinessByID(this.$route.params.id)
+      .then((response) => {
+        this.business = response.data
+      })
+      .catch((error) => {
+        console.error('Error al obtener los detalles del negocio', error)
+      })
   }
-  
-  .business-logo {
-    /* Estilos para el logo de la empresa */
-  }
-  
-  .business-rating {
-    /* Estilos para mostrar la calificación del negocio */
-  }
-  
-  .business-location {
-    /* Estilos para mostrar la ubicación del negocio */
-  }
-  </style>
-  
+}
+</script>
+
+<style scoped>
+.business-detail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.business-summary {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.business-logo img {
+  max-width: 150px;
+  max-height: 150px;
+  border: 2px solid #02aa8b;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.business-rating {
+  margin-bottom: 10px;
+}
+
+.send-button {
+  background-color: #02aa8b;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.business-details {
+  flex: 2;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.project-carousel {
+  /* Agrega estilos para el carrusel de imágenes aquí */
+}
+
+/* Ajusta los estilos del carrusel de imágenes según tu elección */
+</style>
