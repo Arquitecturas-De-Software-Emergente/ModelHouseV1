@@ -10,7 +10,7 @@
         </div>
         <div class="form-group">
           <label for="description">Description</label>
-          <Textarea-v class="custom-input" v-model="description" rows="5" cols="30" placeholder="Description"/>
+          <Textarea-v class="custom-input" autoResize v-model="description" rows="5" cols="30" placeholder="Description"/>
         </div>
         <div class="form-group">
           <!-- Agrega más campos de formulario aquí -->
@@ -30,7 +30,7 @@
     name: "Proposal-Form-Page",
     data() {
       return {
-        value3: ""
+        
       };
     }
   };
