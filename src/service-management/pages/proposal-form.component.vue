@@ -13,7 +13,7 @@
           <Textarea-v class="custom-input" autoResize v-model="description" rows="5" cols="30" placeholder="Description"/>
         </div>
         <div class="form-group">
-          <!-- Agrega más campos de formulario aquí -->
+            <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @upload="onUpload" :auto="true" chooseLabel="Add File" />
         </div>
         <div class="form-group">
           <!-- Agrega más campos de formulario aquí -->
