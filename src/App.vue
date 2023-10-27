@@ -4,6 +4,7 @@
 
 <template>
   <SideBar/>
+  <router-view></router-view>
 </template>
 
 <style scoped>
