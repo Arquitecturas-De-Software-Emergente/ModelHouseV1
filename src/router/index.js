@@ -6,6 +6,8 @@ import signIn from "@/identity-and-access-management/pages/sign-in.component.vue
 import BusinessContent from "@/service-management/pages/business-content.component.vue";
 import RequestForm from "@/service-management/pages/request-form.component.vue";
 import Request from "@/service-management/pages/request.component.vue";
+import ProposalForm from "@/service-management/pages/proposal-form.component.vue";
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,11 +42,15 @@ const router = createRouter({
         component: RequestForm,
     },
     {
+        path: "/proposal-form",
+        name: "proposal-form",
+        component: ProposalForm,
+    },
+    {
         path: "/request/:id",
         name: "request-list",
         component: Request,
     }
-    
     
     ],
 });
