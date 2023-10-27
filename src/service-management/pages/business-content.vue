@@ -3,12 +3,12 @@
         HELLO 
     </div>
 </template>
-
 <script>
 export default {
-    name: "Proposal-Page",
+    name: "Business-Content-Page",
     data(){
         return{
+
         }
     },
 }

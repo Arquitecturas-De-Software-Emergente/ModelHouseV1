@@ -1,33 +1,21 @@
 <template>
-    <section class="introduction">
-        <div class="containerB">
-            <div class="boxB col1">
-                <img src="../../assets/banner.png" class="imgBanner" alt="Remodeling a house view on a laptop">
-            </div>
-            <div class="boxC col2">
-                <h1>Have a comfortable <span class="green">life!</span> </h1>
-                <p id="txtBanner">
-                    Find the best experts to remodel the house of your dreams in a fast and secure way.
-                </p>
-                <div>
-                    <a href="" class="btnBanner">Most populars</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
+  
     <div class="center-part">
-    
+      <Business-List-Page />
     </div>
-
+  
     <div class="final-part-footer">
-
+      <!-- Contenido de la parte inferior del pie de página si es necesario -->
     </div>
-</template>
+  </template>
 
 <script>
+import BusinessListPage from "@/service-management/pages/business-list.component.vue"; 
 export default {
     name: "Home-Page",
+    components: {
+    BusinessListPage, 
+  },
     data(){
         return{
 
