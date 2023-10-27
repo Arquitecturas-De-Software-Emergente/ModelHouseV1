@@ -4,7 +4,7 @@
             <!-- Logo de la aplicación -->
             <div>
                 <router-link to="/" class="logo-container">
-                    <img src="src\assets\logo.png" class="logo" alt="ModelHouse">
+                    <img src="../../assets/logo.png" class="logo" alt="ModelHouse">
                 </router-link>
             </div>
             <!-- Contenido de la barra lateral -->

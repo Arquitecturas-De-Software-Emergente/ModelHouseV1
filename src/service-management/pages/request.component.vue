@@ -6,9 +6,8 @@
   header="REQUESTS"
 >
   <div>
-    <h1>Pending Requests</h1>
     <div class="request-cards">
-      <div v-for="request in requests" :key="request.id" class="request-card">
+      <div v-for="request in pendingRequests" :key="request.id" class="request-card">
         <div class="card">
           <div class="card-body">
             <p>{{ request.description }}</p>
@@ -45,6 +44,27 @@
     >
 
     </TabPanel>
+    <!--    FIFTH PANEL-->
+    <TabPanel
+      style="background-color: green; padding: 10px 15px"
+      header="CANCELED"
+    >
+    <div>
+    <div class="request-cards">
+      <div v-for="request in canceledRequests" :key="request.id" class="request-card">
+        <div class="card">
+          <div class="card-body">
+            <p>{{ request.description }}</p>
+            <p>Address:   {{ request.location }}</p>
+          </div>
+        </div>
+        <div class="button-container">
+          <h3 class="canceled-label">Canceled</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+    </TabPanel>
   </TabView>
 
 </template>
@@ -56,20 +76,24 @@ export default {
   name: 'Request-Page',
   data() {
     return {
-      requests: []
+      requests: [],
+      canceledRequests: [],
+      pendingRequests: [],
     }
   },
   created() {
     const storedRequests = localStorage.getItem('requests')
-    if (storedRequests) {
+  
+    if (storedRequests==null) {
       this.requests = JSON.parse(storedRequests)
     } else {
-      this.loadRequests()
+      this.loadRequestsPending(),
+      this.loadRequestsCanceled()
     }
   },
 
   methods: {
-    loadRequests() {
+    loadRequestsPending() {
       const requestService = new RequestService()
       const userProfileId = 1
       const status = 'Pendiente'
@@ -78,6 +102,29 @@ export default {
         .then((response) => {
           this.requests = response.data
           localStorage.setItem('requests', JSON.stringify(this.requests))
+          this.pendingRequests = this.requests.filter(request => request.status == 'Pendiente')
+          console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes pendientes:', this.pendingRequests)
+
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    },
+
+    loadRequestsCanceled() {
+      const requestService = new RequestService()
+      const userProfileId = 1
+      const status = 'Cancelado'
+      requestService
+        .getRequestsByUserId(userProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          this.canceledRequests = this.requests.filter(request => request.status == 'Cancelado'),
+          console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes canceladas:', this.canceledRequests)
+
         })
         .catch((error) => {
           console.error('Error al obtener las solicitudes:', error)
@@ -95,23 +142,25 @@ export default {
       this.changeRequestStatus(request.id, { status: 'Cancelado' });
     },
 
-changeRequestStatus(requestId, data) {
-  const requestService = new RequestService();
-  requestService.changeRequestStatus(requestId, data)
-    .then(() => {
-      if (data.status === 'Aceptado') {
-        const message = "Cambio de estado a Aceptado exitoso.";
-        window.alert(message);
-      } else {
-        const message = "Cambio de estado a Cancelado exitoso.";
-        window.alert(message);
-      }
-      this.loadRequests();
-    })
-    .catch(error => {
-      console.error('Error al cambiar el estado de la solicitud:', error);
-    });
-}
+    changeRequestStatus(requestId, data) {
+      const requestService = new RequestService();
+      requestService.changeRequestStatus(requestId, data)
+        .then(() => {
+          if(data.status === 'Aceptado'){
+            const message = "Cambio de estado a Aceptado exitoso.";
+      window.alert(message);
+          }
+          else{
+            const message = "Cambio de estado a Cancelado exitoso.";
+            window.alert(message);
+          }
+          window.location.reload();
+        })
+        .catch(error => {
+          
+          console.error('Error al cambiar el estado de la solicitud:', error);
+        });
+    }
 
   }
 }
@@ -196,4 +245,15 @@ changeRequestStatus(requestId, data) {
 .reject-button:hover {
   background-color: #d32f2f;
 }
+
+.canceled-label {
+  color: #d32f2f; 
+  padding: 10px 20px;
+  margin: 10px; 
+  display: inline-block;
+  border-radius: 5px; 
+  text-align: start; 
+  font-size: 18px; 
+}
+
 </style>
