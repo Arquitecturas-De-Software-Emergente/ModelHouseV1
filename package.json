@@ -15,12 +15,10 @@
     "axios": "^1.4.0",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
-    "primevue": "^3.26.1",
+    "primevue": "^3.38.1",
     "stripe": "^12.10.0",
     "vee-validate": "^4.9.5",
-    "vue": "^3.3.4",
-    "vue-router": "^4.2.5",
-    "vue-star-rating": "^1.7.0",
+    "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
