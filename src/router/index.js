@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/public/pages/home.component.vue";
 import signUp from "@/identity-and-access-management/pages/sign-up.component.vue";
 import signIn from "@/identity-and-access-management/pages/sign-in.component.vue";
+import BusinessContent from "@/service-management/pages/business-content.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,12 @@ const router = createRouter({
         name: "sign-in",
         component: signIn,
     },
+    {
+        path: "/business_profile/:id",
+        name: "business-content",
+        component: BusinessContent,
+    }
+
     
     ],
 });
