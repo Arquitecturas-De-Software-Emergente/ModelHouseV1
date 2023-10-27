@@ -1,4 +1,5 @@
 <template>
+  <div class="request-view-container">
     <TabView v-model:activeIndex="active" style="margin: 0px 50px 0px 50px">
     <!--    FIRST PANEL-->
     <TabPanel
@@ -45,7 +46,31 @@
 
     </TabPanel>
     <!--    FIFTH PANEL-->
+
     <TabPanel
+        style="background-color: #f5f5f5; padding: 1rem"
+        header="CANCELED"
+      >
+        <div class="request-cards">
+          <div v-for="request in canceledRequests" :key="request.id" class="request-card">
+            <div class="card">
+              <div class="card-body">
+                <p>{{ request.description }}</p>
+                <p>Address: {{ request.location }}</p>
+              </div>
+            </div>
+            <div class="button-container">
+              <h3 class="canceled-label">Canceled</h3>
+            </div>
+          </div>
+        </div>
+      </TabPanel>
+    </TabView>
+  </div>
+</template>
+
+
+    <!-- <TabPanel
       style="background-color: green; padding: 10px 15px"
       header="CANCELED"
     >
@@ -66,8 +91,8 @@
   </div>
     </TabPanel>
   </TabView>
-
-</template>
+</div>
+</template> -->
 
 <script>
 import { RequestService } from '../service/request.service'
@@ -167,10 +192,18 @@ export default {
 </script>
 
 <style scoped>
+.request-view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .request-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: space-around; /* Distribuir las tarjetas de manera uniforme */
 }
 
 .request-card {
@@ -182,6 +215,8 @@ export default {
   border-radius: 5px;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 .card {
@@ -189,6 +224,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
 }
 
 .card-header {
@@ -198,6 +234,7 @@ export default {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   font-weight: bold;
+  text-align: center;
 }
 
 .card-body {
@@ -205,12 +242,14 @@ export default {
 }
 
 .button-container {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
 }
 
 /* Estilo para el botón "Accept" */
-.accept-button {
+.accept-button,
+.reject-button {
   background-color: #02aa8b;
   color: white;
   border: none;
@@ -221,25 +260,17 @@ export default {
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
-  margin-right: 10px;
+  margin: 0 10px;
 }
 
-.accept-button:hover {
-  background-color: #02aa8b;
+.accept-button:hover,
+.reject-button:hover {
+  background-color: #048071;
 }
 
 /* Estilo para el botón "Reject" */
 .reject-button {
   background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .reject-button:hover {
@@ -247,13 +278,12 @@ export default {
 }
 
 .canceled-label {
-  color: #d32f2f; 
+  color: #d32f2f;
   padding: 10px 20px;
-  margin: 10px; 
+  margin: 10px;
   display: inline-block;
-  border-radius: 5px; 
-  text-align: start; 
-  font-size: 18px; 
+  border-radius: 5px;
+  text-align: start;
+  font-size: 18px;
 }
-
 </style>

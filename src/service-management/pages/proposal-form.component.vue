@@ -12,31 +12,69 @@
           <label for="description">Description</label>
           <Textarea-v class="custom-input" autoResize v-model="description" rows="5" cols="30" placeholder="Description"/>
         </div>
-        <div class="form-group">
-            <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @upload="onUpload" :auto="true" chooseLabel="Add File" />
+        <div class="form-group-2">
+          <input class="file-form" type="file" name="demo[]" accept="*/*" id="fileUpload" style="display: none;" multiple>
+          <label for="fileUpload" class="file-upload-label">Add File <i class="pi pi-file"></i>
+          </label>
         </div>
-        <div class="form-group">
-          <!-- Agrega más campos de formulario aquí -->
+        <div class="form-group-2">
+          <label for="activities">Activities</label>
+          <div v-for="(activity, index) in activities" :key="index" class="input-with-button">
+            <InputText class="custom-input-2" type="text" v-model="activities[index]" placeholder="Activity" />
+            <button class="remove-button" @click="removeActivity(index)"><i class="pi pi-trash"></i></button>
+          </div>
+          <button class="add-button" type="button" @click="addActivity"><i class="pi pi-plus-circle"></i></button> <!-- Agrega type="button" aquí -->
+          <!-- <InputText class="custom-input-2" type="text" v-model="activities" placeholder="Activities"/> -->
         </div>
-        <div class="form-group">
-          <!-- Agrega más campos de formulario aquí -->
+        <div class="form-group-2">
+          <label for ="resources">Resources</label>
+          <div v-for="(resource, index) in resources" :key="index" class="input-with-button">
+            <InputText class="custom-input-2" type="text" v-model="resources[index]" placeholder="Resource" />
+            <input class="quantity-form" type="number" v-model="quantityForm" step="any" min="0" max="999999">
+            <button class="remove-button" @click="removeResource(index)"><i class="pi pi-trash"></i></button>
+          </div>
+          <button class="add-button" type="button" @click="addResource"><i class="pi pi-plus-circle"></i>
+          </button>
+        </div>
+        <div class="submit-button">
+          <button class="submit-button-form">
+            <span class="submit-button-label">Send</span>
+          </button>
         </div>
       </form>
     </div>
   </template>
   
-  <script>
+<script>
   export default {
     name: "Proposal-Form-Page",
     data() {
       return {
-        
+        title: "",
+        description: "",
+        quantityForm: 0,
+        activities: [""],
+        resources: [""],
       };
-    }
+    },
+    methods: {
+      addActivity() {
+        this.activities.push(""); // Agregar un nuevo campo vacío para Activities
+      },
+      removeActivity(index) {
+        this.activities.splice(index, 1); // Eliminar el campo de Activities en el índice especificado
+      },
+      addResource() {
+        this.resources.push(""); // Agregar un nuevo campo vacío para Resources
+      },
+      removeResource(index) {
+        this.resources.splice(index, 1); // Eliminar el campo de Resources en el índice especificado
+      },
+    },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .proposal-container {
     display: flex;
     flex-direction: column;
@@ -70,8 +108,87 @@
     font-size: 18px;
     margin-bottom: 10px;
   }
+
+  .form-group-2 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
   
+  .form-group-2 label {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
   .custom-input {
     width: 100%; /* El InputText ocupará todo el ancho del formulario */
   }
-  </style>
+  .custom-input-2{
+    background-color: #E6E6E6;
+    width: 100%;
+    border: none;
+  }
+  .remove-button{
+    border: none;
+    background-color: #E6E6E6;
+    border-radius: 5px;
+    padding: 12px;
+    margin: 0 0 0 10px;
+    cursor: pointer
+  }
+  .add-button {
+    cursor: pointer;
+    background-color: #E6E6E6;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    height: 45px;
+    margin: 0 0 10px;
+  }
+  .quantity-form {
+    width: 30%;
+    margin: 0 0 0 10px;
+    border-radius: 5px;
+    padding: 12px;
+    border: none;
+    background-color: #E6E6E6;
+  }
+  .input-with-button {
+    display: flex;
+    align-items: center;
+    padding: 0 0 10px 0;
+  }
+  .file-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;;
+  }
+  .file-upload-label{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E6E6E6;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    margin: 10px 0; 
+  }
+  .file-upload-label i {
+    margin: 0 0 0 10px;
+  }
+
+  .submit-button{
+    display: flex;
+    justify-content: center;
+  }
+  .submit-button-form{
+    cursor: pointer;
+    background-color: #02AA8B;
+    color: white;
+    font-size: 24px;
+    border: none;
+    border-radius: 25px;
+    height: 45px;
+    width: 80%;
+  }
+</style>
