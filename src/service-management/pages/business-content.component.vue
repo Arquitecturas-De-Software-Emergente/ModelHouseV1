@@ -2,16 +2,16 @@
   <div class="business-detail" v-if="business">
     <div class="business-summary">
       <div class="business-logo">
-        <img :src="business.logo" alt="Logo de la empresa" />
+        <img :src="business.image" alt="Logo de la empresa" />
       </div>
       <div class="business-rating">
-        <Rating-v v-model="business.review" :cancel="false" :stars="5"></Rating-v>
-      </div>
+    <Rating-v v-model="business.review" :cancel="false" :stars="5"></Rating-v>
+  </div>
       <h1>{{ business.name }}</h1>
       <p>Teléfono: {{ business.phone }}</p>
       <p>Categoría: {{ business.category }}</p>
       <router-link to ="/request-form">
-      <button class="send-button">Enviar</button>
+      <button class="send-button">Send Request</button>
       </router-link>
     </div>
     <div class="business-details">
@@ -63,15 +63,16 @@ export default {
 }
 
 .business-logo img {
-  max-width: 150px;
-  max-height: 150px;
+  max-width: 450px;
   border: 2px solid #02aa8b;
-  border-radius: 50%;
+  border-radius: 5%;
   margin-bottom: 10px;
 }
 
 .business-rating {
   margin-bottom: 10px;
+  font-size: 24px;
+  color: #FDB813;
 }
 
 .send-button {

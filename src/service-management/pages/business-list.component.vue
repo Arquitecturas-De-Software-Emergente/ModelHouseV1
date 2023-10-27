@@ -39,17 +39,18 @@
           </div>
           <p>{{ business.description }}</p>
         </div>
+        <div class="business-card__button">
+          <router-link :to="{ name: 'business-content', params: { id: business.id } }">
+            Read More
+          </router-link>
+        </div>
       </div>
       <div class="business-card__column">
         <div class="business-card__location">
           <!--- <Icon-v icon="prime:map-marker" />-->
           <p>{{ business.address }}</p>
         </div>
-        <div class="business-card__button">
-          <router-link :to="{ name: 'business-content', params: { id: business.id } }">
-            Ver más
-          </router-link>
-        </div>
+        
       </div>
     </div>
   </div>

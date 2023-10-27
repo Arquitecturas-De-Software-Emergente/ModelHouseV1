@@ -40,12 +40,13 @@
         <input type="file" id="file" />
       </div>
 
-      <button type="submit">Publish</button>
+      <button type="submit">Send Request</button>
     </form>
   </div>
 </template>
 
 <script>
+import { RequestService } from '../service/request.service'
 export default {
   name: 'Request-Form-Page',
   data() {
@@ -60,10 +61,27 @@ export default {
     }
   },
   methods: {
-    submitRequest() {
-      // Aquí puedes manejar la lógica para enviar el formulario
-      console.log('Form submitted with data:', this.request)
-    }
+    async submitRequest() {
+        const requestService = new RequestService()
+      try {
+        const userId = 123; 
+        const businessId = 456; 
+        const requestData = {
+          area: this.area,
+          estimatedBudget: this.estimatedBudget,
+          category: this.category,
+          location: this.location,
+          description: this.description,
+        };
+
+        await requestService.sendRequest(userId, businessId, requestData);
+
+        this.$router.push("/success"); 
+      } catch (error) {
+        console.error("Error al enviar la solicitud:", error);
+      }
+    },
+
   }
 }
 </script>

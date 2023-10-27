@@ -29,7 +29,7 @@ const router = createRouter({
         component: signIn,
     },
     {
-        path: "/business-content",
+        path: "/business_profile/:id",
         name: "business-content",
         component: BusinessContent,
     },
