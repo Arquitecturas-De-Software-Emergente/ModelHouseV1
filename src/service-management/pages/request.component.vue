@@ -29,6 +29,7 @@
       style="background-color: yellowgreen; padding: 10px 15px"
       header="PROPOSALS"
     >
+      <proposalComponent></proposalComponent>
 
     </TabPanel>
     <!--    THIRD PANEL-->
@@ -96,97 +97,91 @@
 
 <script>
 import { RequestService } from '../service/request.service'
+import proposalComponent from './proposal.component.vue';
 
 export default {
-  name: 'Request-Page',
-  data() {
-    return {
-      requests: [],
-      canceledRequests: [],
-      pendingRequests: [],
-    }
-  },
-  created() {
-    const storedRequests = localStorage.getItem('requests')
-    console.log(storedRequests);
-    if(storedRequests){
-      this.requests = JSON.parse(storedRequests)
-      this.loadRequestsPending()
-      this.loadRequestsCanceled()
-    }
-  },
-
-  methods: {
-    loadRequestsPending() {
-      const requestService = new RequestService()
-      const userProfileId = 1
-      const status = 'Pendiente'
-      requestService
-        .getRequestsByUserId(userProfileId, status)
-        .then((response) => {
-          this.requests = response.data
-          localStorage.setItem('requests', JSON.stringify(this.requests))
-          this.pendingRequests = this.requests.filter(request => request.status == 'Pendiente')
-          console.log('Solicitudes:', this.requests)
-          console.log('Solicitudes pendientes:', this.pendingRequests)
-
-        })
-        .catch((error) => {
-          console.error('Error al obtener las solicitudes:', error)
-        })
+    name: 'Request-Page',
+    data() {
+        return {
+            requests: [],
+            canceledRequests: [],
+            pendingRequests: [],
+        };
     },
-
-    loadRequestsCanceled() {
-      const requestService = new RequestService()
-      const userProfileId = 1
-      const status = 'Cancelado'
-      requestService
-        .getRequestsByUserId(userProfileId, status)
-        .then((response) => {
-          this.requests = response.data
-          localStorage.setItem('requests', JSON.stringify(this.requests))
-          this.canceledRequests = this.requests.filter(request => request.status == 'Cancelado'),
-          console.log('Solicitudes:', this.requests)
-          console.log('Solicitudes canceladas:', this.canceledRequests)
-
-        })
-        .catch((error) => {
-          console.error('Error al obtener las solicitudes:', error)
-        })
+    created() {
+        const storedRequests = localStorage.getItem('requests');
+        console.log(storedRequests);
+        if (storedRequests) {
+            this.requests = JSON.parse(storedRequests);
+            this.loadRequestsPending();
+            this.loadRequestsCanceled();
+        }
     },
-    acceptRequest(request) {
-      console.log('Solicitud aceptada:', request)
-      request.status = 'Aceptado'; 
-      this.changeRequestStatus(request.id, { status: 'Aceptado' });
+    methods: {
+        loadRequestsPending() {
+            const requestService = new RequestService();
+            const userProfileId = 1;
+            const status = 'Pendiente';
+            requestService
+                .getRequestsByUserId(userProfileId, status)
+                .then((response) => {
+                this.requests = response.data;
+                localStorage.setItem('requests', JSON.stringify(this.requests));
+                this.pendingRequests = this.requests.filter(request => request.status == 'Pendiente');
+                console.log('Solicitudes:', this.requests);
+                console.log('Solicitudes pendientes:', this.pendingRequests);
+            })
+                .catch((error) => {
+                console.error('Error al obtener las solicitudes:', error);
+            });
+        },
+        loadRequestsCanceled() {
+            const requestService = new RequestService();
+            const userProfileId = 1;
+            const status = 'Cancelado';
+            requestService
+                .getRequestsByUserId(userProfileId, status)
+                .then((response) => {
+                this.requests = response.data;
+                localStorage.setItem('requests', JSON.stringify(this.requests));
+                this.canceledRequests = this.requests.filter(request => request.status == 'Cancelado'),
+                    console.log('Solicitudes:', this.requests);
+                console.log('Solicitudes canceladas:', this.canceledRequests);
+            })
+                .catch((error) => {
+                console.error('Error al obtener las solicitudes:', error);
+            });
+        },
+        acceptRequest(request) {
+            console.log('Solicitud aceptada:', request);
+            request.status = 'Aceptado';
+            this.changeRequestStatus(request.id, { status: 'Aceptado' });
+        },
+        rejectRequest(request) {
+            console.log('Solicitud rechazada:', request);
+            request.status = 'Cancelado';
+            this.changeRequestStatus(request.id, { status: 'Cancelado' });
+        },
+        changeRequestStatus(requestId, data) {
+            const requestService = new RequestService();
+            requestService.changeRequestStatus(requestId, data)
+                .then(() => {
+                if (data.status === 'Aceptado') {
+                    const message = "Cambio de estado a Aceptado exitoso.";
+                    window.alert(message);
+                }
+                else {
+                    const message = "Cambio de estado a Cancelado exitoso.";
+                    window.alert(message);
+                }
+                window.location.reload();
+            })
+                .catch(error => {
+                console.error('Error al cambiar el estado de la solicitud:', error);
+            });
+        }
     },
-
-    rejectRequest(request) {
-      console.log('Solicitud rechazada:', request)
-      request.status = 'Cancelado';
-      this.changeRequestStatus(request.id, { status: 'Cancelado' });
-    },
-
-    changeRequestStatus(requestId, data) {
-      const requestService = new RequestService();
-      requestService.changeRequestStatus(requestId, data)
-        .then(() => {
-          if(data.status === 'Aceptado'){
-            const message = "Cambio de estado a Aceptado exitoso.";
-      window.alert(message);
-          }
-          else{
-            const message = "Cambio de estado a Cancelado exitoso.";
-            window.alert(message);
-          }
-          window.location.reload();
-        })
-        .catch(error => {
-          
-          console.error('Error al cambiar el estado de la solicitud:', error);
-        });
-    }
-
-  }
+    components: { proposalComponent }
 }
 </script>
 

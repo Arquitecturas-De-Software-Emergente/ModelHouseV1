@@ -6,11 +6,11 @@
       <form class="form">
         <div class="form-group">
           <label for="title">Title</label>
-          <InputText class="custom-input" type="text" v-model="title" placeholder="Title"/>
+          <InputText id="title" class="custom-input" type="text" v-model="title" placeholder="Title"/>
         </div>
         <div class="form-group">
           <label for="description">Description</label>
-          <Textarea-v class="custom-input" autoResize v-model="description" rows="5" cols="30" placeholder="Description"/>
+          <Textarea-v id="description" class="custom-input" autoResize v-model="description" rows="5" cols="30" placeholder="Description"/>
         </div>
         <div class="form-group-2">
           <input class="file-form" type="file" name="demo[]" accept="*/*" id="fileUpload" style="display: none;" multiple>
@@ -20,7 +20,7 @@
         <div class="form-group-2">
           <label for="activities">Activities</label>
           <div v-for="(activity, index) in activities" :key="index" class="input-with-button">
-            <InputText class="custom-input-2" type="text" v-model="activities[index]" placeholder="Activity" />
+            <InputText id="activities" class="custom-input-2" type="text" v-model="activities[index]" placeholder="Activity" />
             <button class="remove-button" @click="removeActivity(index)"><i class="pi pi-trash"></i></button>
           </div>
           <button class="add-button" type="button" @click="addActivity"><i class="pi pi-plus-circle"></i></button> <!-- Agrega type="button" aquí -->
@@ -30,14 +30,14 @@
           <label for ="resources">Resources</label>
           <div v-for="(resource, index) in resources" :key="index" class="input-with-button">
             <InputText class="custom-input-2" type="text" v-model="resources[index]" placeholder="Resource" />
-            <input class="quantity-form" type="number" v-model="quantityForm" step="any" min="0" max="999999">
+            <input id="quantityForm" class="quantity-form" type="number" v-model="quantityForm" step="any" min="0" max="999999">
             <button class="remove-button" @click="removeResource(index)"><i class="pi pi-trash"></i></button>
           </div>
           <button class="add-button" type="button" @click="addResource"><i class="pi pi-plus-circle"></i>
           </button>
         </div>
         <div class="submit-button">
-          <button class="submit-button-form">
+          <button class="submit-button-form" @click.prevent="submitProposal">
             <span class="submit-button-label">Send</span>
           </button>
         </div>
@@ -46,13 +46,18 @@
   </template>
   
 <script>
+  import { ProposalService } from "../service/proposal.service";
+  // import { ProjectResourceService } from "../service/project-resource.service";
+  // import { ProjectActivityService } from "../service/project-activity.service";
   export default {
     name: "Proposal-Form-Page",
+    props: ['proposalId'],
     data() {
       return {
         title: "",
         description: "",
         quantityForm: 0,
+        file: "",
         activities: [""],
         resources: [""],
       };
@@ -69,6 +74,24 @@
       },
       removeResource(index) {
         this.resources.splice(index, 1); // Eliminar el campo de Resources en el índice especificado
+      },
+      
+      submitProposal() {
+        const proposalService = new ProposalService();
+        console.log('Proposal-Form-Page created111')
+          const proposalData = {
+            title: this.title,
+            description: this.description,
+            file: this.file,
+            // activities: this.activities,
+            // resources: this.resources,
+          };
+          console.log(proposalData)
+          const response = proposalService.updateProposal(this.proposalId, proposalData)
+          console.log('Response:', response.status)
+          if (response.status === 200) {
+            console.log('Proposal sent successfully', response)
+          } 
       },
     },
   };

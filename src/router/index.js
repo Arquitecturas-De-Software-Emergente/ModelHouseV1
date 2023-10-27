@@ -42,15 +42,16 @@ const router = createRouter({
         component: RequestForm,
     },
     {
-        path: "/proposal-form",
+        path: "/proposal-form/:proposalId",
         name: "proposal-form",
         component: ProposalForm,
+        props: true,
     },
     {
         path: "/request/:id",
         name: "request-list",
         component: Request,
-    }
+    },
     
     ],
 });

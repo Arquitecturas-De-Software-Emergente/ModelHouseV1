@@ -29,7 +29,7 @@
 }
 
 .sidebar {
-  flex: 0 0 0; /* Ancho fijo para el sidebar */
+  flex: 0 0 150px; /* Ancho fijo para el sidebar */
   background-color: #004A63;
   height: 100vh;
 }

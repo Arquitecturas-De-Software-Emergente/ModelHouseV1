@@ -51,7 +51,7 @@ export default {
     height: 100vh;
 }
 .sidebar {
-    flex: 0 0 160px; /* Ancho fijo de la barra lateral */
+    flex: 0 0 150px; /* Ancho fijo de la barra lateral */
     background-color: #004A63;
     color: #fff;
     overflow-y: auto;
