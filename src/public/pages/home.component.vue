@@ -1,7 +1,7 @@
 <template>
   
     <div class="center-part">
-      <Business-List-Page />
+      <BusinessListPage />
     </div>
   
     <div class="final-part-footer">

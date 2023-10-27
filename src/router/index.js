@@ -16,16 +16,16 @@ const router = createRouter({
             name: "Home-Page",
             component: Home,
         },
-    {
-        path: "/sign-up",
-        name: "sign-up",
-        component: signUp,
-    },
-    {
-        path: "/sign-in",
-        name: "sign-in",
-        component: signIn,
-    },
+        {
+            path: "/sign-up",
+            name: "sign-up",
+            component: signUp,
+        },
+        {
+            path: "/sign-in",
+            name: "sign-in",
+            component: signIn,
+        },
     
     ],
 });

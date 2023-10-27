@@ -20,6 +20,7 @@
             </ul>
         </aside>
     </div>
+    
 </template>
 <script>
 export default {
