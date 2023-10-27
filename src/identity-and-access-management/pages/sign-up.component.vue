@@ -150,9 +150,11 @@ h1{
     align-items: center;
     max-width: 800px;
     margin: 0 auto;
+    padding: 20px;
 }
 label{
     display: block;
+    padding: 0 0 10px 0;
 }
 .mail{
     position: relative;
