@@ -31,6 +31,7 @@ import TabPanel from "primevue/tabpanel";
 import TieredMenu from "primevue/tieredmenu";
 import Divider from "primevue/divider";
 import ProgressBar from "primevue/progressbar";
+import Carousel from 'primevue/carousel';
 
 const app = createApp(App);
 app.directive('badge', BadgeDirective);
@@ -60,6 +61,7 @@ app.component('TieredMenu', TieredMenu);
 app.component("Divider-v", Divider);
 app.component("ProgressBar", ProgressBar);
 app.component("Image-v", Image);
+app.component("Carousel-v", Carousel);
 
 app.mount('#app');
 

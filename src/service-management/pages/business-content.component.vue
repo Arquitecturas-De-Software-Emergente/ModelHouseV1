@@ -5,17 +5,24 @@
         <img :src="business.image" alt="Logo de la empresa" />
       </div>
       <div class="business-rating">
-    <Rating-v v-model="business.review" :cancel="false" :stars="5"></Rating-v>
-  </div>
+        <Rating-v
+          v-model="business.review"
+          :cancel="false"
+          :stars="5"
+          :pt="{
+            onIcon: { class: 'text-orange-400' }
+          }"
+        />
+      </div>
       <h1>{{ business.name }}</h1>
       <p>Teléfono: {{ business.phone }}</p>
       <p>Oficial Web Page: {{ business.webSite }}</p>
       <p>Address: {{ business.address }}</p>
       <p>Service Area: {{ business.address }}</p>
-      <p>Categoría: </p>
-      <p>Social Media: </p>
-      <router-link to ="/request-form">
-      <button class="send-button">Send Request</button>
+      <p>Categoría:</p>
+      <p>Social Media:</p>
+      <router-link to="/request-form">
+        <button class="send-button">Send Request</button>
       </router-link>
     </div>
     <div class="business-details">
@@ -23,9 +30,32 @@
       <p>{{ business.description }}</p>
       <h2>Especialización</h2>
       <p>{{ business.especialization }}</p>
-      <h2>Projects</h2>
-      <div class="project-carousel">
-        <!-- Agrega un carrusel de imágenes aquí -->
+      <div>
+        <h2>Projects</h2>
+        <div class="project-carousel">
+          <Carousel-v
+            :value="projects"
+            :numVisible="1"
+            :numScroll="1"
+            :responsiveOptions="responsiveOptions"
+            circular
+            :autoplayInterval="3000"
+          >
+          <template #item="slotProps">
+          <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+            <div class="mb-3">
+              <img
+                :src="slotProps.image"
+                class="w-4 shadow-2"
+              />
+            </div>
+            <div>
+              <h4 class="mb-1">{{ slotProps.title }}</h4>
+            </div>
+          </div>
+        </template>
+          </Carousel-v>
+        </div>
       </div>
     </div>
   </div>
@@ -33,15 +63,38 @@
 
 <script>
 import { BusinessDetailService } from '../service/business-detail.service'
+import { ProjectListService } from '../service/project-list.service'
+
 export default {
   name: 'Business-Conent-Page',
   data() {
     return {
-      business: null
+      business: null,
+      projects: [],
+      responsiveOptions: [
+        {
+          breakpoint: '1024px',
+          numVisible: 1,
+          numScroll: 3
+        },
+        {
+          breakpoint: '768px',
+          numVisible: 1,
+          numScroll: 2
+        },
+        {
+          breakpoint: '560px',
+          numVisible: 1,
+          numScroll: 1
+        }
+      ]
     }
   },
+
   created() {
     const businessService = new BusinessDetailService()
+    const projectService = new ProjectListService()
+
     businessService
       .getBusinessByID(this.$route.params.id)
       .then((response) => {
@@ -50,7 +103,17 @@ export default {
       .catch((error) => {
         console.error('Error al obtener los detalles del negocio', error)
       })
-  }
+
+      projectService
+      .getProjectListByBusinessId(this.$route.params.id)
+      .then((response) => {
+        this.projects = response.data
+      })
+      .catch((error) => {
+        console.error('Error al obtener la lista de proyectos:', error)
+      })
+
+  },
 }
 </script>
 
@@ -71,12 +134,6 @@ export default {
   border: 2px solid #02aa8b;
   border-radius: 5%;
   margin-bottom: 10px;
-}
-
-.business-rating {
-  margin-bottom: 10px;
-  font-size: 24px;
-  color: #FDB813;
 }
 
 .send-button {
