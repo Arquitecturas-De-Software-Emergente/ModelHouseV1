@@ -3,10 +3,6 @@
     <div class="center-part">
       <BusinessListPage />
     </div>
-  
-    <div class="final-part-footer">
-      <!-- Contenido de la parte inferior del pie de página si es necesario -->
-    </div>
   </template>
 
 <script>
