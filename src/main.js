@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import App from "./App.vue";
+import './assets/principal.css'
 
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -30,6 +31,7 @@ import TabPanel from "primevue/tabpanel";
 import TieredMenu from "primevue/tieredmenu";
 import Divider from "primevue/divider";
 import ProgressBar from "primevue/progressbar";
+import Sidebar from "primevue/sidebar";
 
 const app = createApp(App);
 app.directive('badge', BadgeDirective);
@@ -59,6 +61,7 @@ app.component('TieredMenu', TieredMenu);
 app.component("Divider-v", Divider);
 app.component("ProgressBar", ProgressBar);
 app.component("Image-v", Image);
+app.component("Sidebar-v", Sidebar);
 
 app.mount('#app');
 
