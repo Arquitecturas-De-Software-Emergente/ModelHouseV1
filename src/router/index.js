@@ -5,6 +5,7 @@ import signUp from "@/identity-and-access-management/pages/sign-up.component.vue
 import signIn from "@/identity-and-access-management/pages/sign-in.component.vue";
 import BusinessContent from "@/service-management/pages/business-content.component.vue";
 import RequestForm from "@/service-management/pages/request-form.component.vue";
+import Request from "@/service-management/pages/request.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,12 @@ const router = createRouter({
         name: "request-form",
         component: RequestForm,
     },
+    {
+        path: "/request/:id",
+        name: "request-list",
+        component: Request,
+    }
+    
     
     ],
 });

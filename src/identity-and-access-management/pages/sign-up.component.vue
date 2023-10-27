@@ -129,7 +129,7 @@ h1{
     justify-content: center;
     text-transform: capitalize;
     position:  relative;
-    top: 80px;
+    top: 10px;
     margin: 0 auto;
     width: 100%;
 }

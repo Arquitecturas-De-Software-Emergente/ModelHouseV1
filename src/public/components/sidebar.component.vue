@@ -29,7 +29,7 @@ export default {
         return{
             sidebarItems: [
                 { id: 'search', label: 'Search', route: '/home', iconClass: 'pi pi-search' },
-                { id: 'request', label: 'Request', route: '/request', iconClass: 'pi pi-send' },
+                { id: 'request', label: 'Request', route: '/request/1', iconClass: 'pi pi-send' },
                 { id: 'notification', label: 'Notification', route: '/notification', iconClass: 'pi pi-bell' },
                 { id: 'settings', label: 'Settings', route: '/settings', iconClass: 'pi pi-cog' },
             ],

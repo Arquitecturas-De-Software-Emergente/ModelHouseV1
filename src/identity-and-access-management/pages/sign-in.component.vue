@@ -29,9 +29,9 @@
             </div>
           <div style="font-size: 12px;">you don't have an account? <router-link  to="/sign-up" style="color: black;"><b><u>Sign up</u></b></router-link></div>
         </div>
-        <div @click="signInUser">
+        <div @click="signInUser"> 
             <Button label="SIGN IN" style="background-color: #02AA8B;
-              border-color: #02AA8B; width: 400px;"/>
+              border-color: #02AA8B; width: 400px; height: 50px; color: black;"/>
         </div>
     </div>
 </template>
@@ -94,7 +94,7 @@ h1{
     font-size: 38px;
     font-weight: 600;
     font-style: normal;
-    line-height: 144px;
+    line-height: 100px;
     padding: 0;
     margin: 10px;
 }
@@ -161,8 +161,8 @@ label{
     margin: 5px 20px ;
 }
 
+
 #email, #password, #confirm_password{
     width: 400px;
 }
-
 </style>

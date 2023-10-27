@@ -10,18 +10,22 @@
       <div class="form-group">
         <label for="budget">Estimated Budget:</label>
         <select id="budget" v-model="request.budget">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option value="0 - 500">0 - 500</option>
+          <option value="500 - 1000">500 - 1000</option>
+          <option value="1000 - 1500">1000 - 1500</option>
+          <option value="1500 - 2000">1500 - 2000</option>
+          <option value="2000 - 2500">2000 - 2500</option>
+          <option value="2500 - 3000">2500 - 3000</option>
+          <option value="2500 - 3000">3000 - 3500</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="category">Category:</label>
         <select id="category" v-model="request.category">
-          <option value="category1">Category 1</option>
-          <option value="category2">Category 2</option>
-          <option value="category3">Category 3</option>
+          <option value="category1">Cocina</option>
+          <option value="category2">Baño</option>
+          <option value="category3">Patio</option>
         </select>
       </div>
 
@@ -42,6 +46,12 @@
 
       <button type="submit">Send Request</button>
     </form>
+
+    <Dialog-v v-model="showDialog" header="Solicitud Enviada" :visible="this.showDialog">
+      <p>Tu solicitud se ha enviado con éxito.</p>
+      <button @click="closeDialog">Cerrar</button>
+    </Dialog-v>
+
   </div>
 </template>
 
@@ -53,35 +63,60 @@ export default {
     return {
       request: {
         area: '',
-        budget: 'low',
-        category: 'category1',
+        budget: '0 - 100',
+        category: 'Cocina',
         location: '',
         description: ''
-      }
+      },
+      showDialog: false
     }
   },
   methods: {
-    async submitRequest() {
-        const requestService = new RequestService()
-      try {
-        const userId = 123; 
-        const businessId = 456; 
-        const requestData = {
-          area: this.area,
-          estimatedBudget: this.estimatedBudget,
-          category: this.category,
-          location: this.location,
-          description: this.description,
-        };
-
-        await requestService.sendRequest(userId, businessId, requestData);
-
-        this.$router.push("/success"); 
-      } catch (error) {
-        console.error("Error al enviar la solicitud:", error);
+    resetForm() {
+      this.request = {
+        area: '',
+        budget: '0 - 500',
+        category: 'Cocina',
+        location: '',
+        description: ''
       }
     },
 
+    async submitRequest() {
+      const requestService = new RequestService()
+      try {
+        const userId = 1
+        const businessId = 1
+        const requestData = {
+          area: this.request.area,
+          estimatedBudget: this.request.estimatedBudget,
+          category: this.request.category,
+          location: this.request.location,
+          description: this.request.description
+        }
+
+        const response = await requestService.sendRequest(userId, businessId, requestData)
+        console.log('Response:', response.status)
+        if (response.status === 200) {
+            console.log('Solicitud enviada con éxito:', response)
+            this.showDialog = true
+            this.resetForm()
+        
+        } else {
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Error al enviar la solicitud',
+            detail: 'Ha ocurrido un error al enviar la solicitud.'
+          })
+        }
+      } catch (error) {
+        console.error('Error al enviar la solicitud:', error)
+      }
+    },
+    closeDialog() {
+    this.showDialog = false;
+    }
+    
   }
 }
 </script>

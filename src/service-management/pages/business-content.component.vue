@@ -9,14 +9,18 @@
   </div>
       <h1>{{ business.name }}</h1>
       <p>Teléfono: {{ business.phone }}</p>
-      <p>Categoría: {{ business.category }}</p>
+      <p>Oficial Web Page: {{ business.webSite }}</p>
+      <p>Address: {{ business.address }}</p>
+      <p>Service Area: {{ business.address }}</p>
+      <p>Categoría: </p>
+      <p>Social Media: </p>
       <router-link to ="/request-form">
       <button class="send-button">Send Request</button>
       </router-link>
     </div>
     <div class="business-details">
       <h2>About Us</h2>
-      <p>{{ business.aboutUs }}</p>
+      <p>{{ business.description }}</p>
       <h2>Especialización</h2>
       <p>{{ business.especialization }}</p>
       <h2>Projects</h2>
