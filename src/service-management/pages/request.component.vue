@@ -1,12 +1,18 @@
 <template>
+    <TabView v-model:activeIndex="active" style="margin: 0px 50px 0px 50px">
+    <!--    FIRST PANEL-->
+    <TabPanel
+  style="background-color: cornflowerblue; padding: 10px 15px"
+  header="REQUESTS"
+>
   <div>
     <h1>Pending Requests</h1>
     <div class="request-cards">
       <div v-for="request in requests" :key="request.id" class="request-card">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">{{ request.status }}</h5>
             <p>{{ request.description }}</p>
+            <p>Address:   {{ request.location }}</p>
           </div>
         </div>
         <div class="button-container">
@@ -16,6 +22,31 @@
       </div>
     </div>
   </div>
+</TabPanel>
+
+    <!--    SECOND PANEL-->
+    <TabPanel
+      style="background-color: yellowgreen; padding: 10px 15px"
+      header="PROPOSALS"
+    >
+
+    </TabPanel>
+    <!--    THIRD PANEL-->
+    <TabPanel
+      style="background-color: green; padding: 10px 15px"
+      header="PROJECTS"
+    >
+
+    </TabPanel>
+    <!--    FOURTH PANEL-->
+    <TabPanel
+      style="background-color: green; padding: 10px 15px"
+      header="COMPLETED Projects"
+    >
+
+    </TabPanel>
+  </TabView>
+
 </template>
 
 <script>
@@ -64,26 +95,24 @@ export default {
       this.changeRequestStatus(request.id, { status: 'Cancelado' });
     },
 
-    changeRequestStatus(requestId, data) {
-      const requestService = new RequestService();
-      requestService.changeRequestStatus(requestId, data)
-        .then(() => {
-          if(data.status === 'Aceptado'){
-            const message = "Cambio de estado a Aceptado exitoso.";
-      window.alert(message);
+changeRequestStatus(requestId, data) {
+  const requestService = new RequestService();
+  requestService.changeRequestStatus(requestId, data)
+    .then(() => {
+      if (data.status === 'Aceptado') {
+        const message = "Cambio de estado a Aceptado exitoso.";
+        window.alert(message);
+      } else {
+        const message = "Cambio de estado a Cancelado exitoso.";
+        window.alert(message);
+      }
+      this.loadRequests();
+    })
+    .catch(error => {
+      console.error('Error al cambiar el estado de la solicitud:', error);
+    });
+}
 
-          }
-          else{
-            const message = "Cambio de estado a Cancelado exitoso.";
-            window.alert(message);
-          }
-          window.location.reload();
-        })
-        .catch(error => {
-          
-          console.error('Error al cambiar el estado de la solicitud:', error);
-        });
-    }
   }
 }
 </script>
