@@ -108,11 +108,10 @@ export default {
   },
   created() {
     const storedRequests = localStorage.getItem('requests')
-  
-    if (storedRequests==null) {
+    console.log(storedRequests);
+    if(storedRequests){
       this.requests = JSON.parse(storedRequests)
-    } else {
-      this.loadRequestsPending(),
+      this.loadRequestsPending()
       this.loadRequestsCanceled()
     }
   },
