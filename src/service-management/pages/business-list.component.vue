@@ -1,11 +1,26 @@
 <template>
-  <div class="Buttons">
-    <div class="button-container">
-        <router-link to="/sign-in">
-      <button class="sign-in-button">Sign In</button></router-link>
+  <div v-if="!userIsLoggedIn">
+    <div class="Buttons">
+      <div class="button-container">
+        <router-link to="/sign-in"> <button class="sign-in-button">Sign In</button></router-link>
         <router-link to="/sign-up">
-      <button class="sign-up-button">Sign Up</button>
+          <button class="sign-up-button">Sign Up</button>
         </router-link>
+      </div>
+    </div>
+  </div>
+  <div v-else>
+    <div class="AvatarButton">
+      <router-link to="/sign-in">
+        <div class="giant-button">
+          <div class="avatar">
+            <img :src="user.avatar" alt="Avatar del usuario" />
+          </div>
+          <div class="user-name">
+            {{ user.name }}
+          </div>
+        </div>
+      </router-link>
     </div>
   </div>
 
@@ -31,7 +46,9 @@
           <p>{{ business.address }}</p>
         </div>
         <div class="business-card__button">
-          <a href="#">Ver más</a>
+          <router-link :to="{ name: 'business-content', params: { id: business.id } }">
+            Ver más
+          </router-link>
         </div>
       </div>
     </div>
@@ -45,7 +62,12 @@ export default {
   name: 'Business-List-Page',
   data() {
     return {
-      businesses: []
+      businesses: [],
+      user: {
+        name: 'Nombre del Usuario',
+        avatar: 'ruta_del_avatar.jpg'
+      },
+      userIsLoggedIn: false
     }
   },
   created() {
@@ -53,6 +75,13 @@ export default {
     businessService.searchRemodeler().then((response) => {
       this.businesses = response.data
     })
+  },
+
+  userIsLogged() {
+    const account = localStorage.getItem('account')
+    if (account) {
+      this.userIsLoggedIn = true
+    }
   }
 }
 </script>
@@ -99,11 +128,11 @@ export default {
   background-color: #02aa8b; /* Color de fondo del botón */
   color: #fff;
   border: none;
-  padding: 10px 20px; 
-  border-radius: 5px; 
-  font-size: 16px; 
-  cursor: pointer; 
-  transition: background-color 0.3s; 
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
   margin-right: 15px;
 
   &:hover {
@@ -124,5 +153,44 @@ export default {
   &:hover {
     background-color: #e6fffa;
   }
+}
+
+.AvatarButton {
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 50px;
+}
+.giant-button {
+  max-width: 300px;
+  max-height: 150px;
+  display: flex;
+  align-items: center;
+  background-color: #e0e4e9;
+  color: #000000;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20px; /* Espacio entre el avatar y el nombre */
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta la imagen dentro del avatar */
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
