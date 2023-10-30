@@ -7,7 +7,7 @@ import BusinessContent from "@/service-management/pages/business-content.compone
 import RequestForm from "@/service-management/pages/request-form.component.vue";
 import Request from "@/service-management/pages/request.component.vue";
 import ProposalForm from "@/service-management/pages/proposal-form.component.vue";
-
+import configurationContent from "@/service-management/pages/configuration-content.component.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +52,11 @@ const router = createRouter({
         name: "request-list",
         component: Request,
     },
+    {
+        path: "/settings",
+        name: "settings",
+        component: configurationContent,
+    }
     
     ],
 });

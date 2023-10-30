@@ -68,6 +68,10 @@ export default defineComponent({
                 "password":  this.password
             }).then(res=>{
                 console.log("user sign in succeeded", res.data);
+                
+                    const message = "´Se ha inciado sesión correctamente";
+                    window.alert(message);
+                
                 localStorage.setItem("account",JSON.stringify(res.data));
                 this.redirectToHome();
                 setInterval("location.reload()", 100);

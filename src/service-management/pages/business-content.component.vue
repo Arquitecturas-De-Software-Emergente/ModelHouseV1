@@ -71,6 +71,7 @@ export default {
     return {
       business: null,
       projects: [],
+      projectsLoaded: false,
       responsiveOptions: [
         {
           breakpoint: '1024px',
@@ -108,6 +109,7 @@ export default {
       .getProjectListByBusinessId(this.$route.params.id)
       .then((response) => {
         this.projects = response.data
+        this.projectsLoaded = true; // Marca los proyectos como cargados
       })
       .catch((error) => {
         console.error('Error al obtener la lista de proyectos:', error)
