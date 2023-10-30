@@ -18,6 +18,8 @@
     "primevue": "^3.38.1",
     "stripe": "^12.10.0",
     "vee-validate": "^4.9.5",
+    "vue": "^3.3.7",
+    "vue-carousel": "^0.18.0",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },
