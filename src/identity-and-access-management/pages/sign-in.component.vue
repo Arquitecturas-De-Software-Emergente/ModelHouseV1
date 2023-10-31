@@ -68,7 +68,7 @@ export default defineComponent({
                 "emailAddress": this.emailAddress,
                 "password":  this.password
             }).then(res=>{
-                console.log("user sign in succeeded", res.data);       
+                //console.log("user sign in succeeded", res.data);       
                 
                     
                 localStorage.setItem("account",JSON.stringify(res.data));
@@ -81,7 +81,7 @@ export default defineComponent({
             });
         },
         redirectToHome() {
-            console.log(`Bearer ${JSON.parse(localStorage.getItem("account")).token}`)
+            //console.log(`Bearer ${JSON.parse(localStorage.getItem("account")).token}`)
             this.$router.push({
                         name: "Home-Page"
                     })

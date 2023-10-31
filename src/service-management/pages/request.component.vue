@@ -4,24 +4,40 @@
       <!--    FIRST PANEL-->
       <TabPanel style="background-color: cornflowerblue; padding: 10px 15px" header="REQUESTS">
         <div>
+          <div v-if = 'this.businessProfileId == null'>
           <div class="request-cards">
             <div v-for="request in pendingRequests" :key="request.id" class="request-card">
               <div class="card">
                 <div class="card-body">
-                  <p>User Type in Request-Page: {{ userType }}</p>
                   <p>{{ request.description }}</p>
                   <p>Address: {{ request.location }}</p>
                 </div>
               </div>
-              <div class="button-container-business" v-if="userType == 'business'">
-                <button @click="acceptRequest(request)" class="accept-button">Accept</button>
-                <button @click="rejectRequest(request)" class="reject-button">Reject</button>
-              </div>
-              <div class="button-container-client" v-if="userType == 'user'">
+              <div class="button-container-client">
                 <button class="see-details">See Details</button>
               </div>
             </div>
+            
           </div>
+            </div>
+
+            <div v-if = 'this.businessProfileId != null'>
+          <div class="request-cards">
+            <div v-for="request in pendingRequests" :key="request.id" class="request-card">
+              <div class="card">
+                <div class="card-body">
+                  <p>{{ request.description }}</p>
+                  <p>Address: {{ request.location }}</p>
+                </div>
+              </div>
+              <div class="button-container-business">
+                <button @click="acceptRequest(request)" class="accept-button">Accept</button>
+                <button @click="rejectRequest(request)" class="reject-button">Reject</button>
+              </div>
+            </div>
+            
+          </div>
+            </div>
         </div>
       </TabPanel>
 
@@ -68,6 +84,7 @@ export default {
       canceledRequests: [],
       pendingRequests: [],
       userType: 'business',
+      businessProfileId: null,
     }
   },
 
@@ -75,7 +92,8 @@ export default {
 
   created() {
     const storedRequests = localStorage.getItem('requests')
-    console.log(storedRequests)
+    console.log(storedRequests),
+    this.getAccoundId();
     if (storedRequests) {
       this.requests = JSON.parse(storedRequests)
       this.loadRequestsPending()
@@ -85,8 +103,9 @@ export default {
   methods: {
     loadRequestsPending() {
       const requestService = new RequestService()
-      const userProfileId = localStorage.getItem('userId')
+      const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
       const status = 'Pendiente'
+      if(userProfileId != null){
       requestService
         .getRequestsByUserId(userProfileId, status)
         .then((response) => {
@@ -99,11 +118,27 @@ export default {
         .catch((error) => {
           console.error('Error al obtener las solicitudes:', error)
         })
-    },
+    }else {
+      const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+      requestService
+        .getRequestsByBusinessId(businessProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          this.pendingRequests = this.requests.filter((request) => request.status == 'Pendiente')
+          console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes pendientes:', this.pendingRequests)
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    }
+  },
     loadRequestsCanceled() {
       const requestService = new RequestService()
-      const userProfileId = localStorage.getItem('userId')
+      const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
       const status = 'Cancelado'
+      if(userProfileId != null){
       requestService
         .getRequestsByUserId(userProfileId, status)
         .then((response) => {
@@ -111,14 +146,28 @@ export default {
           localStorage.setItem('requests', JSON.stringify(this.requests))
           ;(this.canceledRequests = this.requests.filter(
             (request) => request.status == 'Cancelado'
-          )),
-            console.log('Solicitudes:', this.requests)
-          console.log('Solicitudes canceladas:', this.canceledRequests)
+          ))
         })
         .catch((error) => {
           console.error('Error al obtener las solicitudes:', error)
         })
-    },
+    }else{
+      const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+      requestService
+        .getRequestsByBusinessId(businessProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          ;(this.canceledRequests = this.requests.filter(
+            (request) => request.status == 'Cancelado'
+          ))
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    }
+  },
+
     acceptRequest(request) {
       console.log('Solicitud aceptada:', request)
       request.status = 'Aprobado'
@@ -146,7 +195,13 @@ export default {
         .catch((error) => {
           console.error('Error al cambiar el estado de la solicitud:', error)
         })
-    }
+    },
+
+    getAccoundId(){
+            this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+            console.log(this.businessProfileId);
+        }
+
   }
 }
 </script>
@@ -207,10 +262,24 @@ export default {
   margin-top: 20px;
 }
 
-.button-container-client{
+.button-container-client {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+
+.see-details {
+  background-color: #ffffff;
+  color: #02aa8b;
+  border: 1px solid #02aa8b;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
 }
 
 /* Estilo para el botón "Accept" */
