@@ -10,7 +10,7 @@
             <!-- Contenido de la barra lateral -->
             <ul>
                 <div v-for="item in sidebarItems" :key="item.id" class="sidebar-content" :class="{ selected: item.id === selectedItemId }" @click="selectItem(item.id)">
-                    <router-link :to="item.route">
+                    <router-link :to="item.route" v-if="shouldShowItem(item)">
                         <li>
                             <i :class="item.iconClass"></i>
                             <br>{{ item.label }}
@@ -29,16 +29,33 @@ export default {
         return{
             sidebarItems: [
                 { id: 'search', label: 'Search', route: '/home', iconClass: 'pi pi-search' },
-                { id: 'request', label: 'Request', route: '/request/1', iconClass: 'pi pi-send' },
+                { id: 'request', label: 'Request', route: '/request/', iconClass: 'pi pi-send' },
                 { id: 'notification', label: 'Notification', route: '/notification', iconClass: 'pi pi-bell' },
                 { id: 'settings', label: 'Settings', route: '/settings', iconClass: 'pi pi-cog' },
             ],
         selectedItemId: null,
+        account: null,
         };
     },
+    created () {
+        this.account = JSON.parse(localStorage.getItem("account"));
+    },
     methods: {
+        shouldShowItem(item) {
+            if (item.id === 'request') {
+              return this.account !== null;
+            } else {
+              // Aquí puedes agregar condiciones adicionales para otros elementos si es necesario
+              return true;
+            }
+        },
         selectItem(itemId) {
             this.selectedItemId = itemId;
+        },
+
+        userLogued() {
+            localStorage.removeItem("account");
+            this.$store.commit("setUserLoggedIn", false);
         },
     },
 }

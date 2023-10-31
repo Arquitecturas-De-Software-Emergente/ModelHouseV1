@@ -29,8 +29,8 @@ export default {
         openSubscriptionComponent() {
         // Navigate to the Subscription component
         this.$router.push('/subscription');
-      }
-        },
+        }
+    },
 
     
 }
