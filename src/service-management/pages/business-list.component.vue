@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-  <Request-Page :userType="userType" />
+
 </template>
 
 <script>
@@ -76,7 +76,7 @@ export default {
         id: null,
         name: null,
         image: null,
-        userType: null,
+        userType: 'business',
       },
       
       
@@ -100,7 +100,7 @@ export default {
         this.account.name = response.data.name;
         this.account.image = response.data.image;
         this.account.id = response.data.id;
-        this.account.userType = "business";
+        //this.account.userType = "business";
         console.log("es empresa: ", response.data.id);
       }
     })
@@ -112,7 +112,7 @@ export default {
             this.account.name = userProfile.data.firstName;;
             this.account.image = userProfile.data.image;
             this.account.id = userProfile.data.id;
-            this.account.userType = "user";
+            //this.account.userType = "user";
             console.log("es usuario: ", this.account);
           })
           .catch((userProfileError) => {
@@ -124,6 +124,7 @@ export default {
 }
 
   },
+
 
 }
 </script>
