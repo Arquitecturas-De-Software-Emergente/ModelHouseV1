@@ -4,6 +4,7 @@
             <i class="pi pi-sign-out"></i>
             <span>Sign Out</span>
         </li>
+      <button @click="openSubscriptionComponent">Open Subscription</button>
     </div>
 </template>
 
@@ -25,7 +26,12 @@ export default {
             this.$store.commit("setUserLoggedIn", false);
             this.$router.push('/home');
         }
-    }
+        },
+      openSubscriptionComponent() {
+        // Navigate to the Subscription component
+        this.$router.push('/subscription');
+      }
+    
 }
 
 </script>
