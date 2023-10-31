@@ -8,15 +8,16 @@
             <div v-for="request in pendingRequests" :key="request.id" class="request-card">
               <div class="card">
                 <div class="card-body">
+                  <p>User Type in Request-Page: {{ userType }}</p>
                   <p>{{ request.description }}</p>
                   <p>Address: {{ request.location }}</p>
                 </div>
               </div>
-              <div class="button-container-business" v-if="userType === 'business'">
+              <div class="button-container-business" v-if="userType == 'business'">
                 <button @click="acceptRequest(request)" class="accept-button">Accept</button>
                 <button @click="rejectRequest(request)" class="reject-button">Reject</button>
               </div>
-              <div class="button-container-client" v-if="userType === 'user'">
+              <div class="button-container-client" v-if="userType == 'user'">
                 <button class="see-details">See Details</button>
               </div>
             </div>
@@ -59,13 +60,14 @@ import { RequestService } from '../service/request.service';
 import proposalComponent from './proposal.component.vue';
 
 export default {
+
   name: 'Request-Page',
-  props: ['userType'],
   data() {
     return {
       requests: [],
       canceledRequests: [],
       pendingRequests: [],
+      userType: 'business',
     }
   },
 
@@ -119,8 +121,8 @@ export default {
     },
     acceptRequest(request) {
       console.log('Solicitud aceptada:', request)
-      request.status = 'Aceptado'
-      this.changeRequestStatus(request.id, { status: 'Aceptado' })
+      request.status = 'Aprobado'
+      this.changeRequestStatus(request.id, { status: 'Aprobado' })
     },
     rejectRequest(request) {
       console.log('Solicitud rechazada:', request)
@@ -132,8 +134,8 @@ export default {
       requestService
         .changeRequestStatus(requestId, data)
         .then(() => {
-          if (data.status === 'Aceptado') {
-            const message = 'Cambio de estado a Aceptado exitoso.'
+          if (data.status === 'Aprobado') {
+            const message = 'Cambio de estado a Aprobado exitoso.'
             window.alert(message)
           } else {
             const message = 'Cambio de estado a Cancelado exitoso.'
