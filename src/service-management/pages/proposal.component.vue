@@ -1,6 +1,6 @@
 <template>
     <div class="cards-container">
-        <div v-if = 'this.userId = 1'>
+        <div v-if = 'this.businessProfileId == null'>
             <div class="proposal-cards">
                 <div v-for="proposal in sentProposals" :key="proposal.id" class="proposal-card">
                     <div class="card-body">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div v-else-if='this.userId = 2'>
+        <div v-else-if='this.businessProfileId != null'>
             <div class="proposal-cards">
                 <div v-for="proposal in sentProposals" :key="proposal.id" class="proposal-card">
                     <div class="card-body">
@@ -62,7 +62,7 @@ export default {
             proposals: [],
             pendingProposals: [],
             sentProposals: [],
-            userId: null,
+            businessProfileId: null,
         }
     },
     created(){
@@ -108,8 +108,8 @@ export default {
             });
         },
         getAccoundId(){
-            this.userId = localStorage.getItem('userId');
-            console.log(this.userId);
+            this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+            console.log(this.businessProfileId);
         }
 
     }
