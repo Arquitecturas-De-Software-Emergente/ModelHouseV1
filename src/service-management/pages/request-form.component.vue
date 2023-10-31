@@ -63,8 +63,8 @@ export default {
     return {
       request: {
         area: '',
-        budget: '0 - 100',
-        category: 'Cocina',
+        budget: '',
+        category: '',
         location: '',
         description: ''
       },
@@ -75,8 +75,8 @@ export default {
     resetForm() {
       this.request = {
         area: '',
-        budget: '0 - 500',
-        category: 'Cocina',
+        budget: '',
+        category: '',
         location: '',
         description: ''
       }
@@ -85,8 +85,8 @@ export default {
     async submitRequest() {
       const requestService = new RequestService()
       try {
-        const userId = 1
-        const businessId = 1
+        const userId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+        const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
         const requestData = {
           area: this.request.area,
           estimatedBudget: this.request.estimatedBudget,

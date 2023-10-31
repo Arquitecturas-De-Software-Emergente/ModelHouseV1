@@ -1,4 +1,6 @@
 <template>
+  <div v-if="accountActive">
+
   <div class="request-view-container">
     <TabView v-model:activeIndex="active" style="margin: 0px 50px 0px 50px">
       <!--    FIRST PANEL-->
@@ -69,6 +71,15 @@
       </TabPanel>
     </TabView>
   </div>
+</div>
+
+<div v-if="!accountActive">
+  <p>Es necesario iniciar sesión</p>
+      <router-link to="/home">
+        <button>Iniciar Sesión</button>
+      </router-link>
+</div>
+
 </template>
 
 <script>
@@ -85,6 +96,7 @@ export default {
       pendingRequests: [],
       userType: 'business',
       businessProfileId: null,
+      accountActive: JSON.parse(localStorage.getItem('account'))?.isActive,
     }
   },
 
