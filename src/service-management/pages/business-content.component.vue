@@ -21,9 +21,7 @@
       <p>Service Area: {{ business.address }}</p>
       <p>Categoría:</p>
       <p>Social Media:</p>
-      <router-link to="/request-form">
-        <button class="send-button">Send Request</button>
-      </router-link>
+      <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
     </div>
     <div class="business-details">
       <h2>About Us</h2>
@@ -90,6 +88,18 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    navigateToRequestForm() {
+      const accountActive = JSON.parse(localStorage.getItem('account'))?.isActive;
+      if(accountActive){
+        this.$router.push('/request-form');
+      }else{
+        this.$router.push('/sign-in');
+      }
+      
+    
+    },
   },
 
   created() {

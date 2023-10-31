@@ -1,57 +1,60 @@
 <template>
+  <div v-if="accountActive">
+
   <div class="request-view-container">
     <TabView v-model:activeIndex="active" style="margin: 0px 50px 0px 50px">
-    <!--    FIRST PANEL-->
-    <TabPanel
-  style="background-color: cornflowerblue; padding: 10px 15px"
-  header="REQUESTS"
->
-  <div>
-    <div class="request-cards">
-      <div v-for="request in pendingRequests" :key="request.id" class="request-card">
-        <div class="card">
-          <div class="card-body">
-            <p>{{ request.description }}</p>
-            <p>Address:   {{ request.location }}</p>
+      <!--    FIRST PANEL-->
+      <TabPanel style="background-color: cornflowerblue; padding: 10px 15px" header="REQUESTS">
+        <div>
+          <div v-if = 'this.businessProfileId == null'>
+          <div class="request-cards">
+            <div v-for="request in pendingRequests" :key="request.id" class="request-card">
+              <div class="card">
+                <div class="card-body">
+                  <p>{{ request.description }}</p>
+                  <p>Address: {{ request.location }}</p>
+                </div>
+              </div>
+              <div class="button-container-client">
+                <button class="see-details">See Details</button>
+              </div>
+            </div>
+            
           </div>
+            </div>
+
+            <div v-if = 'this.businessProfileId != null'>
+          <div class="request-cards">
+            <div v-for="request in pendingRequests" :key="request.id" class="request-card">
+              <div class="card">
+                <div class="card-body">
+                  <p>{{ request.description }}</p>
+                  <p>Address: {{ request.location }}</p>
+                </div>
+              </div>
+              <div class="button-container-business">
+                <button @click="acceptRequest(request)" class="accept-button">Accept</button>
+                <button @click="rejectRequest(request)" class="reject-button">Reject</button>
+              </div>
+            </div>
+            
+          </div>
+            </div>
         </div>
-        <div class="button-container">
-          <button @click="acceptRequest(request)" class="accept-button">Accept</button>
-          <button @click="rejectRequest(request)" class="reject-button">Reject</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</TabPanel>
+      </TabPanel>
 
-    <!--    SECOND PANEL-->
-    <TabPanel
-      style="background-color: yellowgreen; padding: 10px 15px"
-      header="PROPOSALS"
-    >
-      <proposalComponent></proposalComponent>
+      <!--    SECOND PANEL-->
+      <TabPanel style="background-color: yellowgreen; padding: 10px 15px" header="PROPOSALS">
+        <proposalComponent></proposalComponent>
+      </TabPanel>
+      <!--    THIRD PANEL-->
+      <TabPanel style="background-color: green; padding: 10px 15px" header="PROJECTS"> </TabPanel>
+      <!--    FOURTH PANEL-->
+      <TabPanel style="background-color: green; padding: 10px 15px" header="COMPLETED Projects">
+      </TabPanel>
+      <!--    FIFTH PANEL-->
 
-    </TabPanel>
-    <!--    THIRD PANEL-->
-    <TabPanel
-      style="background-color: green; padding: 10px 15px"
-      header="PROJECTS"
-    >
-
-    </TabPanel>
-    <!--    FOURTH PANEL-->
-    <TabPanel
-      style="background-color: green; padding: 10px 15px"
-      header="COMPLETED Projects"
-    >
-
-    </TabPanel>
-    <!--    FIFTH PANEL-->
-
-    <TabPanel
-        style="background-color: #f5f5f5; padding: 1rem"
-        header="CANCELED"
-      >
+      <TabPanel style="background-color: #f5f5f5; padding: 1rem" header="CANCELED">
         <div class="request-cards">
           <div v-for="request in canceledRequests" :key="request.id" class="request-card">
             <div class="card">
@@ -68,120 +71,154 @@
       </TabPanel>
     </TabView>
   </div>
+</div>
+
+<div class="MessageSignIn" v-if="!accountActive">
+  <h1>Es necesario iniciar sesión</h1>
+      <router-link to="/sign-in">
+        <div class="SignIn-button">
+          <button class="SignIn-button-form" >
+            Ir a la vista de Sign In
+          </button>
+        </div>
+      </router-link>
+</div>
+
 </template>
 
-
-    <!-- <TabPanel
-      style="background-color: green; padding: 10px 15px"
-      header="CANCELED"
-    >
-    <div>
-    <div class="request-cards">
-      <div v-for="request in canceledRequests" :key="request.id" class="request-card">
-        <div class="card">
-          <div class="card-body">
-            <p>{{ request.description }}</p>
-            <p>Address:   {{ request.location }}</p>
-          </div>
-        </div>
-        <div class="button-container">
-          <h3 class="canceled-label">Canceled</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-    </TabPanel>
-  </TabView>
-</div>
-</template> -->
-
 <script>
-import { RequestService } from '../service/request.service'
+import { RequestService } from '../service/request.service';
 import proposalComponent from './proposal.component.vue';
 
 export default {
-    name: 'Request-Page',
-    data() {
-        return {
-            requests: [],
-            canceledRequests: [],
-            pendingRequests: [],
-        };
+
+  name: 'Request-Page',
+  data() {
+    return {
+      requests: [],
+      canceledRequests: [],
+      pendingRequests: [],
+      userType: 'business',
+      businessProfileId: null,
+      accountActive: JSON.parse(localStorage.getItem('account'))?.isActive,
+    }
+  },
+
+  components: { proposalComponent },
+
+  created() {
+    const storedRequests = localStorage.getItem('requests')
+    console.log(storedRequests),
+    this.getAccoundId();
+    if (storedRequests) {
+      this.requests = JSON.parse(storedRequests)
+      this.loadRequestsPending()
+      this.loadRequestsCanceled()
+    }
+  },
+  methods: {
+    loadRequestsPending() {
+      const requestService = new RequestService()
+      const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+      const status = 'Pendiente'
+      if(userProfileId != null){
+      requestService
+        .getRequestsByUserId(userProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          this.pendingRequests = this.requests.filter((request) => request.status == 'Pendiente')
+          console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes pendientes:', this.pendingRequests)
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    }else {
+      const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+      requestService
+        .getRequestsByBusinessId(businessProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          this.pendingRequests = this.requests.filter((request) => request.status == 'Pendiente')
+          console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes pendientes:', this.pendingRequests)
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    }
+  },
+    loadRequestsCanceled() {
+      const requestService = new RequestService()
+      const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+      const status = 'Cancelado'
+      if(userProfileId != null){
+      requestService
+        .getRequestsByUserId(userProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          ;(this.canceledRequests = this.requests.filter(
+            (request) => request.status == 'Cancelado'
+          ))
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    }else{
+      const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+      requestService
+        .getRequestsByBusinessId(businessProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          ;(this.canceledRequests = this.requests.filter(
+            (request) => request.status == 'Cancelado'
+          ))
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
+    }
+  },
+
+    acceptRequest(request) {
+      console.log('Solicitud aceptada:', request)
+      request.status = 'Aprobado'
+      this.changeRequestStatus(request.id, { status: 'Aprobado' })
     },
-    created() {
-        const storedRequests = localStorage.getItem('requests');
-        console.log(storedRequests);
-        if (storedRequests) {
-            this.requests = JSON.parse(storedRequests);
-            this.loadRequestsPending();
-            this.loadRequestsCanceled();
+    rejectRequest(request) {
+      console.log('Solicitud rechazada:', request)
+      request.status = 'Cancelado'
+      this.changeRequestStatus(request.id, { status: 'Cancelado' })
+    },
+    changeRequestStatus(requestId, data) {
+      const requestService = new RequestService()
+      requestService
+        .changeRequestStatus(requestId, data)
+        .then(() => {
+          if (data.status === 'Aprobado') {
+            const message = 'Cambio de estado a Aprobado exitoso.'
+            window.alert(message)
+          } else {
+            const message = 'Cambio de estado a Cancelado exitoso.'
+            window.alert(message)
+          }
+          window.location.reload()
+        })
+        .catch((error) => {
+          console.error('Error al cambiar el estado de la solicitud:', error)
+        })
+    },
+
+    getAccoundId(){
+            this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+            console.log(this.businessProfileId);
         }
-    },
-    methods: {
-        loadRequestsPending() {
-            const requestService = new RequestService();
-            const userProfileId = 1;
-            const status = 'Pendiente';
-            requestService
-                .getRequestsByUserId(userProfileId, status)
-                .then((response) => {
-                this.requests = response.data;
-                localStorage.setItem('requests', JSON.stringify(this.requests));
-                this.pendingRequests = this.requests.filter(request => request.status == 'Pendiente');
-                console.log('Solicitudes:', this.requests);
-                console.log('Solicitudes pendientes:', this.pendingRequests);
-            })
-                .catch((error) => {
-                console.error('Error al obtener las solicitudes:', error);
-            });
-        },
-        loadRequestsCanceled() {
-            const requestService = new RequestService();
-            const userProfileId = 1;
-            const status = 'Cancelado';
-            requestService
-                .getRequestsByUserId(userProfileId, status)
-                .then((response) => {
-                this.requests = response.data;
-                localStorage.setItem('requests', JSON.stringify(this.requests));
-                this.canceledRequests = this.requests.filter(request => request.status == 'Cancelado'),
-                    console.log('Solicitudes:', this.requests);
-                console.log('Solicitudes canceladas:', this.canceledRequests);
-            })
-                .catch((error) => {
-                console.error('Error al obtener las solicitudes:', error);
-            });
-        },
-        acceptRequest(request) {
-            console.log('Solicitud aceptada:', request);
-            request.status = 'Aceptado';
-            this.changeRequestStatus(request.id, { status: 'Aceptado' });
-        },
-        rejectRequest(request) {
-            console.log('Solicitud rechazada:', request);
-            request.status = 'Cancelado';
-            this.changeRequestStatus(request.id, { status: 'Cancelado' });
-        },
-        changeRequestStatus(requestId, data) {
-            const requestService = new RequestService();
-            requestService.changeRequestStatus(requestId, data)
-                .then(() => {
-                if (data.status === 'Aceptado') {
-                    const message = "Cambio de estado a Aceptado exitoso.";
-                    window.alert(message);
-                }
-                else {
-                    const message = "Cambio de estado a Cancelado exitoso.";
-                    window.alert(message);
-                }
-                window.location.reload();
-            })
-                .catch(error => {
-                console.error('Error al cambiar el estado de la solicitud:', error);
-            });
-        }
-    },
-    components: { proposalComponent }
+
+  }
 }
 </script>
 
@@ -235,12 +272,55 @@ export default {
   padding: 1rem;
 }
 
-.button-container {
+.button-container-business {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
+.button-container-client {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.see-details {
+  background-color: #ffffff;
+  color: #02aa8b;
+  border: 1px solid #02aa8b;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+}
+.SignIn-button{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    text-decoration: none;
+  }
+  .SignIn-button-form{
+    cursor: pointer;
+    background-color: #02AA8B;
+    color: white;
+    font-size: 24px;
+    border: none;
+    border-radius: 25px;
+    height: 70px;
+    width: 100%;
+
+  }
+  .MessageSignIn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+  }
 /* Estilo para el botón "Accept" */
 .accept-button,
 .reject-button {

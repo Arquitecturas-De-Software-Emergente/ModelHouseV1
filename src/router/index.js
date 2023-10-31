@@ -8,6 +8,7 @@ import RequestForm from "@/service-management/pages/request-form.component.vue";
 import Request from "@/service-management/pages/request.component.vue";
 import ProposalForm from "@/service-management/pages/proposal-form.component.vue";
 import configurationContent from "@/service-management/pages/configuration-content.component.vue"
+import profile from "@/identity-and-access-management/pages/edit-profile.component.vue";
 import Cart from "@/payment-and-subscription-management/Cart.vue";
 
 const router = createRouter({
@@ -49,7 +50,7 @@ const router = createRouter({
         props: true,
     },
     {
-        path: "/request/:id",
+        path: "/request/",
         name: "request-list",
         component: Request,
     },
@@ -58,6 +59,13 @@ const router = createRouter({
         name: "settings",
         component: configurationContent,
     },
+    {
+        path: "/profile",
+        name: "Profile-Page",
+        component: profile,
+    },
+    
+    
     {
         path:"/subscription",
         name:"cartSubscription",

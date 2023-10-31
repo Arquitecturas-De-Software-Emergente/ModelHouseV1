@@ -30,7 +30,7 @@
           <div style="font-size: 12px;">you don't have an account? <router-link  to="/sign-up" style="color: black;"><b><u>Sign up</u></b></router-link></div>
         </div>
         <div @click="signInUser"> 
-            <Button label="SIGN IN" style="background-color: #02AA8B;
+            <Button-v label="SIGN IN" style="background-color: #02AA8B;
               border-color: #02AA8B; width: 400px; height: 50px; color: black;"/>
         </div>
     </div>
@@ -38,6 +38,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {UserSignInService} from "@/identity-and-access-management/service/user-sign-in.service";
+
 export default defineComponent({
     name: "signIn",
     data() {
@@ -67,21 +68,23 @@ export default defineComponent({
                 "emailAddress": this.emailAddress,
                 "password":  this.password
             }).then(res=>{
-                console.log("user sign in succeeded", res.data);
+                //console.log("user sign in succeeded", res.data);       
                 
-                    const message = "´Se ha inciado sesión correctamente";
-                    window.alert(message);
-                
+                    
                 localStorage.setItem("account",JSON.stringify(res.data));
+                localStorage.setItem("userId", res.data.id);
                 this.redirectToHome();
-                setInterval("location.reload()", 100);
+                //setInterval("location.reload()", 100);
+                this.$store.commit("setUserLoggedIn", true);
             }).catch(err=>{
                 console.log("user sign in failed", err);
             });
         },
         redirectToHome() {
-            console.log(`Bearer ${JSON.parse(localStorage.getItem("account")).token}`)
-            this.$router.push('/home');
+            //console.log(`Bearer ${JSON.parse(localStorage.getItem("account")).token}`)
+            this.$router.push({
+                        name: "Home-Page"
+                    })
         }
     },
 })

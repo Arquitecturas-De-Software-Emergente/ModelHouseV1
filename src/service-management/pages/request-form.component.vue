@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <h1>Request Form</h1>
-    <form @submit.prevent="submitRequest">
-      <div class="form-group">
-        <label for="area">Area:</label>
-        <input type="text" id="area" v-model="request.area" />
+
+  <div class="cards-container">
+    <div class="request-title">
+      <h1>Request Form</h1>
       </div>
+
+    <form class="form" @submit.prevent="submitRequest">
+
+      <div class="form-group">
+          <label for="title">Area : </label>
+          <InputText id="title" class="custom-input" type="text" v-model="title" placeholder="Area"/>
+        </div>
 
       <div class="form-group">
         <label for="budget">Estimated Budget:</label>
@@ -39,12 +44,17 @@
         <textarea id="description" v-model="request.description"></textarea>
       </div>
 
-      <div class="form-group">
-        <label for="file">Add File:</label>
-        <input type="file" id="file" />
-      </div>
+      <div class="form-group-2">
+          <input class="file-form" type="file" name="demo[]" accept="*/*" id="fileUpload" style="display: none;" multiple>
+          <label for="fileUpload" class="file-upload-label">Add File <i class="pi pi-file"></i>
+          </label>
+        </div>
 
-      <button type="submit">Send Request</button>
+      <div class="submit-button">
+          <button class="submit-button-form" type="submit">
+            <span class="submit-button-label">Send Request</span>
+          </button>
+        </div>
     </form>
 
     <Dialog-v v-model="showDialog" header="Solicitud Enviada" :visible="this.showDialog">
@@ -53,6 +63,7 @@
     </Dialog-v>
 
   </div>
+
 </template>
 
 <script>
@@ -63,8 +74,8 @@ export default {
     return {
       request: {
         area: '',
-        budget: '0 - 100',
-        category: 'Cocina',
+        budget: '',
+        category: '',
         location: '',
         description: ''
       },
@@ -75,8 +86,8 @@ export default {
     resetForm() {
       this.request = {
         area: '',
-        budget: '0 - 500',
-        category: 'Cocina',
+        budget: '',
+        category: '',
         location: '',
         description: ''
       }
@@ -85,8 +96,8 @@ export default {
     async submitRequest() {
       const requestService = new RequestService()
       try {
-        const userId = 1
-        const businessId = 1
+        const userId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+        const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
         const requestData = {
           area: this.request.area,
           estimatedBudget: this.request.estimatedBudget,
@@ -122,30 +133,111 @@ export default {
 </script>
 
 <style scoped>
-.form-group {
-  margin-bottom: 20px;
-}
 
-label {
-  display: block;
-  font-weight: bold;
-}
+.request-title {
+    align-items: center;
+    text-align: center;
+    display: flex;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .form {
+    width: 100%; /* El formulario ocupará todo el ancho disponible */
+    max-width: 500px;
+  }
+  
+  .form-group-2 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .form-group-2 label {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
 
-input[type='text'],
-select,
-textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+  }
 
-button {
-  background-color: #02aa8b;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  input[type="text"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  select {
+    appearance: none;
+  }
+
+  .file-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;;
+  }
+  .file-upload-label{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E6E6E6;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    margin: 10px 0; 
+  }
+  .file-upload-label i {
+    margin: 0 0 0 10px;
+  }
+
+  .submit-button{
+    display: flex;
+    justify-content: center;
+  }
+  .submit-button-form{
+    cursor: pointer;
+    background-color: #02AA8B;
+    color: white;
+    font-size: 24px;
+    border: none;
+    border-radius: 25px;
+    height: 45px;
+    width: 80%;
+  }
+
+  /* Responsive Design */
+  @media screen and (max-width: 600px) {
+    .cards-container {
+      max-width: 100%;
+    }
+
+    label,
+    input[type="text"],
+    select,
+    textarea {
+      font-size: 14px;
+    }
+  }
 </style>
