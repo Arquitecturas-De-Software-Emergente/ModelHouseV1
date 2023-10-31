@@ -25,7 +25,7 @@ export default {
             localStorage.removeItem("account");
             this.$router.push('/sign-in');
         },
-      openSubscriptionComponent() {
+        openSubscriptionComponent() {
         // Navigate to the Subscription component
         this.$router.push('/subscription');
       }
