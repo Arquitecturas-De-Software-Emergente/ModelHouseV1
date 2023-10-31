@@ -37,7 +37,7 @@
           <div style="font-size: 12px;">you already have an account? <router-link to="/sign-in" style="color: black;"><b><u>Sign in</u></b></router-link></div>
         </div>
         <div @click="registerUser">
-            <Button label="REGISTER" style="background-color: #02AA8B;
+            <Button-v label="REGISTER" style="background-color: #02AA8B;
               border-color: #02AA8B; width: 400px;"/>
         </div>
     </div>
@@ -112,7 +112,7 @@ h1{
     font-size: 38px;
     font-weight: 600;
     font-style: normal;
-    line-height: 144px;
+    line-height: 100px;
     padding: 0;
     margin: 10px;
 }
@@ -129,7 +129,7 @@ h1{
     justify-content: center;
     text-transform: capitalize;
     position:  relative;
-    top: 10px;
+    top: 5px;
     margin: 0 auto;
     width: 100%;
 }

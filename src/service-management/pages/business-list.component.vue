@@ -152,8 +152,8 @@ export default {
   margin-right: 40px;
 }
 .small-image {
-  max-width: 250px;
-  max-height: 150px;
+  max-width: 600px;
+  max-height: 200px;
 }
 .button-container {
   display: flex;

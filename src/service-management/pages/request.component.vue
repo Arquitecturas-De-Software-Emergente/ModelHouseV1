@@ -73,10 +73,14 @@
   </div>
 </div>
 
-<div v-if="!accountActive">
-  <p>Es necesario iniciar sesión</p>
-      <router-link to="/home">
-        <button>Iniciar Sesión</button>
+<div class="MessageSignIn" v-if="!accountActive">
+  <h1>Es necesario iniciar sesión</h1>
+      <router-link to="/sign-in">
+        <div class="SignIn-button">
+          <button class="SignIn-button-form" >
+            Ir a la vista de Sign In
+          </button>
+        </div>
       </router-link>
 </div>
 
@@ -293,7 +297,30 @@ export default {
   cursor: pointer;
   margin: 0 10px;
 }
+.SignIn-button{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    text-decoration: none;
+  }
+  .SignIn-button-form{
+    cursor: pointer;
+    background-color: #02AA8B;
+    color: white;
+    font-size: 24px;
+    border: none;
+    border-radius: 25px;
+    height: 70px;
+    width: 100%;
 
+  }
+  .MessageSignIn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+  }
 /* Estilo para el botón "Accept" */
 .accept-button,
 .reject-button {

@@ -30,7 +30,7 @@
           <div style="font-size: 12px;">you don't have an account? <router-link  to="/sign-up" style="color: black;"><b><u>Sign up</u></b></router-link></div>
         </div>
         <div @click="signInUser"> 
-            <Button label="SIGN IN" style="background-color: #02AA8B;
+            <Button-v label="SIGN IN" style="background-color: #02AA8B;
               border-color: #02AA8B; width: 400px; height: 50px; color: black;"/>
         </div>
     </div>
