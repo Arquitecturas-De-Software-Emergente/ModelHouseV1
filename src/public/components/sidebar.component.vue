@@ -10,7 +10,7 @@
             <!-- Contenido de la barra lateral -->
             <ul>
                 <div v-for="item in sidebarItems" :key="item.id" class="sidebar-content" :class="{ selected: item.id === selectedItemId }" @click="selectItem(item.id)">
-                    <router-link :to="item.route" v-if="shouldShowItem(item)">
+                    <router-link :to="item.route">
                         <li>
                             <i :class="item.iconClass"></i>
                             <br>{{ item.label }}
@@ -30,15 +30,11 @@ export default {
             sidebarItems: [
                 { id: 'search', label: 'Search', route: '/home', iconClass: 'pi pi-search' },
                 { id: 'request', label: 'Request', route: '/request/', iconClass: 'pi pi-send' },
-                { id: 'notification', label: 'Notification', route: '/notification', iconClass: 'pi pi-bell' },
+                // { id: 'notification', label: 'Notification', route: '/notification', iconClass: 'pi pi-bell' },
                 { id: 'settings', label: 'Settings', route: '/settings', iconClass: 'pi pi-cog' },
             ],
         selectedItemId: null,
-        account: null,
         };
-    },
-    created () {
-        this.account = JSON.parse(localStorage.getItem("account"));
     },
     methods: {
         shouldShowItem(item) {
@@ -51,11 +47,6 @@ export default {
         },
         selectItem(itemId) {
             this.selectedItemId = itemId;
-        },
-
-        userLogued() {
-            localStorage.removeItem("account");
-            this.$store.commit("setUserLoggedIn", false);
         },
     },
 }
