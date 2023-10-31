@@ -1,57 +1,41 @@
 <template>
   <div class="request-view-container">
     <TabView v-model:activeIndex="active" style="margin: 0px 50px 0px 50px">
-    <!--    FIRST PANEL-->
-    <TabPanel
-  style="background-color: cornflowerblue; padding: 10px 15px"
-  header="REQUESTS"
->
-  <div>
-    <div class="request-cards">
-      <div v-for="request in pendingRequests" :key="request.id" class="request-card">
-        <div class="card">
-          <div class="card-body">
-            <p>{{ request.description }}</p>
-            <p>Address:   {{ request.location }}</p>
+      <!--    FIRST PANEL-->
+      <TabPanel style="background-color: cornflowerblue; padding: 10px 15px" header="REQUESTS">
+        <div>
+          <div class="request-cards">
+            <div v-for="request in pendingRequests" :key="request.id" class="request-card">
+              <div class="card">
+                <div class="card-body">
+                  <p>{{ request.description }}</p>
+                  <p>Address: {{ request.location }}</p>
+                </div>
+              </div>
+              <div class="button-container-business" v-if="userType === 'business'">
+                <button @click="acceptRequest(request)" class="accept-button">Accept</button>
+                <button @click="rejectRequest(request)" class="reject-button">Reject</button>
+              </div>
+              <div class="button-container-client" v-if="userType === 'user'">
+                <button class="see-details">See Details</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="button-container">
-          <button @click="acceptRequest(request)" class="accept-button">Accept</button>
-          <button @click="rejectRequest(request)" class="reject-button">Reject</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</TabPanel>
+      </TabPanel>
 
-    <!--    SECOND PANEL-->
-    <TabPanel
-      style="background-color: yellowgreen; padding: 10px 15px"
-      header="PROPOSALS"
-    >
-      <proposalComponent></proposalComponent>
+      <!--    SECOND PANEL-->
+      <TabPanel style="background-color: yellowgreen; padding: 10px 15px" header="PROPOSALS">
+        <proposalComponent></proposalComponent>
+      </TabPanel>
+      <!--    THIRD PANEL-->
+      <TabPanel style="background-color: green; padding: 10px 15px" header="PROJECTS"> </TabPanel>
+      <!--    FOURTH PANEL-->
+      <TabPanel style="background-color: green; padding: 10px 15px" header="COMPLETED Projects">
+      </TabPanel>
+      <!--    FIFTH PANEL-->
 
-    </TabPanel>
-    <!--    THIRD PANEL-->
-    <TabPanel
-      style="background-color: green; padding: 10px 15px"
-      header="PROJECTS"
-    >
-
-    </TabPanel>
-    <!--    FOURTH PANEL-->
-    <TabPanel
-      style="background-color: green; padding: 10px 15px"
-      header="COMPLETED Projects"
-    >
-
-    </TabPanel>
-    <!--    FIFTH PANEL-->
-
-    <TabPanel
-        style="background-color: #f5f5f5; padding: 1rem"
-        header="CANCELED"
-      >
+      <TabPanel style="background-color: #f5f5f5; padding: 1rem" header="CANCELED">
         <div class="request-cards">
           <div v-for="request in canceledRequests" :key="request.id" class="request-card">
             <div class="card">
@@ -70,118 +54,94 @@
   </div>
 </template>
 
-
-    <!-- <TabPanel
-      style="background-color: green; padding: 10px 15px"
-      header="CANCELED"
-    >
-    <div>
-    <div class="request-cards">
-      <div v-for="request in canceledRequests" :key="request.id" class="request-card">
-        <div class="card">
-          <div class="card-body">
-            <p>{{ request.description }}</p>
-            <p>Address:   {{ request.location }}</p>
-          </div>
-        </div>
-        <div class="button-container">
-          <h3 class="canceled-label">Canceled</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-    </TabPanel>
-  </TabView>
-</div>
-</template> -->
-
 <script>
 import { RequestService } from '../service/request.service'
-import proposalComponent from './proposal.component.vue';
 
 export default {
-    name: 'Request-Page',
-    data() {
-        return {
-            requests: [],
-            canceledRequests: [],
-            pendingRequests: [],
-        };
+  name: 'Request-Page',
+  props: ['userType'],
+  data() {
+    return {
+      requests: [],
+      canceledRequests: [],
+      pendingRequests: [],
+    }
+  },
+  created() {
+    const storedRequests = localStorage.getItem('requests')
+    console.log(storedRequests)
+    if (storedRequests) {
+      this.requests = JSON.parse(storedRequests)
+      this.loadRequestsPending()
+      this.loadRequestsCanceled()
+    }
+  },
+  methods: {
+    loadRequestsPending() {
+      const requestService = new RequestService()
+      const userProfileId = localStorage.getItem('userId')
+      const status = 'Pendiente'
+      requestService
+        .getRequestsByUserId(userProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          this.pendingRequests = this.requests.filter((request) => request.status == 'Pendiente')
+          console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes pendientes:', this.pendingRequests)
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
     },
-    created() {
-        const storedRequests = localStorage.getItem('requests');
-        console.log(storedRequests);
-        if (storedRequests) {
-            this.requests = JSON.parse(storedRequests);
-            this.loadRequestsPending();
-            this.loadRequestsCanceled();
-        }
+    loadRequestsCanceled() {
+      const requestService = new RequestService()
+      const userProfileId = localStorage.getItem('userId')
+      const status = 'Cancelado'
+      requestService
+        .getRequestsByUserId(userProfileId, status)
+        .then((response) => {
+          this.requests = response.data
+          localStorage.setItem('requests', JSON.stringify(this.requests))
+          ;(this.canceledRequests = this.requests.filter(
+            (request) => request.status == 'Cancelado'
+          )),
+            console.log('Solicitudes:', this.requests)
+          console.log('Solicitudes canceladas:', this.canceledRequests)
+        })
+        .catch((error) => {
+          console.error('Error al obtener las solicitudes:', error)
+        })
     },
-    methods: {
-        loadRequestsPending() {
-            const requestService = new RequestService();
-            const userProfileId = 1;
-            const status = 'Pendiente';
-            requestService
-                .getRequestsByUserId(userProfileId, status)
-                .then((response) => {
-                this.requests = response.data;
-                localStorage.setItem('requests', JSON.stringify(this.requests));
-                this.pendingRequests = this.requests.filter(request => request.status == 'Pendiente');
-                console.log('Solicitudes:', this.requests);
-                console.log('Solicitudes pendientes:', this.pendingRequests);
-            })
-                .catch((error) => {
-                console.error('Error al obtener las solicitudes:', error);
-            });
-        },
-        loadRequestsCanceled() {
-            const requestService = new RequestService();
-            const userProfileId = 1;
-            const status = 'Cancelado';
-            requestService
-                .getRequestsByUserId(userProfileId, status)
-                .then((response) => {
-                this.requests = response.data;
-                localStorage.setItem('requests', JSON.stringify(this.requests));
-                this.canceledRequests = this.requests.filter(request => request.status == 'Cancelado'),
-                    console.log('Solicitudes:', this.requests);
-                console.log('Solicitudes canceladas:', this.canceledRequests);
-            })
-                .catch((error) => {
-                console.error('Error al obtener las solicitudes:', error);
-            });
-        },
-        acceptRequest(request) {
-            console.log('Solicitud aceptada:', request);
-            request.status = 'Aceptado';
-            this.changeRequestStatus(request.id, { status: 'Aceptado' });
-        },
-        rejectRequest(request) {
-            console.log('Solicitud rechazada:', request);
-            request.status = 'Cancelado';
-            this.changeRequestStatus(request.id, { status: 'Cancelado' });
-        },
-        changeRequestStatus(requestId, data) {
-            const requestService = new RequestService();
-            requestService.changeRequestStatus(requestId, data)
-                .then(() => {
-                if (data.status === 'Aceptado') {
-                    const message = "Cambio de estado a Aceptado exitoso.";
-                    window.alert(message);
-                }
-                else {
-                    const message = "Cambio de estado a Cancelado exitoso.";
-                    window.alert(message);
-                }
-                window.location.reload();
-            })
-                .catch(error => {
-                console.error('Error al cambiar el estado de la solicitud:', error);
-            });
-        }
+    acceptRequest(request) {
+      console.log('Solicitud aceptada:', request)
+      request.status = 'Aceptado'
+      this.changeRequestStatus(request.id, { status: 'Aceptado' })
     },
-    components: { proposalComponent }
+    rejectRequest(request) {
+      console.log('Solicitud rechazada:', request)
+      request.status = 'Cancelado'
+      this.changeRequestStatus(request.id, { status: 'Cancelado' })
+    },
+    changeRequestStatus(requestId, data) {
+      const requestService = new RequestService()
+      requestService
+        .changeRequestStatus(requestId, data)
+        .then(() => {
+          if (data.status === 'Aceptado') {
+            const message = 'Cambio de estado a Aceptado exitoso.'
+            window.alert(message)
+          } else {
+            const message = 'Cambio de estado a Cancelado exitoso.'
+            window.alert(message)
+          }
+          window.location.reload()
+        })
+        .catch((error) => {
+          console.error('Error al cambiar el estado de la solicitud:', error)
+        })
+    }
+  }
 }
 </script>
 
@@ -235,7 +195,13 @@ export default {
   padding: 1rem;
 }
 
-.button-container {
+.button-container-business {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.button-container-client{
   display: flex;
   justify-content: center;
   margin-top: 20px;
