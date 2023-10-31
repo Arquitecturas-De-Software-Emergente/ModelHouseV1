@@ -8,6 +8,7 @@ import RequestForm from "@/service-management/pages/request-form.component.vue";
 import Request from "@/service-management/pages/request.component.vue";
 import ProposalForm from "@/service-management/pages/proposal-form.component.vue";
 import configurationContent from "@/service-management/pages/configuration-content.component.vue"
+import profile from "@/identity-and-access-management/pages/edit-profile.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,7 +57,12 @@ const router = createRouter({
         path: "/settings",
         name: "settings",
         component: configurationContent,
-    }
+    },
+    {
+        path: "/profile",
+        name: "Profile-Page",
+        component: profile,
+    },
     
     ],
 });

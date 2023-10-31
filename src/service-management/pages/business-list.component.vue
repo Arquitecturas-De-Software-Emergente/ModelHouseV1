@@ -11,7 +11,7 @@
   </div>
   <div v-else>
     <div class="AvatarButton">
-      <router-link to="/sign-in">
+      <router-link to="/profile">
         <div class="giant-button">
           <div class="avatar">
             <img :src="account.image" alt="Avatar del usuario" />
