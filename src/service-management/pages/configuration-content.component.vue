@@ -22,7 +22,8 @@ export default {
     methods: {
         signOut() {
             localStorage.removeItem("account");
-            this.$router.push('/sign-in');
+            this.$store.commit("setUserLoggedIn", false);
+            this.$router.push('/home');
         }
     }
 }

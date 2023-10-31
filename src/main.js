@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import App from "./App.vue";
+import store from "../src/components/store";
 import './assets/principal.css'
 
 import "primevue/resources/themes/lara-light-indigo/theme.css";
@@ -36,6 +37,7 @@ import Carousel from 'primevue/carousel';
 const app = createApp(App);
 app.directive('badge', BadgeDirective);
 app.use(router);
+app.use(store);
 app.use(PrimeVue);
 app.use(ToastService);
 app.component('Button-v', Button);

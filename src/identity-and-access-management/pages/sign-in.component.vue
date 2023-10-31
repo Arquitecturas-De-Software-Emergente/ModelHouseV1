@@ -38,6 +38,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {UserSignInService} from "@/identity-and-access-management/service/user-sign-in.service";
+
 export default defineComponent({
     name: "signIn",
     data() {
@@ -67,21 +68,23 @@ export default defineComponent({
                 "emailAddress": this.emailAddress,
                 "password":  this.password
             }).then(res=>{
-                console.log("user sign in succeeded", res.data);
+                console.log("user sign in succeeded", res.data);       
                 
-                    const message = "´Se ha inciado sesión correctamente";
-                    window.alert(message);
-                
+                    
                 localStorage.setItem("account",JSON.stringify(res.data));
+                localStorage.setItem("userId", res.data.id);
                 this.redirectToHome();
-                setInterval("location.reload()", 100);
+                //setInterval("location.reload()", 100);
+                this.$store.commit("setUserLoggedIn", true);
             }).catch(err=>{
                 console.log("user sign in failed", err);
             });
         },
         redirectToHome() {
             console.log(`Bearer ${JSON.parse(localStorage.getItem("account")).token}`)
-            this.$router.push('/home');
+            this.$router.push({
+                        name: "Home-Page"
+                    })
         }
     },
 })

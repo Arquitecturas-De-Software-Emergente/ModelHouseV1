@@ -14,10 +14,10 @@
       <router-link to="/sign-in">
         <div class="giant-button">
           <div class="avatar">
-            <img :src="user.avatar" alt="Avatar del usuario" />
+            <img :src="account.image" alt="Avatar del usuario" />
           </div>
           <div class="user-name">
-            {{ user.name }}
+            {{ account.name }}
           </div>
         </div>
       </router-link>
@@ -57,33 +57,70 @@
 </template>
 
 <script>
+//import {SigIn} from "../../identity-and-access-management/service/user-sign-in.service"
 import { BusinessListService } from '../service/business-list.service'
+import { UserListService } from '../service/users-list.service'
 
 export default {
   name: 'Business-List-Page',
+  computed: {
+    userIsLoggedIn() {
+      return this.$store.state.userIsLoggedIn;
+    },
+  },
   data() {
     return {
       businesses: [],
-      user: {
-        name: 'Nombre del Usuario',
-        avatar: 'ruta_del_avatar.jpg'
+      account: {
+        id: null,
+        name: null,
+        image: null,
       },
-      userIsLoggedIn: false
+      
+      userType: null,
     }
-  },
-  created() {
-    const businessService = new BusinessListService()
-    businessService.searchRemodeler().then((response) => {
-      this.businesses = response.data
-    })
   },
 
-  userIsLogged() {
-    const account = localStorage.getItem('account')
-    if (account) {
-      this.userIsLoggedIn = true
-    }
-  }
+  created() {
+    const businessService = new BusinessListService();
+    const userProfileService = new UserListService();
+
+    businessService.searchRemodeler().then((response) => {
+      this.businesses = response.data
+    });
+
+    const userId = localStorage.getItem("userId");
+
+    if (userId) {
+  businessService.searchBusinessProfile(userId)
+    .then((response) => {
+      if (response.data != null) {
+        this.account.name = response.data.name;
+        this.account.image = response.data.image;
+        this.account.id = response.data.id;
+        console.log("es empresa: ", response.data.id);
+      }
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 500) {
+        console.log("Business profile not found. Switching to searchUserProfile.");
+        userProfileService.searchUserProfile(userId)
+          .then((userProfile) => {
+            this.account.name = userProfile.data.name;
+            this.account.image = userProfile.data.image;
+            this.account.id = userProfile.data.id;
+            console.log("es usuario: ", this.account);
+          })
+          .catch((userProfileError) => {
+            console.error("Error in searchUserProfile:", userProfileError);
+            // Handle the error from searchUserProfile if needed
+          });
+      } 
+    });
+}
+
+  },
+
 }
 </script>
 
