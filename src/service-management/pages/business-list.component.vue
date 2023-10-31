@@ -106,7 +106,7 @@ export default {
         console.log("Business profile not found. Switching to searchUserProfile.");
         userProfileService.searchUserProfile(userId)
           .then((userProfile) => {
-            this.account.name = userProfile.data.name;
+            this.account.name = userProfile.data.firstName;;
             this.account.image = userProfile.data.image;
             this.account.id = userProfile.data.id;
             console.log("es usuario: ", this.account);
