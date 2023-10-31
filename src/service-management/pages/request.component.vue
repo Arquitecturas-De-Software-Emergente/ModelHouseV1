@@ -74,16 +74,17 @@
 </div>
 
 <div class="MessageSignIn" v-if="!accountActive">
-  <h1>Es necesario iniciar sesión</h1>
-      <router-link to="/sign-in">
-        <div class="SignIn-button">
-          <button class="SignIn-button-form" >
-            Ir a la vista de Sign In
-          </button>
-        </div>
-      </router-link>
+  <h1>You need to log in or register to submit a request</h1>
+  <div class="button-container">
+    <router-link to="/sign-in">
+      <button class="SignIn-button-form">Sign In</button>
+    </router-link>
+    <router-link to="/sign-up">
+      <button class="SignIn-button-form">Sign Up</button>
+    </router-link>
+  </div>
 </div>
-
+  
 </template>
 
 <script>
@@ -297,30 +298,35 @@ export default {
   cursor: pointer;
   margin: 0 10px;
 }
-.SignIn-button{
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    text-decoration: none;
-  }
-  .SignIn-button-form{
-    cursor: pointer;
-    background-color: #02AA8B;
-    color: white;
-    font-size: 24px;
-    border: none;
-    border-radius: 25px;
-    height: 70px;
-    width: 100%;
+/* Estilo para los botones "Sign In" y "Sign Up" */
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  width: 50%;
+  padding: 20px;
+}
 
-  }
-  .MessageSignIn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px;
-  }
+.SignIn-button-form {
+  cursor: pointer;
+  background-color: #02AA8B;
+  color: white;
+  font-size: 24px;
+  border: none;
+  width: 160px;
+  border-radius: 25px;
+  height: 70px;
+  flex: 1; /* Esto asegura que los botones se distribuyan por igual en el contenedor */
+  margin: 0 10px;
+}
+
+.MessageSignIn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+}
 /* Estilo para el botón "Accept" */
 .accept-button,
 .reject-button {
