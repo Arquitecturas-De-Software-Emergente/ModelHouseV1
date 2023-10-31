@@ -50,7 +50,7 @@ const router = createRouter({
         props: true,
     },
     {
-        path: "/request/:id",
+        path: "/request/",
         name: "request-list",
         component: Request,
     },
