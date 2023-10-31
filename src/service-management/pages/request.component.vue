@@ -55,7 +55,8 @@
 </template>
 
 <script>
-import { RequestService } from '../service/request.service'
+import { RequestService } from '../service/request.service';
+import proposalComponent from './proposal.component.vue';
 
 export default {
   name: 'Request-Page',
@@ -67,6 +68,9 @@ export default {
       pendingRequests: [],
     }
   },
+
+  components: { proposalComponent },
+
   created() {
     const storedRequests = localStorage.getItem('requests')
     console.log(storedRequests)

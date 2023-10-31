@@ -24,19 +24,21 @@
 <style scoped>
 
 .container {
-  display: flex; /* Utilizamos flexbox para el diseño */
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan cuando no haya suficiente espacio */
+  display: flex;
+  background-color: #004A63; /* Utilizamos flexbox para el diseño */
 }
 
 .sidebar {
-  flex: 0 0 150px; /* Ancho fijo para el sidebar */
-  background-color: #004A63;
-  height: 100vh;
+  flex: 0 0 150px; /* Ancho fijo de la barra lateral */
+    background-color: #004A63;
+    color: #fff;
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: center
 }
 
 .content {
   padding: 50px;
-
   flex: 1; /* El contenido principal ocupa todo el espacio restante */
   background-color: #ffffff; /* Color de fondo del contenido principal */
 }

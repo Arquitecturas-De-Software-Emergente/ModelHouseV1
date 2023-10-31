@@ -1,16 +1,51 @@
 <template>
     <div class="cards-container">
-        <div class="proposal-cards">
-            <div v-for="proposal in pendingProposals" :key="proposal.id" class="proposal-card">
-                <div class="card-body">
-                    <span>{{ proposal.description }}</span>
+        <div v-if = 'this.userId = 1'>
+            <div class="proposal-cards">
+                <div v-for="proposal in sentProposals" :key="proposal.id" class="proposal-card">
+                    <div class="card-body">
+                        <span>{{ proposal.description }}</span>
+                    </div>
+                    <div class="proposal-button-container">
+                        <router-link :to ="'/proposal-form/' + proposal.id">
+                            <button class="create-proposal-button-form">
+                                <span>Elaborate Proposal</span>
+                            </button>
+                        </router-link>
+                    </div>
                 </div>
-                <div class="proposal-button-container">
-                    <router-link :to ="'/proposal-form/' + proposal.id">
-                        <button class="create-proposal-button-form">
-                            <span>Elaborate Proposal</span>
-                        </button>
-                    </router-link>
+                <div v-for="proposal in pendingProposals" :key="proposal.id" class="proposal-card">
+                    <div class="card-body">
+                        <span>{{ proposal.description }}</span>
+                    </div>
+                    <div class="status-message">
+                        <span>Pending</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-else-if='this.userId = 2'>
+            <div class="proposal-cards">
+                <div v-for="proposal in sentProposals" :key="proposal.id" class="proposal-card">
+                    <div class="card-body">
+                        <span>{{ proposal.description }}</span>
+                    </div>
+                    <div>
+                        <span>Sent</span>
+                    </div>
+                </div>
+                <div v-for="proposal in pendingProposals" :key="proposal.id" class="proposal-card">
+                    <div class="card-body">
+                        <span>{{ proposal.description }}</span>
+                    </div>
+                    <div class="proposal-button-container">
+                        <router-link :to ="'/proposal-form/' + proposal.id">
+                            <button class="create-proposal-button-form">
+                                <span>Elaborate Proposal</span>
+                            </button>
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -26,10 +61,14 @@ export default {
         return{
             proposals: [],
             pendingProposals: [],
+            sentProposals: [],
+            userId: null,
         }
     },
     created(){
         this.loadProposalsPending();
+        this.loadProposalSent();
+        this.getAccoundId();
         const storedProposals = localStorage.getItem('proposals')
         console.log(storedProposals);
         // if(storedProposals) {
@@ -52,7 +91,27 @@ export default {
             ).catch((error) => {
                 console.error('Error al obtener las propuestas:', error);
             });
+        },
+        loadProposalSent(){
+            const proposalService = new ProposalService();
+            proposalService
+                .getProposal()
+                .then((response) => {
+                    this.proposals = response.data;
+                    localStorage.setItem('proposals', JSON.stringify(this.proposals));
+                    this.sentProposals = this.proposals.filter((proposal) => proposal.status === 'Enviado');
+                    console.log('Propuestas:', this.proposals);
+                    console.log('Propuestas enviadas:', this.sentProposals);
+                }
+            ).catch((error) => {
+                console.error('Error al obtener las propuestas:', error);
+            });
+        },
+        getAccoundId(){
+            this.userId = localStorage.getItem('userId');
+            console.log(this.userId);
         }
+
     }
 }
 </script>
@@ -80,14 +139,14 @@ export default {
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 .card{
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 1; 
+    flex: 1;
 }
 .card-body {
   padding: 1rem;

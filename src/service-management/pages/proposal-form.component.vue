@@ -24,7 +24,6 @@
             <button class="remove-button" @click="removeActivity(index)"><i class="pi pi-trash"></i></button>
           </div>
           <button class="add-button" type="button" @click="addActivity"><i class="pi pi-plus-circle"></i></button> <!-- Agrega type="button" aquí -->
-          <!-- <InputText class="custom-input-2" type="text" v-model="activities" placeholder="Activities"/> -->
         </div>
         <div class="form-group-2">
           <label for ="resources">Resources</label>
