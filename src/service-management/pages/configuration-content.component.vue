@@ -4,7 +4,7 @@
             <i class="pi pi-sign-out"></i>
             <span>Sign Out</span>
         </li>
-      <button @click="openSubscriptionComponent()">Open Subscription</button>
+      <button  class="subscription-button" @click="openSubscriptionComponent()">Open Subscription</button>
     </div>
 </template>
 
@@ -31,14 +31,27 @@ export default {
         this.$router.push('/subscription');
         }
     },
-
-    
 }
 
 </script>
 
 <style>
 .sign-out {
- cursor: pointer;
+  cursor: pointer;
+}
+
+.subscription-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.subscription-button:hover {
+  background-color: #45a049;
 }
 </style>
