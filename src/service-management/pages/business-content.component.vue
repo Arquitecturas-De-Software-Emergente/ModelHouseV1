@@ -39,24 +39,28 @@
             circular
             :autoplayInterval="3000"
           >
-          <template #item="slotProps">
-          <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
-            <div class="mb-3">
-              <img
-                :src="slotProps.image"
-                class="w-4 shadow-2"
-              />
-            </div>
-            <div>
-              <h4 class="mb-1">{{ slotProps.title }}</h4>
-            </div>
-          </div>
-        </template>
+            <template #item="slotProps">
+              <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+                <div class="mb-3">
+                  <img :src="slotProps.image" class="w-4 shadow-2" />
+                </div>
+                <div>
+                  <h4 class="mb-1">{{ slotProps.title }}</h4>
+                </div>
+              </div>
+            </template>
           </Carousel-v>
         </div>
       </div>
     </div>
   </div>
+  <Dialog-v v-model="showDialog" :visible="this.showDialog">
+    <i class="pi-check" style="font-size: 48px; color: #4caf50"></i>
+    <p>To perform this action it is necessary to change the role to "Customer".</p>
+    <router-link :to="{ name: 'sign-in' }">
+      <button>Cambiar de cuenta</button>
+    </router-link>
+  </Dialog-v>
 </template>
 
 <script>
@@ -70,6 +74,7 @@ export default {
       business: null,
       projects: [],
       projectsLoaded: false,
+      showDialog: false,
       responsiveOptions: [
         {
           breakpoint: '1024px',
@@ -91,15 +96,23 @@ export default {
   },
   methods: {
     navigateToRequestForm() {
-      const accountActive = JSON.parse(localStorage.getItem('account'))?.isActive;
-      if(accountActive){
-        this.$router.push('/request-form');
-      }else{
-        this.$router.push('/sign-in');
+      const accountActive = JSON.parse(localStorage.getItem('account'))?.isActive
+      const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId
+
+      if (accountActive) {
+        if (businessId != null) {
+          this.showDialog = true
+        } else {
+          // Add a log to verify business.id
+          console.log('business.id:', this.business.id)
+
+          // Pass the business.id as a route parameter
+          this.$router.push({ name: 'request-form', params: { businessId: this.business.id } })
+        }
+      } else {
+        this.$router.push('/sign-in')
       }
-      
-    
-    },
+    }
   },
 
   created() {
@@ -115,17 +128,18 @@ export default {
         console.error('Error al obtener los detalles del negocio', error)
       })
 
-      projectService
+    projectService
       .getProjectListByBusinessId(this.$route.params.id)
       .then((response) => {
         this.projects = response.data
-        this.projectsLoaded = true; // Marca los proyectos como cargados
+        this.projectsLoaded = true // Marca los proyectos como cargados
       })
       .catch((error) => {
         console.error('Error al obtener la lista de proyectos:', error)
       })
 
-  },
+
+  }
 }
 </script>
 

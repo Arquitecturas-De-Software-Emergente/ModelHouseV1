@@ -1,16 +1,14 @@
 <template>
-
   <div class="cards-container">
     <div class="request-title">
       <h1>Request Form</h1>
-      </div>
+    </div>
 
     <form class="form" @submit.prevent="submitRequest">
-
       <div class="form-group">
-          <label for="title">Area : </label>
-          <InputText id="title" class="custom-input" type="text" v-model="title" placeholder="Area"/>
-        </div>
+        <label for="title">Area : </label>
+        <InputText id="title" class="custom-input" type="text" v-model="title" placeholder="Area" />
+      </div>
 
       <div class="form-group">
         <label for="budget">Estimated Budget:</label>
@@ -45,25 +43,32 @@
       </div>
 
       <div class="form-group-2">
-          <input class="file-form" type="file" name="demo[]" accept="*/*" id="fileUpload" style="display: none;" multiple>
-          <label for="fileUpload" class="file-upload-label">Add File <i class="pi pi-file"></i>
-          </label>
-        </div>
+        <input
+          class="file-form"
+          type="file"
+          name="demo[]"
+          accept="*/*"
+          id="fileUpload"
+          style="display: none"
+          multiple
+        />
+        <label for="fileUpload" class="file-upload-label"
+          >Add File <i class="pi pi-file"></i>
+        </label>
+      </div>
 
       <div class="submit-button">
-          <button class="submit-button-form" type="submit">
-            <span class="submit-button-label">Send Request</span>
-          </button>
-        </div>
+        <button class="submit-button-form" type="submit">
+          <span class="submit-button-label">Send Request</span>
+        </button>
+      </div>
     </form>
 
     <Dialog-v v-model="showDialog" header="Solicitud Enviada" :visible="this.showDialog">
       <p>Tu solicitud se ha enviado con éxito.</p>
       <button @click="closeDialog">Cerrar</button>
     </Dialog-v>
-
   </div>
-
 </template>
 
 <script>
@@ -79,7 +84,8 @@ export default {
         location: '',
         description: ''
       },
-      showDialog: false
+      showDialog: false,
+      businessId: null
     }
   },
   methods: {
@@ -93,11 +99,17 @@ export default {
       }
     },
 
+    created() {
+      this.businessId = this.$route.params.businessId
+      console.log('businessId in created hook:', this.businessId)
+    },
+
     async submitRequest() {
       const requestService = new RequestService()
       try {
-        const userId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
-        const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+        const userId = JSON.parse(localStorage.getItem('account'))?.userProfileId
+        const businessId = this.$route.params.businessId
+        console.log('BusinessId:', businessId)
         const requestData = {
           area: this.request.area,
           estimatedBudget: this.request.estimatedBudget,
@@ -105,14 +117,12 @@ export default {
           location: this.request.location,
           description: this.request.description
         }
-
         const response = await requestService.sendRequest(userId, businessId, requestData)
         console.log('Response:', response.status)
         if (response.status === 200) {
-            console.log('Solicitud enviada con éxito:', response)
-            this.showDialog = true
-            this.resetForm()
-        
+          console.log('Solicitud enviada con éxito:', response)
+          this.showDialog = true
+          this.resetForm()
         } else {
           this.$toast.add({
             severity: 'error',
@@ -125,119 +135,117 @@ export default {
       }
     },
     closeDialog() {
-    this.showDialog = false;
+      this.showDialog = false
     }
-    
   }
 }
 </script>
 
 <style scoped>
-
 .request-title {
-    align-items: center;
-    text-align: center;
-    display: flex;
-    padding: 10px;
-    margin-bottom: 20px;
-  }
-  
+  align-items: center;
+  text-align: center;
+  display: flex;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.form {
+  width: 100%; /* El formulario ocupará todo el ancho disponible */
+  max-width: 500px;
+}
+
+.form-group-2 {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group-2 label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.form-group label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+label {
+  display: block;
+  font-weight: 600;
+}
+
+input[type='text'],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+select {
+  appearance: none;
+}
+
+.file-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.file-upload-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e6e6e6;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+.file-upload-label i {
+  margin: 0 0 0 10px;
+}
+
+.submit-button {
+  display: flex;
+  justify-content: center;
+}
+.submit-button-form {
+  cursor: pointer;
+  background-color: #02aa8b;
+  color: white;
+  font-size: 24px;
+  border: none;
+  border-radius: 25px;
+  height: 45px;
+  width: 80%;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 600px) {
   .cards-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .form {
-    width: 100%; /* El formulario ocupará todo el ancho disponible */
-    max-width: 500px;
-  }
-  
-  .form-group-2 {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
-  .form-group-2 label {
-    font-size: 18px;
-    margin-bottom: 10px;
+    max-width: 100%;
   }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  .form-group label {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  label {
-    display: block;
-    font-weight: 600;
-  }
-
-  input[type="text"],
+  label,
+  input[type='text'],
   select,
   textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px;
   }
-
-  select {
-    appearance: none;
-  }
-
-  .file-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;;
-  }
-  .file-upload-label{
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #E6E6E6;
-    border: none;
-    padding: 12px;
-    border-radius: 5px;
-    margin: 10px 0; 
-  }
-  .file-upload-label i {
-    margin: 0 0 0 10px;
-  }
-
-  .submit-button{
-    display: flex;
-    justify-content: center;
-  }
-  .submit-button-form{
-    cursor: pointer;
-    background-color: #02AA8B;
-    color: white;
-    font-size: 24px;
-    border: none;
-    border-radius: 25px;
-    height: 45px;
-    width: 80%;
-  }
-
-  /* Responsive Design */
-  @media screen and (max-width: 600px) {
-    .cards-container {
-      max-width: 100%;
-    }
-
-    label,
-    input[type="text"],
-    select,
-    textarea {
-      font-size: 14px;
-    }
-  }
+}
 </style>

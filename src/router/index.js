@@ -39,7 +39,7 @@ const router = createRouter({
         component: BusinessContent,
     },
     {
-        path: "/request-form",
+        path: "/request-form/:businessId",
         name: "request-form",
         component: RequestForm,
     },
