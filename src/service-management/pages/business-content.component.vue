@@ -2,7 +2,7 @@
   <div class="business-detail" v-if="business">
     <div class="business-summary">
       <div class="business-logo">
-        <img :src="business.image" alt="Logo de la empresa" />
+        <img :src="business.image" alt="Business logo" />
       </div>
       <div class="business-rating">
         <Rating-v
@@ -15,18 +15,18 @@
         />
       </div>
       <h1>{{ business.name }}</h1>
-      <p>Teléfono: {{ business.phone }}</p>
-      <p>Oficial Web Page: {{ business.webSite }}</p>
+      <p>Phone: {{ business.phone }}</p>
+      <p>Website: {{ business.webSite }}</p>
       <p>Address: {{ business.address }}</p>
       <p>Service Area: {{ business.address }}</p>
-      <p>Categoría:</p>
+      <p>Category:</p>
       <p>Social Media:</p>
       <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
     </div>
     <div class="business-details">
       <h2>About Us</h2>
       <p>{{ business.description }}</p>
-      <h2>Especialización</h2>
+      <h2>Specialization</h2>
       <p>{{ business.especialization }}</p>
       <div>
         <h2>Projects</h2>

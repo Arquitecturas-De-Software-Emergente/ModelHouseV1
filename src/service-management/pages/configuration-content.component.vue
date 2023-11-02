@@ -1,9 +1,9 @@
 <template>
     <div>
-        <li class="navbar-link sign-out" v-if='this.account' @click="signOut()">
+        <div class="navbar-link sign-out" v-if='this.account' @click="signOut()">
             <i class="pi pi-sign-out"></i>
             <span>Sign Out</span>
-        </li>
+        </div>
       <button @click="openSubscriptionComponent()">Open Subscription</button>
     </div>
 </template>

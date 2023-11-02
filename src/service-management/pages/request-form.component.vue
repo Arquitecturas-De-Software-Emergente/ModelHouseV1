@@ -1,16 +1,11 @@
 <template>
-
-  <div class="cards-container">
-    <div class="request-title">
-      <h1>Request Form</h1>
-      </div>
-
-    <form class="form" @submit.prevent="submitRequest">
-
+  <div>
+    <h1>Request Form</h1>
+    <form @submit.prevent="submitRequest">
       <div class="form-group">
-          <label for="title">Area : </label>
-          <InputText id="title" class="custom-input" type="text" v-model="title" placeholder="Area"/>
-        </div>
+        <label for="area">Area:</label>
+        <input type="text" id="area" v-model="request.area" />
+      </div>
 
       <div class="form-group">
         <label for="budget">Estimated Budget:</label>
@@ -50,11 +45,7 @@
           </label>
         </div>
 
-      <div class="submit-button">
-          <button class="submit-button-form" type="submit">
-            <span class="submit-button-label">Send Request</span>
-          </button>
-        </div>
+<button type="submit">Send Request</button>
     </form>
 
     <Dialog-v v-model="showDialog" header="Solicitud Enviada" :visible="this.showDialog">
@@ -97,7 +88,7 @@ export default {
       const requestService = new RequestService()
       try {
         const userId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
-        const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+        const businessId = 1
         const requestData = {
           area: this.request.area,
           estimatedBudget: this.request.estimatedBudget,
