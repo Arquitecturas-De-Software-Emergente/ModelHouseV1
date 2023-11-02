@@ -48,7 +48,9 @@
         <proposalComponent></proposalComponent>
       </TabPanel>
       <!--    THIRD PANEL-->
-      <TabPanel style="background-color: green; padding: 10px 15px" header="PROJECTS"> </TabPanel>
+      <TabPanel style="background-color: green; padding: 10px 15px" header="PROJECTS"> 
+        <projectsListComponent></projectsListComponent>
+      </TabPanel>
       <!--    FOURTH PANEL-->
       <TabPanel style="background-color: green; padding: 10px 15px" header="COMPLETED Projects">
       </TabPanel>
@@ -90,6 +92,7 @@
 <script>
 import { RequestService } from '../service/request.service';
 import proposalComponent from './proposal.component.vue';
+import projectsListComponent from './projects-list.component.vue';
 
 export default {
 
@@ -105,7 +108,7 @@ export default {
     }
   },
 
-  components: { proposalComponent },
+  components: { proposalComponent, projectsListComponent },
 
   created() {
     const storedRequests = localStorage.getItem('requests')

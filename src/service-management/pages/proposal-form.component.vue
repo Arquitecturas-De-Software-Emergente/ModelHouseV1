@@ -77,7 +77,7 @@
       
       submitProposal() {
         const proposalService = new ProposalService();
-        console.log('Proposal-Form-Page created111')
+        console.log('Proposal-Form-Page created')
           const proposalData = {
             title: this.title,
             description: this.description,

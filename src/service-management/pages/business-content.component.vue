@@ -187,6 +187,7 @@ h2 {
 }
 
 .project-carousel {
+  border: none;
   /* Agrega estilos para el carrusel de imágenes aquí */
 }
 

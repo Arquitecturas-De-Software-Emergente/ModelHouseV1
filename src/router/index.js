@@ -10,6 +10,7 @@ import ProposalForm from "@/service-management/pages/proposal-form.component.vue
 import configurationContent from "@/service-management/pages/configuration-content.component.vue"
 import profile from "@/identity-and-access-management/pages/edit-profile.component.vue";
 import Cart from "@/payment-and-subscription-management/Cart.vue";
+import projectProgressView from "@/service-management/pages/project-progress-view.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,6 +72,11 @@ const router = createRouter({
         name:"cartSubscription",
         component: Cart
     },
+    {
+        path: "/project/:proposalId",
+        name: "project",
+        component:projectProgressView
+    }
     ],
 });
 export default router;
