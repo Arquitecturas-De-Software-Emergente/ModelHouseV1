@@ -30,27 +30,38 @@
       <p>{{ business.especialization }}</p>
       <div>
         <h2>Projects</h2>
-        <div class="project-carousel">
-          <Carousel-v
-            :value="projects"
-            :numVisible="1"
-            :numScroll="1"
-            :responsiveOptions="responsiveOptions"
-            circular
-            :autoplayInterval="3000"
-          >
-            <template #item="slotProps">
-              <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
-                <div class="mb-3">
-                  <img :src="slotProps.image" class="w-4 shadow-2" />
-                </div>
-                <div>
-                  <h4 class="mb-1">{{ slotProps.title }}</h4>
+        <div class="carrousel">
+        <Carousel-v
+          :value="projects"
+          :numVisible="3"
+          :numScroll="1"
+          :responsiveOptions="responsiveOptions"
+          circular
+          :autoplayInterval="3000"
+        >
+          <template #item="slotProps">
+            <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+              <div class="mb-3">
+                <img
+                  :src="
+                    'https://primefaces.org/cdn/primevue/images/product/' + slotProps.data.image
+                  "
+                  :alt="slotProps.data.title"
+                  class="w-6 shadow-2"
+                />
+              </div>
+              <div>
+                <h4 class="mb-1">{{ slotProps.data.title }}</h4>
+                <h6 class="mt-0 mb-3">${{ slotProps.data.status }}</h6>
+                <div class="mt-5 flex align-items-center justify-content-center gap-2">
+                  <Button icon="pi pi-search" rounded />
+                  <Button icon="pi pi-star-fill" rounded severity="secondary" />
                 </div>
               </div>
-            </template>
-          </Carousel-v>
-        </div>
+            </div>
+          </template>
+        </Carousel-v>
+      </div>
       </div>
     </div>
   </div>
@@ -94,11 +105,11 @@ export default {
       ]
     }
   },
+
   methods: {
     navigateToRequestForm() {
       const accountActive = JSON.parse(localStorage.getItem('account'))?.isActive
       const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId
-
       if (accountActive) {
         if (businessId != null) {
           this.showDialog = true
@@ -132,13 +143,12 @@ export default {
       .getProjectListByBusinessId(this.$route.params.id)
       .then((response) => {
         this.projects = response.data
+        console.log('Projects: ', this.projects)
         this.projectsLoaded = true // Marca los proyectos como cargados
       })
       .catch((error) => {
         console.error('Error al obtener la lista de proyectos:', error)
       })
-
-
   }
 }
 </script>
@@ -185,7 +195,11 @@ h2 {
   font-size: 20px;
   margin-top: 20px;
 }
-
+.carrousel{
+  width: 700px;
+  margin:  10px;
+  padding: 10px;
+}
 .project-carousel {
   border: none;
   /* Agrega estilos para el carrusel de imágenes aquí */
