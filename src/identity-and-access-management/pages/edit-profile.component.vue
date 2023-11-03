@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.userId!=null">
+  <div v-if='this.userProfileId != null'>
     <div class="profile-container">
       <h1 class="profile-title">PERFIL</h1>
       <div class="profile">
@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div v-if="this.userId==null">
+  <div v-else-if='this.businessProfileId != null'>
     <div class="profile-container">
       <h1 class="profile-title">PERFIL</h1>
       <div class="profile">
@@ -66,9 +66,8 @@ export default {
   name: 'Profile-Page',
   data() {
     return {
-      account: null,
-      userId: null,
-      businessId: null,
+      userProfileId: null,
+      businessProfileId: null,
       user: {
         firstName: null,
         lastName: null,
@@ -91,13 +90,14 @@ export default {
     }
   },
   created() {
+    this.getAccountId();
     const editProfileService = new EditProfileService()
     //const account = JSON.parse(localStorage.getItem("account"));
-    const userId = JSON.parse(localStorage.getItem('userId'))?.userProfileId
-    const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId
+    const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+    const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
 
-    if (userId!=null) {
-      editProfileService.userprofileByUserId(userId).then((response) => {
+    if (userProfileId != null) {
+      editProfileService.userprofileByUserId(userProfileId).then((response) => {
         if (response.data != null) {
           this.user.firstName = response.data.firstName
           this.user.image = response.data.image
@@ -109,8 +109,8 @@ export default {
           //console.log('datos:: ', response.data.id)
         }
       })
-    } else if (userId==null) {
-      editProfileService.businessProfileByUserId(businessId).then((response) => {
+    } else if (businessProfileId != null) {
+      editProfileService.businessProfileByUserId(businessProfileId).then((response) => {
         if (response.data != null) {
           this.business.name = response.data.name
           this.business.image = response.data.image
@@ -132,6 +132,12 @@ export default {
       localStorage.removeItem('account')
       this.$store.commit('setUserLoggedIn', false)
       this.$router.push('/home')
+    },
+    getAccountId(){
+      this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+      console.log(this.businessProfileId);
+
+      this.userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
     }
   }
 }
