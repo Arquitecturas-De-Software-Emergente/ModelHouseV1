@@ -33,6 +33,7 @@ import TieredMenu from "primevue/tieredmenu";
 import Divider from "primevue/divider";
 import ProgressBar from "primevue/progressbar";
 import Carousel from 'primevue/carousel';
+import Checkbox from 'primevue/checkbox';
 
 const app = createApp(App);
 app.directive('badge', BadgeDirective);
@@ -64,6 +65,7 @@ app.component("Divider-v", Divider);
 app.component("ProgressBar", ProgressBar);
 app.component("Image-v", Image);
 app.component("Carousel-v", Carousel);
+app.component("Checkbox-v", Checkbox);
 
 app.mount('#app');
 
