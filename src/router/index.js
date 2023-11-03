@@ -11,6 +11,7 @@ import configurationContent from "@/service-management/pages/configuration-conte
 import profile from "@/identity-and-access-management/pages/edit-profile.component.vue";
 import Cart from "@/payment-and-subscription-management/Cart.vue";
 import projectProgressView from "@/service-management/pages/project-progress-view.component.vue";
+import porjectDetails from "@/service-management/pages/project-details.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
         path: "/business_profile/:id",
         name: "business-content",
         component: BusinessContent,
+    },
+    {
+        path: "/project-details/:projectId",
+        name: "project-details",
+        component: porjectDetails,
     },
     {
         path: "/request-form/:businessId",
