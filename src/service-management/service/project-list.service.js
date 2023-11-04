@@ -6,4 +6,7 @@ export class ProjectListService {
     getProjectById(id){
         return http.securityApi.get(`/project/${id}/profile`);
     }
+    geteProjects() {
+        return http.securityApi.get(`/project`);
+    }
 }

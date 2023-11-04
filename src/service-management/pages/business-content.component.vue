@@ -45,9 +45,7 @@
                   <div class="project-image">
                     <router-link :to="'/project-details/' + slotProps.data.id">
                       <img
-                        :src="
-                          'https://primefaces.org/cdn/primevue/images/product/' +
-                          slotProps.data.image
+                        :src="slotProps.data.image
                         "
                         :alt="slotProps.data.title"
                         class="project-image"
@@ -58,7 +56,7 @@
                     <router-link :to="'/project-details/' + slotProps.data.id">
                       {{ slotProps.data.title }}
                     </router-link>
-                    <h6 class="project-status">${{ slotProps.data.status }}</h6>
+                    <h6 class="project-status">Status: {{ slotProps.data.status }}</h6>
                   </div>
                 </div>
               </template>
@@ -91,6 +89,7 @@ export default {
       projects: [],
       projectsLoaded: false,
       showDialog: false,
+      completedProjects: [],
       responsiveOptions: [
         {
           breakpoint: '1024px',
@@ -151,6 +150,10 @@ export default {
       .getProjectListByBusinessId(this.$route.params.id)
       .then((response) => {
         this.projects = response.data
+        localStorage.setItem('projects', JSON.stringify(this.projects));
+        this.completedProjects = this.projects.filter((projects) => projects.status === 'Completado');
+        console.log('Propuestas:', this.projects);
+        console.log('Propuestas completadas:', this.completedProposal);
         console.log('Projects: ', this.projects)
         this.projectsLoaded = true // Marca los proyectos como cargados
       })

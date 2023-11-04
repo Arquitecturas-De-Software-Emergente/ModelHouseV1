@@ -18,24 +18,6 @@
                         </div>
                     </template>
                 </Card-v>
-
-                <Card-v class="project-card">
-                    <template #title>Project Title</template>
-                    <template #content>
-                        <div class="project-card-content">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam corporis reiciendis saepe magnam sapiente sunt obcaecati vel. Blanditiis omnis assumenda quam inventore, molestiae, ab error illo adipisci at, eveniet sunt! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex laudantium quisquam, natus, voluptatibus reiciendis quis dolores a libero doloremque, minima nemo doloribus itaque? Explicabo quam facere labore quaerat iste accusantium?
-                            </p>
-                            <div class="project-progress-button-container">
-                                <router-link :to="'/project/'">
-                                    <button class="see-progress-button">
-                                        <span>See Progress</span>
-                                    </button>
-                                </router-link>
-                            </div>
-                        </div>
-                    </template>
-                </Card-v>
             </div>
         </div>
     </div>
