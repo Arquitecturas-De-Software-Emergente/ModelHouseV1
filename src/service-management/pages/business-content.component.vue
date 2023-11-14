@@ -34,7 +34,7 @@
           <div class="carousel">
             <Carousel-v
               :value="projects"
-              :numVisible="3"
+              :numVisible="1"
               :numScroll="1"
               :responsiveOptions="responsiveOptions"
               circular
@@ -89,7 +89,6 @@ export default {
       projects: [],
       projectsLoaded: false,
       showDialog: false,
-      completedProjects: [],
       responsiveOptions: [
         {
           breakpoint: '1024px',
@@ -151,7 +150,7 @@ export default {
       .then((response) => {
         this.projects = response.data
         localStorage.setItem('projects', JSON.stringify(this.projects));
-        this.completedProjects = this.projects.filter((projects) => projects.status === 'Completado');
+        this.projects = this.projects.filter((projects) => projects.status === 'Completado');
         console.log('Propuestas:', this.projects);
         console.log('Propuestas completadas:', this.completedProposal);
         console.log('Projects: ', this.projects)
@@ -232,7 +231,9 @@ p {
 .carousel {
   display: flex;
   overflow-x: auto;
-  width: 600px;
+  justify-content: center; /* Centrar el contenido horizontalmente */
+  align-items: center; /* Centrar el contenido verticalmente */
+  width: 100%; /* Hacer que el carrusel ocupe todo el ancho disponible */
 }
 
 .project-item {
@@ -241,15 +242,20 @@ p {
   margin-right: 10px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Centrar el texto y otros elementos en el sentido horizontal */
 }
 
 .project-image img {
-  max-width: 100px;
+  max-width: 60%;
   height: auto;
 }
-
+.project-details{
+  text-align: center;
+}
 .project-details a {
   font-size: 16px;
+  display: block;
+  margin-top: 10px;
   text-decoration: none;
   color: #007bff;
 }
