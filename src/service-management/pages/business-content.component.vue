@@ -20,7 +20,9 @@
         <p>Service Area: {{ business.address }}</p>
         <p>Category:</p>
         <p>Social Media:</p>
+        <div v-if = 'this.businessProfileId == null'>
         <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
+      </div>
       </div>
     </div>
     <div class="column-2">
@@ -67,13 +69,14 @@
     </div>
   </div>
 
-  <Dialog-v v-model="showDialog" :visible="this.showDialog">
+  <!-- <Dialog-v v-model="showDialog" :visible="this.showDialog">
     <i class="pi-check" style="font-size: 48px; color: #4caf50"></i>
     <p>To perform this action it is necessary to change the role to "Customer".</p>
     <router-link :to="{ name: 'sign-in' }">
       <button>Cambiar de cuenta</button>
     </router-link>
-  </Dialog-v>
+  </Dialog-v> -->
+
 </template>
 
 <script>
@@ -89,6 +92,8 @@ export default {
       projects: [],
       projectsLoaded: false,
       showDialog: false,
+      showButton: false,
+      businessProfileId : JSON.parse(localStorage.getItem('account'))?.businessProfileId,
       completedProjects: [],
       responsiveOptions: [
         {
