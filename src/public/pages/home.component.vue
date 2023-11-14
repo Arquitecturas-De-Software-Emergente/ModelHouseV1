@@ -1,9 +1,9 @@
 <template>
   
     <div class="center-part">
-      <BusinessListPage />
+      <BusinessListPage></BusinessListPage>
     </div>
-  </template>
+</template>
 
 <script>
 import BusinessListPage from "@/service-management/pages/business-list.component.vue"; 
