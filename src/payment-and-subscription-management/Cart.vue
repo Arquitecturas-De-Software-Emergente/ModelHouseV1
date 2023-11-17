@@ -1,28 +1,29 @@
 <template>
   <div class="subscription-container">
     <div class="subscription-header">
-      <h2>Choose Your Plan</h2>
-      <p>You can cancel anytime.</p>
+    <h2>Choose your plan</h2>
+    <p>You can canceled anytime.</p>
     </div>
-    <div class="card-container">
-      <div class="card" v-for="plan in plans" :key="plan.id">
-        <div class="card-header">
-          <img class="user-image" src="https://primefaces.org/cdn/primevue/images/usercard.png" alt="user header" />
-        </div>
-        <div class="card-body">
-          <h3>{{ plan.name }}</h3>
-          <p>{{ plan.description }}</p>
-        </div>
-        <div class="card-footer">
-          <button class="subscribe-button" @click="goToCheckout(plan)">
-            Subscribe for {{ plan.price }}/Monthly
-          </button>
-        </div>
-      </div>
+    <div class="card flex align-items-center justify-content-center cardContent" >
+      <Card-v v-for="plan in plans" :key="plan.id" style="width: 25em">
+        <template #header>
+          <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" />
+        </template>
+        <template #title> {{ plan.name }} </template>
+        <template #subtitle> {{'🗸 '+ plan.description}} </template>
+        <template #content>
+          <p></p>
+        </template>
+        <template #footer>
+          <Button-v @click="goToCheckout(plan)">
+            {{ 'USD ' + plan.price + '/Monthly' }}
+          </Button-v>
+        </template>
+      </Card-v>
     </div>
+
   </div>
 </template>
-
 
 <script>
 import {defineComponent} from 'vue'
@@ -76,7 +77,17 @@ export default defineComponent ({
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 50px;
+  justify-content: center;
+  height: 80vh;
+  padding: 20px;
+}
+
+.cardContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 110px; /* Increased space between cards */
+  max-width: 1100px;
+  width: 100%;
 }
 
 .subscription-header {
@@ -84,57 +95,16 @@ export default defineComponent ({
   margin-bottom: 20px;
 }
 
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+/* Responsive styles */
+@media (max-width: 768px) {
+  .cardContent {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
 }
 
-.card {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  margin: 20px;
-  width: 300px;
-  background-color: #f9f9f9;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-  padding: 20px;
-  text-align: center;
-}
-
-.user-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-}
-
-.card-body {
-  padding: 20px;
-  text-align: center;
-}
-
-.card-footer {
-  padding: 20px;
-  text-align: center;
-}
-
-.subscribe-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.subscribe-button:hover {
-  background-color: #45a049;
+@media (max-width: 480px) {
+  .cardContent {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

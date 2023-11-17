@@ -10,8 +10,8 @@ import ProposalForm from "@/service-management/pages/proposal-form.component.vue
 import configurationContent from "@/service-management/pages/configuration-content.component.vue"
 import profile from "@/identity-and-access-management/pages/edit-profile.component.vue";
 import Cart from "@/payment-and-subscription-management/Cart.vue";
-import failure from "@/payment-and-subscription-management/payment-status/failure.vue";
-import success from "@/payment-and-subscription-management/payment-status/success.vue";
+import projectProgressView from "@/service-management/pages/project-progress-view.component.vue";
+import porjectDetails from "@/service-management/pages/project-details.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,7 +41,12 @@ const router = createRouter({
         component: BusinessContent,
     },
     {
-        path: "/request-form",
+        path: "/project-details/:projectId",
+        name: "project-details",
+        component: porjectDetails,
+    },
+    {
+        path: "/request-form/:businessId",
         name: "request-form",
         component: RequestForm,
     },
@@ -66,21 +71,18 @@ const router = createRouter({
         name: "Profile-Page",
         component: profile,
     },
+    
+    
     {
         path:"/subscription",
         name:"cartSubscription",
         component: Cart
     },
     {
-        path:"/payment/failure",
-        name:"failurePayment",
-        component: failure
-    },
-    {
-        path:"/payment/success",
-        name:"successPayment",
-        component: success
-    },
+        path: "/project/:proposalId",
+        name: "project",
+        component:projectProgressView
+    }
     ],
 });
 export default router;

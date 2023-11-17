@@ -4,7 +4,7 @@ export class ProjectListService {
         return http.securityApi.get(`/business_profile/${businessId}/project`);
     }
     getProjectById(id){
-        return http.get(`/project/${id}/profile`);
+        return http.securityApi.get(`/project/${id}/profile`);
     }
     geteProjects() {
         return http.securityApi.get(`/project`);

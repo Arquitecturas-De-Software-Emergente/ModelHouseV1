@@ -1,7 +1,4 @@
 <template>
-    <div>
-        <h1>PERFIL</h1> 
-    </div>
   <div v-if='this.userProfileId != null'>
     <div class="profile-container">
       <h1 class="profile-title">PERFIL</h1>
@@ -64,9 +61,9 @@
   </div>
 </template>
 <script>
-import {EditProfileService} from "@/identity-and-access-management/service/edit-profile.service";
+import { EditProfileService } from '../service/edit-profile.service'
 export default {
-  name: 'ProfilePage',
+  name: 'Profile-Page',
   data() {
     return {
       userProfileId: null,
@@ -77,7 +74,7 @@ export default {
         gender: null,
         phoneNumber: null,
         address: null,
-        image: null,
+        image: null
       },
       business: {
         name: null,
@@ -88,13 +85,13 @@ export default {
         phoneNumber: null,
         foundationName: null,
         categories: [],
-        review: null,
-      },
-    };
+        review: null
+      }
+    }
   },
   created() {
     this.getAccountId();
-    const editProfileService = new EditProfileService();
+    const editProfileService = new EditProfileService()
     //const account = JSON.parse(localStorage.getItem("account"));
     const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
     const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
@@ -102,49 +99,48 @@ export default {
     if (userProfileId != null) {
       editProfileService.userprofileByUserId(userProfileId).then((response) => {
         if (response.data != null) {
-          this.user.firstName = response.data.firstName;
-          this.user.image = response.data.image;
-          this.user.lastName = response.data.lastName;
-          this.user.gender = response.data.gender;
-          this.user.phoneNumber = response.data.phoneNumber;
-          this.user.address = response.data.address;
-          this.user.id = response.data.id;
+          this.user.firstName = response.data.firstName
+          this.user.image = response.data.image
+          this.user.lastName = response.data.lastName
+          this.user.gender = response.data.gender
+          this.user.phoneNumber = response.data.phoneNumber
+          this.user.address = response.data.address
+          this.user.id = response.data.id
           //console.log('datos:: ', response.data.id)
         }
-      });
+      })
     } else if (businessProfileId != null) {
       editProfileService.businessProfileByUserId(businessProfileId).then((response) => {
         if (response.data != null) {
-          this.business.name = response.data.name;
-          this.business.image = response.data.image;
-          this.business.id = response.data.id;
-          this.business.description = response.data.description;
-          this.business.address = response.data.address;
-          this.business.webSite = response.data.webSite;
-          this.business.phoneNumber = response.data.phoneNumber;
-          this.business.foundationName = response.data.foundationName;
-          this.business.categories = response.data.categories;
-          this.business.review = response.data.review;
-          console.log('datos:: ', response.data.name);
+          this.business.name = response.data.name
+          this.business.image = response.data.image
+          this.business.id = response.data.id
+          this.business.description = response.data.description
+          this.business.address = response.data.address
+          this.business.webSite = response.data.webSite
+          this.business.phoneNumber = response.data.phoneNumber
+          this.business.foundationName = response.data.foundationName
+          this.business.categories = response.data.categories
+          this.business.review = response.data.review
+          console.log('datos:: ', response.data.name)
         }
-      });
+      })
     }
   },
   methods: {
     signOut() {
-      localStorage.removeItem('account');
-      this.$store.commit('setUserLoggedIn', false);
-      this.$router.push('/home');
+      localStorage.removeItem('account')
+      this.$store.commit('setUserLoggedIn', false)
+      this.$router.push('/home')
     },
-    getAccountId() {
+    getAccountId(){
       this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
       console.log(this.businessProfileId);
 
       this.userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
-    },
-  },
-};
-
+    }
+  }
+}
 </script>
 
 <style scoped>
