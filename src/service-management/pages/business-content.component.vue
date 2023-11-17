@@ -7,7 +7,7 @@
         </div>
         <div class="business-rating">
           <Rating-v
-            v-model="business.review"
+            :modelValue="businessReview"
             :cancel="false"
             :stars="5"
             :pt="{ onIcon: { class: 'text-orange-400' } }"
@@ -33,7 +33,7 @@
         <p>{{ business.especialization }}</p>
         <div>
           <h2>Projects</h2>
-          <div class="carousel">
+          <div class="carousel" v-if="projects.length>0">
             <Carousel-v
               :value="projects"
               :numVisible="1"
@@ -64,6 +64,9 @@
               </template>
             </Carousel-v>
           </div>
+          <div v-else class="no-projects">
+            <p>The company does not yet have completed projects</p>
+          </div>
         </div>
       </div>
     </div>
@@ -93,6 +96,7 @@ export default {
       projectsLoaded: false,
       showDialog: false,
       showButton: false,
+      businessReview: 4,
       businessProfileId : JSON.parse(localStorage.getItem('account'))?.businessProfileId,
       responsiveOptions: [
         {
@@ -190,7 +194,7 @@ export default {
 }
 
 .business-logo img {
-  max-width: 100px;
+  max-width: 60%;
   height: auto;
   border: 1px solid #ccc;
   border-radius: 15%;
@@ -290,5 +294,23 @@ Button {
 
 .Button.secondary {
   background-color: #ccc;
+}
+
+.no-projects {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* Adjust the height as needed */
+  border: 2px solid #48b9a5; /* Border color */
+  border-radius: 8px; /* Border radius for rounded corners */
+  background-color: #f9f9f9; /* Background color */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional box shadow for depth */
+}
+
+.no-projects p {
+  margin: 0; /* Remove default margin */
+  font-size: 18px;
+  color: #48b9a5; /* Text color */
+  text-align: center;
 }
 </style>
