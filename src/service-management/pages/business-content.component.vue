@@ -1,5 +1,58 @@
 <template>
   <div class="business-detail" v-if="business">
+    <div class="business-summary">
+      <div class="business-logo">
+        <img :src="business.image" alt="Logo de la empresa" />
+      </div>
+      <div class="business-rating">
+        <Rating-v
+          v-model="business.review"
+          :cancel="false"
+          :stars="5"
+          :pt="{
+            onIcon: { class: 'text-orange-400' }
+          }"
+        />
+      </div>
+      <h1>{{ business.name }}</h1>
+      <p>Teléfono: {{ business.phone }}</p>
+      <p>Oficial Web Page: {{ business.webSite }}</p>
+      <p>Address: {{ business.address }}</p>
+      <p>Service Area: {{ business.address }}</p>
+      <p>Categoría:</p>
+      <p>Social Media:</p>
+      <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
+    </div>
+    <div class="business-details">
+      <h2>About Us</h2>
+      <p>{{ business.description }}</p>
+      <h2>Especialización</h2>
+      <p>{{ business.especialization }}</p>
+      <div>
+        <h2>Projects</h2>
+        <div class="project-carousel">
+          <Carousel-v
+            :value="projects"
+            :numVisible="1"
+            :numScroll="1"
+            :responsiveOptions="responsiveOptions"
+            circular
+            :autoplayInterval="3000"
+          >
+          <template #item="slotProps">
+          <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+            <div class="mb-3">
+              <img
+                :src="slotProps.image"
+                class="w-4 shadow-2"
+              />
+            </div>
+            <div>
+              <h4 class="mb-1">{{ slotProps.title }}</h4>
+            </div>
+          </div>
+        </template>
+          </Carousel-v>
     <div class="column-1">
       <div class="business-summary">
         <div class="business-logo">
@@ -79,7 +132,6 @@
       <button>Cambiar de cuenta</button>
     </router-link>
   </Dialog-v> -->
-
 </template>
 
 <script>
@@ -91,7 +143,6 @@ export default {
   data() {
     return {
       business: null,
-      projectId: null,
       projects: [],
       projectsLoaded: false,
       showDialog: false,
@@ -117,28 +168,17 @@ export default {
       ]
     }
   },
-
   methods: {
     navigateToRequestForm() {
-      const accountActive = JSON.parse(localStorage.getItem('account'))?.isActive
-      const businessId = JSON.parse(localStorage.getItem('account'))?.businessProfileId
-      if (accountActive) {
-        if (businessId != null) {
-          this.showDialog = true
-        } else {
-          // Add a log to verify business.id
-          console.log('business.id:', this.business.id)
-
-          // Pass the business.id as a route parameter
-          this.$router.push({ name: 'request-form', params: { businessId: this.business.id } })
-        }
-      } else {
-        this.$router.push('/sign-in')
+      const accountActive = JSON.parse(localStorage.getItem('account'))?.isActive;
+      if(accountActive){
+        this.$router.push('/request-form');
+      }else{
+        this.$router.push('/sign-in');
       }
+      
+    
     },
-    navigateToProjectDetails(projectId) {
-      this.$router.push({ name: 'project-details', params: { id: projectId } })
-    }
   },
 
   created() {
@@ -154,10 +194,11 @@ export default {
         console.error('Error al obtener los detalles del negocio', error)
       })
 
-    projectService
+      projectService
       .getProjectListByBusinessId(this.$route.params.id)
       .then((response) => {
         this.projects = response.data
+        this.projectsLoaded = true; // Marca los proyectos como cargados
         localStorage.setItem('projects', JSON.stringify(this.projects));
         this.projects = this.projects.filter((projects) => projects.status === 'Completado');
         console.log('Propuestas:', this.projects);
@@ -168,7 +209,8 @@ export default {
       .catch((error) => {
         console.error('Error al obtener la lista de proyectos:', error)
       })
-  }
+
+  },
 }
 </script>
 
@@ -176,24 +218,19 @@ export default {
 .business-detail {
   display: flex;
   justify-content: space-between;
-  background-color: #f9f9f9;
-  padding: 20px;
-}
-
-.column-1,
-.column-2 {
-  flex: 1;
-  padding: 20px;
 }
 
 .business-summary {
-  background-color: #fff;
+  flex: 1;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #ccc;
 }
 
 .business-logo img {
+  max-width: 450px;
+  border: 2px solid #02aa8b;
+  border-radius: 5%;
+  margin-bottom: 10px;
   max-width: 60%;
   height: auto;
   border: 1px solid #ccc;
@@ -211,12 +248,13 @@ p {
 }
 
 .send-button {
-  background-color: #48b9a5;
+  background-color: #02aa8b;
   color: #fff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
   font-size: 16px;
 }
 
@@ -245,9 +283,13 @@ p {
   width: 100%; /* Hacer que el carrusel ocupe todo el ancho disponible */
 }
 
-.project-item {
-  background-color: #fff;
+.business-details {
+  flex: 2;
   padding: 20px;
+}
+
+h1 {
+  font-size: 24px;
   margin-right: 10px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -274,24 +316,16 @@ p {
   margin: 10px 0;
 }
 
-.project-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
+h2 {
+  font-size: 20px;
+  margin-top: 20px;
 }
 
-Button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-right: 5px;
+.project-carousel {
+  /* Agrega estilos para el carrusel de imágenes aquí */
 }
 
+/* Ajusta los estilos del carrusel de imágenes según tu elección */
 .Button.secondary {
   background-color: #ccc;
 }
@@ -312,5 +346,5 @@ Button {
   font-size: 18px;
   color: #48b9a5; /* Text color */
   text-align: center;
-}
+
 </style>

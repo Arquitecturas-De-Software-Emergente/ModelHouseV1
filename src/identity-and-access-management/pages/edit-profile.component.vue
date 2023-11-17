@@ -1,4 +1,7 @@
 <template>
+    <div>
+        <h1>PERFIL</h1> 
+    </div>
   <div v-if='this.userProfileId != null'>
     <div class="profile-container">
       <h1 class="profile-title">PERFIL</h1>
@@ -61,7 +64,6 @@
   </div>
 </template>
 <script>
-import { EditProfileService } from '../service/edit-profile.service'
 export default {
   name: 'Profile-Page',
   data() {
@@ -124,7 +126,6 @@ export default {
           this.business.review = response.data.review
           console.log('datos:: ', response.data.name)
         }
-      })
     }
   },
   methods: {
@@ -209,4 +210,4 @@ export default {
 .edit-button:hover {
   background-color: #0056b3;
 }
-</style>
+</script>

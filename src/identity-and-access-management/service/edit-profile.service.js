@@ -1,12 +1,9 @@
 import http from "../../shared/services/http-common";
 export class EditProfileService{
-    userprofileByUserId(Id){
-        return http.securityApi.get(`/user_profile/${Id}`);
-    }
-    businessProfileByUserId(Id){
-        return http.securityApi.get(`/business_profile/${Id}`);
+    profileByUserId(accountId){
+        return http.localApi.get(`/account/${accountId}/user_profile`);
     }
     updateProfileByUserId(userId, data){
-        return http.securityApi.put(`/user_profile/${userId}`, data);
+        return http.localApi.put(`/user_profile/${userId}`, data);
     }
 }

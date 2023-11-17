@@ -14,7 +14,7 @@
       <router-link to="/profile">
         <div class="giant-button">
           <div class="avatar">
-            <img :src="account.image" alt="User Avatar" />
+            <img :src="account.image" alt="Avatar del usuario" />
           </div>
           <div class="user-name">
             {{ account.name }}
@@ -28,7 +28,7 @@
     <div class="business-card" v-for="(business, index) in businesses" :key="index">
       <div class="business-card__column">
         <div class="business-card__logo">
-          <img :src="business.image" alt="Business logo" class="small-image" />
+          <img :src="business.image" alt="Logo de la empresa" class="small-image" />
         </div>
       </div>
       <div class="business-card__column">
@@ -96,6 +96,7 @@ export default {
       this.businesses = response.data
     })
 
+    const userId = localStorage.getItem("userId");
     const userId = localStorage.getItem('userId')
     if (userId) {
       this.userIsLoggedIn = true
