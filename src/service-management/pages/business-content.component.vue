@@ -6,133 +6,131 @@
       </div>
       <div class="business-rating">
         <Rating-v
-          v-model="business.review"
-          :cancel="false"
-          :stars="5"
-          :pt="{
-            onIcon: { class: 'text-orange-400' }
-          }"
+            v-model="business.review"
+            :cancel="false"
+            :stars="5"
+            :pt="{ onIcon: { class: 'text-orange-400' } }"
         />
       </div>
       <h1>{{ business.name }}</h1>
       <p>Teléfono: {{ business.phone }}</p>
-      <p>Oficial Web Page: {{ business.webSite }}</p>
+      <p>Official Web Page: {{ business.webSite }}</p>
       <p>Address: {{ business.address }}</p>
       <p>Service Area: {{ business.address }}</p>
-      <p>Categoría:</p>
+      <p>Category:</p>
       <p>Social Media:</p>
       <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
     </div>
+
     <div class="business-details">
       <h2>About Us</h2>
       <p>{{ business.description }}</p>
       <h2>Especialización</h2>
       <p>{{ business.especialization }}</p>
+
       <div>
         <h2>Projects</h2>
         <div class="project-carousel">
           <Carousel-v
-            :value="projects"
-            :numVisible="1"
-            :numScroll="1"
-            :responsiveOptions="responsiveOptions"
-            circular
-            :autoplayInterval="3000"
-          >
-          <template #item="slotProps">
-          <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
-            <div class="mb-3">
-              <img
-                :src="slotProps.image"
-                class="w-4 shadow-2"
-              />
-            </div>
-            <div>
-              <h4 class="mb-1">{{ slotProps.title }}</h4>
-            </div>
-          </div>
-        </template>
-          </Carousel-v>
-    <div class="column-1">
-      <div class="business-summary">
-        <div class="business-logo">
-          <img :src="business.image" alt="Business logo" />
-        </div>
-        <div class="business-rating">
-          <Rating-v
-            :modelValue="businessReview"
-            :cancel="false"
-            :stars="5"
-            :pt="{ onIcon: { class: 'text-orange-400' } }"
-          />
-        </div>
-        <h1>{{ business.name }}</h1>
-        <p>Phone: {{ business.phone }}</p>
-        <p>Website: {{ business.webSite }}</p>
-        <p>Address: {{ business.address }}</p>
-        <p>Service Area: {{ business.address }}</p>
-        <p>Category:</p>
-        <p>Social Media:</p>
-        <div v-if = 'this.businessProfileId == null'>
-        <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
-      </div>
-      </div>
-    </div>
-    <div class="column-2">
-      <div class="business-details-more">
-        <h2>About Us</h2>
-        <p>{{ business.description }}</p>
-        <h2>Specialization</h2>
-        <p>{{ business.especialization }}</p>
-        <div>
-          <h2>Projects</h2>
-          <div class="carousel" v-if="projects.length>0">
-            <Carousel-v
               :value="projects"
               :numVisible="1"
               :numScroll="1"
               :responsiveOptions="responsiveOptions"
               circular
               :autoplayInterval="3000"
-            >
-              <template #item="slotProps">
-                <div class="project-item">
-                  <div class="project-image">
-                    <router-link :to="'/project-details/' + slotProps.data.id">
-                      <img
-                        :src="slotProps.data.image
-                        "
-                        :alt="slotProps.data.title"
-                        class="project-image"
-                      />
-                    </router-link>
-                  </div>
-                  <div class="project-details">
-                    <router-link :to="'/project-details/' + slotProps.data.id">
-                      {{ slotProps.data.title }}
-                    </router-link>
-                    <h6 class="project-status">Status: {{ slotProps.data.status }}</h6>
-                  </div>
+          >
+            <template #item="slotProps">
+              <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+                <div class="mb-3">
+                  <img :src="slotProps.image" class="w-4 shadow-2" />
                 </div>
-              </template>
-            </Carousel-v>
+                <div>
+                  <h4 class="mb-1">{{ slotProps.title }}</h4>
+                </div>
+              </div>
+            </template>
+          </Carousel-v>
+        </div>
+      </div>
+
+      <div class="column-1">
+        <div class="business-summary">
+          <div class="business-logo">
+            <img :src="business.image" alt="Business logo" />
           </div>
-          <div v-else class="no-projects">
-            <p>The company does not yet have completed projects</p>
+          <div class="business-rating">
+            <Rating-v
+                :modelValue="businessReview"
+                :cancel="false"
+                :stars="5"
+                :pt="{ onIcon: { class: 'text-orange-400' } }"
+            />
+          </div>
+          <h1>{{ business.name }}</h1>
+          <p>Phone: {{ business.phone }}</p>
+          <p>Website: {{ business.webSite }}</p>
+          <p>Address: {{ business.address }}</p>
+          <p>Service Area: {{ business.address }}</p>
+          <p>Category:</p>
+          <p>Social Media:</p>
+          <div v-if="this.businessProfileId == null">
+            <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="column-2">
+        <div class="business-details-more">
+          <h2>About Us</h2>
+          <p>{{ business.description }}</p>
+          <h2>Specialization</h2>
+          <p>{{ business.especialization }}</p>
+
+          <div>
+            <h2>Projects</h2>
+            <div class="carousel" v-if="projects.length > 0">
+              <Carousel-v
+                  :value="projects"
+                  :numVisible="1"
+                  :numScroll="1"
+                  :responsiveOptions="responsiveOptions"
+                  circular
+                  :autoplayInterval="3000"
+              >
+                <template #item="slotProps">
+                  <div class="project-item">
+                    <div class="project-image">
+                      <router-link :to="'/project-details/' + slotProps.data.id">
+                        <img :src="slotProps.data.image" :alt="slotProps.data.title" class="project-image" />
+                      </router-link>
+                    </div>
+                    <div class="project-details">
+                      <router-link :to="'/project-details/' + slotProps.data.id">
+                        {{ slotProps.data.title }}
+                      </router-link>
+                      <h6 class="project-status">Status: {{ slotProps.data.status }}</h6>
+                    </div>
+                  </div>
+                </template>
+              </Carousel-v>
+            </div>
+            <div v-else class="no-projects">
+              <p>The company does not yet have completed projects</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- <Dialog-v v-model="showDialog" :visible="this.showDialog">
-    <i class="pi-check" style="font-size: 48px; color: #4caf50"></i>
-    <p>To perform this action it is necessary to change the role to "Customer".</p>
-    <router-link :to="{ name: 'sign-in' }">
-      <button>Cambiar de cuenta</button>
-    </router-link>
-  </Dialog-v> -->
 </template>
+
+<!-- <Dialog-v v-model="showDialog" :visible="this.showDialog">
+   <i class="pi-check" style="font-size: 48px; color: #4caf50"></i>
+   <p>To perform this action it is necessary to change the role to "Customer".</p>
+   <router-link :to="{ name: 'sign-in' }">
+     <button>Cambiar de cuenta</button>
+   </router-link>
+ </Dialog-v> -->
 
 <script>
 import { BusinessDetailService } from '../service/business-detail.service'
@@ -340,11 +338,10 @@ h2 {
   background-color: #f9f9f9; /* Background color */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional box shadow for depth */
 }
-
 .no-projects p {
   margin: 0; /* Remove default margin */
   font-size: 18px;
   color: #48b9a5; /* Text color */
   text-align: center;
-
+}
 </style>

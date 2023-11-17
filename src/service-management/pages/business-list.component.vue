@@ -95,8 +95,6 @@ export default {
     businessService.searchRemodeler().then((response) => {
       this.businesses = response.data
     })
-
-    const userId = localStorage.getItem("userId");
     const userId = localStorage.getItem('userId')
     if (userId) {
       this.userIsLoggedIn = true
