@@ -4,12 +4,11 @@
             <i class="pi pi-sign-out"></i>
             <span>Sign Out</span>
         </li>
-      <button  class="subscription-button" @click="openSubscriptionComponent()">Open Subscription</button>
+      <button class="subscription-button" @click="openSubscriptionComponent()">Open Subscription</button>
     </div>
 </template>
 
 <script>
-
 export default {
     name: "SignOut",
     data() {
@@ -32,7 +31,6 @@ export default {
         }
     },
 }
-
 </script>
 
 <style>
