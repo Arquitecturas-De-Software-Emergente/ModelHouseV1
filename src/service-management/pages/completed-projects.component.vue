@@ -40,32 +40,32 @@
     :style="{ width: '50rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
   >
-  <div class="business-rating">
-          <!-- <Rating-v
-            v-model="businessValueSend"
-            :cancel="false"
-            :stars="5"
-            :pt="{ onIcon: { class: 'text-orange-400' } }"
-          /> -->
-        </div>
-    <textarea rows="4" cols="50" placeholder="Escribe tu comentario aquí"></textarea>
-    <button class="send-comment">Send</button>
+    <div class="business-rating">
+      <Rating-v
+        v-model="businessValueSend"
+        :cancel="false"
+        :stars="5"
+      />
+    </div>
+    <textarea v-model="commentText" rows="4" cols="50" placeholder="Escribe tu comentario aquí"></textarea>
+    <button class="send-comment" @click="sendComment">Send</button>
   </Dialog-v>
 </template>
 
 <script>
 import { ProjectListService } from '../service/project-list.service'
+import { ReviewService } from '../service/review-service'
 
 export default {
   name: 'Completed-Projects-Page',
   data() {
     return {
-      businessValueSend: 4 ,
       proposals: [],
       completedProposal: [],
-      businessProfileId: null,
-      userProfileId: null,
-      showDialog: false
+      showDialog: false,
+      businessValueSend: 0,
+      commentText: '', 
+      projectId: 1,
     }
   },
   created() {
@@ -77,6 +77,25 @@ export default {
   methods: {
     leaveComment() {
       this.showDialog = true
+    },
+
+    sendComment(){
+      const reviewService = new ReviewService()
+      const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+      console.log('Score:', this.businessValueSend);
+      console.log('Comment:', this.commentText);
+      const reviewData = {
+        score: this.businessValueSend,
+        comment: this.commentText
+      }
+      reviewService
+        .createReview(this.projectId, businessProfileId, reviewData)
+        .then((response) => {
+          console.log('review', response)
+        })
+        .catch((error) => {
+          console.error('Error al obtener puntaje de proyecto', error)
+        })
     },
 
     loadCompletedProposal() {
