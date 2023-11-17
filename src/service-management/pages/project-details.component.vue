@@ -7,14 +7,11 @@
   <div class="comment-details">
     <h2>Comment:</h2>
     <div class="comment">
-      <img
-        src="https://www.bbva.com/wp-content/uploads/2018/03/empresa-social-bbva.jpg"
-        alt="Comment Image"
-      />
+      <img :src="user.image" alt="User Avatar" />
       <div class="comment-info">
-        <h1>User</h1>
+        <h1>{{ user.name }}</h1>
         <div class="business-rating">
-          <Rating-v :cancel="false" :stars="review.score" :pt="{ onIcon: { class: 'text-orange-400' } }" />
+          <Rating-v :modelValue="review.score" :cancel="false" :stars="5" :pt="{ onIcon: { class: 'text-orange-400' } }" />
         </div>
         <p>{{ review.comment }}</p>
       </div>
@@ -24,6 +21,7 @@
 <script>
 import { ProjectListService } from '@/service-management/service/project-list.service'
 import { ReviewService } from '../service/review-service'
+import {UserProfile} from "../service/user-detail.service"
 
 export default {
   name: 'Project-Details',
@@ -47,9 +45,11 @@ export default {
   },
   created() {
     const projectService = new ProjectListService()
+    const userProfile = new UserProfile()
     //this.projectId = this.$route.params.id;
     const reviewService = new ReviewService()
-
+    const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+    console.log('userProfileId:', userProfileId)
     reviewService.getReviewProjectId(this.$route.params.projectId).then((response) => {
       this.review.score = response.data.score
       this.review.comment = response.data.comment
@@ -57,6 +57,15 @@ export default {
     })
     .catch((error) => {
       console.error('Error al obtener puntaje de projecto', error)
+    })
+
+    userProfile.getUserProfile(userProfileId).then((response) => {
+      this.user.image = response.data.image
+      this.user.name = response.data.firstName + ' ' + response.data.lastName
+      console.log('user', this.user)
+    })
+    .catch((error) => {
+      console.error('Error al obtener los detalles del usuario', error)
     })
 
     projectService
