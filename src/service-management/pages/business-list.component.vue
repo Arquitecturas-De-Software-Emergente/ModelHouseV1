@@ -35,7 +35,12 @@
         <div class="business-card__info">
           <h3>{{ business.name }}</h3>
           <div class="business-card__rating">
-            <Rating-v v-model="business.rating" :cancel="false" :stars="5"></Rating-v>
+            <Rating-v
+              :modelValue= "businessReview"
+              :cancel="false"
+              :stars="5"
+              :readonly="true"
+            ></Rating-v>
           </div>
           <p>{{ business.description }}</p>
         </div>
@@ -50,11 +55,9 @@
           <!--- <Icon-v icon="prime:map-marker" />-->
           <p>{{ business.address }}</p>
         </div>
-        
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -66,8 +69,8 @@ export default {
   name: 'Business-List-Page',
   computed: {
     userIsLoggedIn() {
-      return this.$store.state.userIsLoggedIn;
-    },
+      return this.$store.state.userIsLoggedIn
+    }
   },
   data() {
     return {
@@ -76,56 +79,61 @@ export default {
         id: null,
         name: null,
         image: null,
-        userType: 'business',
+        userType: 'business'
       },
-      
-      
+      businessReview: 4,
+      review:{
+        socre: 4,
+      }
     }
   },
 
   created() {
-    const businessService = new BusinessListService();
-    const userProfileService = new UserListService();
+    const businessService = new BusinessListService()
+    const userProfileService = new UserListService()
 
     businessService.searchRemodeler().then((response) => {
       this.businesses = response.data
-    });
+    })
 
     const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem('userId')
+    if (userId) {
+      this.userIsLoggedIn = true
+    }
 
     if (userId) {
-  businessService.searchBusinessProfile(userId)
-    .then((response) => {
-      if (response.data != null) {
-        this.account.name = response.data.name;
-        this.account.image = response.data.image;
-        this.account.id = response.data.id;
-        //this.account.userType = "business";
-        console.log("es empresa: ", response.data.id);
-      }
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 500) {
-        console.log("Business profile not found. Switching to searchUserProfile.");
-        userProfileService.searchUserProfile(userId)
-          .then((userProfile) => {
-            this.account.name = userProfile.data.firstName;;
-            this.account.image = userProfile.data.image;
-            this.account.id = userProfile.data.id;
-            //this.account.userType = "user";
-            console.log("es usuario: ", this.account);
-          })
-          .catch((userProfileError) => {
-            console.error("Error in searchUserProfile:", userProfileError);
-            // Handle the error from searchUserProfile if needed
-          });
-      } 
-    });
-}
-
-  },
-
-
+      businessService
+        .searchBusinessProfile(userId)
+        .then((response) => {
+          if (response.data != null) {
+            this.account.name = response.data.name
+            this.account.image = response.data.image
+            this.account.id = response.data.id
+            //this.account.userType = "business";
+            console.log('es empresa: ', response.data.id)
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 500) {
+            console.log('Business profile not found. Switching to searchUserProfile.')
+            userProfileService
+              .searchUserProfile(userId)
+              .then((userProfile) => {
+                this.account.name = userProfile.data.firstName
+                this.account.image = userProfile.data.image
+                this.account.id = userProfile.data.id
+                //this.account.userType = "user";
+                console.log('es usuario: ', this.account)
+              })
+              .catch((userProfileError) => {
+                console.error('Error in searchUserProfile:', userProfileError)
+                // Handle the error from searchUserProfile if needed
+              })
+          }
+        })
+    }
+  }
 }
 </script>
 
