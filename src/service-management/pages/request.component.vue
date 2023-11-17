@@ -16,7 +16,10 @@
                 </div>
               </div>
               <div class="button-container-client">
-                <button class="see-details">See Details</button>
+                <router-link :to="'/request-details/' + request.id">
+                  <button class="see-details">See Details</button>
+          </router-link>
+                
               </div>
             </div>
             

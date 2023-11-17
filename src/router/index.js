@@ -12,6 +12,7 @@ import profile from "@/identity-and-access-management/pages/edit-profile.compone
 import Cart from "@/payment-and-subscription-management/Cart.vue";
 import projectProgressView from "@/service-management/pages/project-progress-view.component.vue";
 import porjectDetails from "@/service-management/pages/project-details.component.vue";
+import requestDetails from "@/service-management/pages/request-details.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +83,11 @@ const router = createRouter({
         path: "/project/:proposalId",
         name: "project",
         component:projectProgressView
+    },
+    {
+        path: "/request-details/:requestId",
+        name: "request-details",
+        component: requestDetails
     }
     ],
 });
