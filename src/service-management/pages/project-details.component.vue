@@ -7,9 +7,9 @@
   <div class="comment-details">
     <h2>Comment:</h2>
     <div class="comment">
-      <img :src="user.image" alt="User Avatar" />
+      <img :src="project.proposal.request.user.image" alt="User Avatar" />
       <div class="comment-info">
-        <h1>{{ user.name }}</h1>
+        <h1>{{ project.proposal.request.user.firstName }}</h1>
         <div class="business-rating">
           <Rating-v :modelValue="review.score" :cancel="false" :stars="5" :pt="{ onIcon: { class: 'text-orange-400' } }" />
         </div>
@@ -31,7 +31,17 @@ export default {
       project: {
         image: null,
         title: null,
-        description: null
+        description: null,
+        proposal: {
+          request: {
+          user: {
+            firstName: null,
+            image: null,
+          },
+        },
+        },
+        
+        
       },
       user: {
         image: null,
@@ -46,6 +56,7 @@ export default {
   created() {
     const projectService = new ProjectListService()
     const userProfile = new UserProfile()
+    console.log('userProfile', userProfile)
     //this.projectId = this.$route.params.id;
     const reviewService = new ReviewService()
     const userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
@@ -59,21 +70,15 @@ export default {
       console.error('Error al obtener puntaje de projecto', error)
     })
 
-    userProfile.getUserProfile(userProfileId).then((response) => {
-      this.user.image = response.data.image
-      this.user.name = response.data.firstName + ' ' + response.data.lastName
-      console.log('user', this.user)
-    })
-    .catch((error) => {
-      console.error('Error al obtener los detalles del usuario', error)
-    })
-
     projectService
       .getProjectById(this.$route.params.projectId)
       .then((response) => {
         this.project.image = response.data.image
-        this.project.title = response.data.title
+        this.project.title = response.data.title 
         this.project.description = response.data.description
+        this.project.proposal.request.user.firstName = response.data.proposal.request.userProfile.firstName
+        this.project.proposal.request.user.image = response.data.proposal.request.userProfile.image
+
         console.log('project', this.project)
       })
       .catch((error) => {

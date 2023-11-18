@@ -21,7 +21,7 @@
                   <h3>{{ projects.status }}</h3>
                 </div>
 
-                <div class="project-progress-leave-comment">
+                <div v-if="projects.reviewId == null" class="project-progress-leave-comment">
                   <button class="leave-comment-button" @click="leaveComment">
                     <span>Leave Comment</span>
                   </button>
@@ -66,6 +66,11 @@ export default {
       businessValueSend: 0,
       commentText: '', 
       projectId: 1,
+      review : {
+        score: 4,
+        comment: null
+      },
+      proposalIdCompleted: null,
     }
   },
   created() {
@@ -96,6 +101,7 @@ export default {
         .catch((error) => {
           console.error('Error al obtener puntaje de proyecto', error)
         })
+    
     },
 
     loadCompletedProposal() {
