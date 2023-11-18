@@ -153,14 +153,14 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 1rem;
-  max-width: 800px;
+  width: 900px;
 }
 .business-card__column {
   margin-right: 40px;
 }
 .small-image {
-  max-width: 600px;
-  max-height: 200px;
+  width: 300px;
+  height: 200px;
 }
 .button-container {
   display: flex;
