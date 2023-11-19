@@ -72,8 +72,11 @@ export default {
     },
     methods: {
         registerUser() {
-            this.password == this.confirm_password ?
-                this.userService.register({
+            this.$router.push({
+                        name: "user-type"
+                    })
+            /*this.password == this.confirm_password ?
+                /*this.userService.register({
                     "emailAddress": this.emailAddress,
                     "password":  this.password
                 }).then(res => {
@@ -83,6 +86,9 @@ export default {
                     })
                 })
                 : null;
+                this.$router.push({
+                        name: "user-type"
+                    }): null;*/
         },
         validatePasswords() {
             const passwordRegex = /^(?=.[!@#$%^&])(?=.{8,})/;

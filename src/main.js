@@ -11,7 +11,7 @@ import "primeicons/primeicons.css";
 import Button from "primevue/button";
 import Image from 'primevue/image';
 import router from "@/router";
-import InputText from "primevue/inputtext";
+import InputText from "primevue/inputtext"
 import Toast from "primevue/toast";
 import ToastService from "primevue/toastservice";
 import Password from "primevue/password";
@@ -44,6 +44,7 @@ app.use(ToastService);
 app.component('Button-v', Button);
 app.component('pv-image', Image);
 app.component('InputText', InputText);
+app.component('Textarea', Textarea);
 app.component('Toast-v', Toast);
 app.component('Password-v', Password);
 app.component('Card-v', Card);
