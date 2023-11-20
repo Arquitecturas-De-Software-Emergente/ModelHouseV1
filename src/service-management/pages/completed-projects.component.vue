@@ -74,8 +74,8 @@ export default {
     }
   },
   created() {
-    this.loadCompletedProposal()
     this.getAccoundId()
+    this.loadCompletedProposal()
     const storedProposals = localStorage.getItem('proposals')
     console.log(storedProposals)
   },
@@ -105,21 +105,40 @@ export default {
     },
 
     loadCompletedProposal() {
+      console.log(this.userProfileId);
       const projectService = new ProjectListService()
-      projectService
-        .geteProjects()
-        .then((response) => {
-          this.proposals = response.data
-          localStorage.setItem('proposals', JSON.stringify(this.projects))
-          this.completedProposal = this.proposals.filter(
-            (proposal) => proposal.status === 'Completado'
-          )
-          console.log('Propuestas:', this.proposals)
-          console.log('Propuestas completadas:', this.completedProposal)
-        })
-        .catch((error) => {
-          console.log('Error al obtener las propuestas:', error)
-        })
+      if(this.userProfileId){
+        projectService
+            .getProjectsUserProfile(this.userProfileId)
+            .then((response) => {
+              console.log(response, "RESPONSE");
+              this.proposals = response.data
+              localStorage.setItem('proposals', JSON.stringify(this.projects))
+              this.completedProposal = this.proposals.filter(
+                  (proposal) => proposal.status === 'Completado'
+              )
+              console.log('Propuestas:', this.proposals)
+              console.log('Propuestas completadas:', this.completedProposal)
+            })
+            .catch((error) => {
+              console.log('Error al obtener las propuestas:', error)
+            })
+      }else if(this.businessProfileId){
+        projectService
+            .getProjectsBusinessProfile(this.businessProfileId)
+            .then((response) => {
+              this.proposals = response.data
+              localStorage.setItem('proposals', JSON.stringify(this.projects))
+              this.completedProposal = this.proposals.filter(
+                  (proposal) => proposal.status === 'Completado'
+              )
+              console.log('Propuestas:', this.proposals)
+              console.log('Propuestas completadas:', this.completedProposal)
+            })
+            .catch((error) => {
+              console.log('Error al obtener las propuestas:', error)
+            })
+      }
     },
     getAccoundId() {
       this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId
