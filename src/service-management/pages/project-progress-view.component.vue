@@ -7,9 +7,14 @@
             <div class="progress-bar">
                 <ProgressBar :value="combinedProgress"/>
             </div>
+
+            <div class="description">
+                <span>{{projects.title}}</span>
+            </div>
+
             <div class="description">
                 <h2>Description:</h2>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, numquam voluptas laudantium nesciunt neque hic facilis doloremque ea quis minus ex fugit modi repudiandae. Fugit molestiae voluptate velit repudiandae officiis!</span>
+                <span>{{projects.description}}</span>
             </div>
             <div class="files">
         
@@ -46,7 +51,18 @@ import {ProjectListService} from '../service/project-list.service';
         name: 'Project-Progress-View-Page',
         props: ['proposalId'],
         data() {
-            return
+            return {
+                businessProfileId: null,
+                userProfileId: null,
+                proposal: [],
+                projects: {
+                    title: '',
+                    description: '',
+                    status: '',
+                    activities: [],
+                    resources: [],
+                }
+            }
         },
         setup() {
             const activitiesProgress = ref(0);
@@ -86,12 +102,24 @@ import {ProjectListService} from '../service/project-list.service';
               resourcesChecked,
               updateActivitiesProgress,
               updateResourcesProgress,
-              proposal: []
             };
         },
         created() {
             const storedProposals = localStorage.getItem('proposals')
             console.log(storedProposals);
+
+            const projectListService = new ProjectListService()
+            projectListService.geteProjects().then((response) => {
+                const allProjects = response.data
+                console.log('Todos los proyectos:', allProjects)
+                this.project = allProjects.find((project) => project.id == this.$route.params.projectId)
+                this.projects.title = this.project.title
+                this.projects.description = this.project.description
+                this.projects.status = this.project.status
+                console.log('Proyecto:', this.project)
+            }).catch((error) => {
+                console.error('Error al obtener los proyectos:', error)
+            })
         },
         methods: {
         completeProject(proposal) {
@@ -114,6 +142,11 @@ import {ProjectListService} from '../service/project-list.service';
               console.error('Error al cambiar el estado de la propuesta:', error)
             })
         },
+
+        getAccoundId(){
+                this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
+                this.userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
+            },
         }
     }
 </script>
