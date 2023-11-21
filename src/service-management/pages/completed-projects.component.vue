@@ -21,11 +21,11 @@
                   <h3>{{ projects.status }}</h3>
                 </div>
 
-                <div v-if="projects.reviewId == null" class="project-progress-leave-comment">
+                <!-- <div v-if="projects.reviewId == null" class="project-progress-leave-comment">
                   <button class="leave-comment-button" @click="leaveComment">
                     <span>Leave Comment</span>
                   </button>
-                </div>
+                </div> -->
               </div>
             </div>
           </template>
