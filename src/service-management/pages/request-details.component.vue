@@ -2,85 +2,107 @@
   <div>
     <h1>Request to {{ requests.user.firstName }} {{ requests.user.lastName }}</h1>
     <div class="request-details">
-      <div class="detail">
-        <strong>Category:</strong> {{ requests.category }}
-      </div>
-      <div class="detail">
-        <strong>Estimated Budget:</strong> {{ requests.estimatedBudget }}
-      </div>
-      <div class="detail">
-        <strong>Area (m2):</strong> {{ requests.area }}
-      </div>
-      <div class="detail">
-        <strong>Location :</strong> {{ requests.location }}
-      </div>
+      <div class="detail"><strong>Category:</strong> {{ requests.category }}</div>
+      <div class="detail"><strong>Estimated Budget:</strong> {{ requests.estimatedBudget }}</div>
+      <div class="detail"><strong>Area (m2):</strong> {{ requests.area }}</div>
+      <div class="detail"><strong>Location :</strong> {{ requests.location }}</div>
       <div class="detail">
         <strong>Files :</strong>
-        {{ requests.file ? requests.file : 'No hay documentos' }}
+        <div v-if="requests.file">
+          <img
+            v-if="isImage(requests.file)"
+            :src="requests.file"
+            alt="File Preview"
+            style="max-width: 100px; max-height: 100px"
+          />
+          <a v-else :href="requests.file" target="_blank" rel="noopener noreferrer">{{
+            requests.file
+          }}</a>
+        </div>
+        <span v-else>No hay documentos</span>
       </div>
-      <div class="detail">
-        <strong>Description:</strong> {{ requests.description }}
-      </div>
+      <div class="detail"><strong>Description:</strong> {{ requests.description }}</div>
     </div>
   </div>
-
-
 </template>
 <script>
-import { RequestService } from '../service/request.service';
+import { RequestService } from '../service/request.service'
 
 export default {
   name: 'Request-Details',
   data() {
     return {
+      isImg: false,
       requests: {
         category: null,
         estimatedBudget: null,
-        area : null,
+        area: null,
         file: null,
         description: null,
         location: null,
         status: null,
         user: {
           firstName: null,
-          lastName: null,
-        },
-      },
+          lastName: null
+        }
       }
-
-    
+    }
   },
 
-  created(){
+  methods: {
+    // ... (resto de los métodos)
 
-      const requestService = new RequestService()
-        requestService.getRequests()
-    .then(response => {
-      const allRequests = response.data;
-      console.log('Todas las solicitudes:', allRequests);
-      this.request = allRequests.find(request => request.id == this.$route.params.requestId);
-      this.requests.description = this.request.description;
-      this.requests.location = this.request.location;
-      this.requests.status = this.request.status;
-      this.requests.category = this.request.category;
-      this.requests.estimatedBudget = this.request.estimatedBudget;
-      this.requests.area = this.request.area;
-      this.requests.file = this.request.file;
-      this.requests.user.firstName = this.request.userProfile.firstName;
-      this.requests.user.lastName = this.request.userProfile.lastName;
-      console.log('Detalles de la solicitud:', this.request);
-      if (this.request) {
-        console.log('Detalles de la solicitud:', this.request);
-      } else {
-        console.log('Solicitud no encontrada.');
+    handleFileUpload(event) {
+      const file = event.target.files[0]
+
+      if (file) {
+        // Lee el contenido del archivo como una URL de datos
+        const reader = new FileReader()
+        reader.onload = () => {
+          this.request.files = file
+          this.previewImage = reader.result
+          this.isImg = this.isImage(file)
+        }
+        reader.readAsDataURL(file)
       }
-    })
-    .catch(error => {
-      console.log('Error al obtener las solicitudes:', error);
-    });
+    },
 
+    isImage(file) {
+      // Verifica si el archivo es una imagen según la extensión o tipo MIME
+      return file && file.type.startsWith('image/')
+    }
+
+    // ... (resto de los métodos)
   },
 
+  created() {
+    const requestService = new RequestService()
+    requestService
+      .getRequests()
+      .then((response) => {
+        const allRequests = response.data
+        console.log('Todas las solicitudes:', allRequests)
+        this.request = allRequests.find((request) => request.id == this.$route.params.requestId)
+        this.requests.description = this.request.description
+        this.requests.location = this.request.location
+        this.requests.status = this.request.status
+        this.requests.category = this.request.category
+        this.requests.estimatedBudget = this.request.estimatedBudget
+        this.requests.area = this.request.area
+        this.requests.file = this.request.file
+        this.requests.user.firstName = this.request.userProfile.firstName
+        this.requests.user.lastName = this.request.userProfile.lastName
+        console.log('Detalles de la solicitud:', this.request)
+        if (this.request) {
+          console.log('Detalles de la solicitud:', this.request)
+        } else {
+          console.log('Solicitud no encontrada.')
+        }
+      })
+      .catch((error) => {
+        console.log('Error al obtener las solicitudes:', error)
+      })
+  }
 }
 </script>
 <style scoped>
@@ -133,6 +155,4 @@ h1 {
 .detail a:hover {
   text-decoration: underline;
 }
-
 </style>
-

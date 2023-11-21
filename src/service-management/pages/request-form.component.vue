@@ -52,7 +52,7 @@
           <option value="category13">Cuarto de lavado</option>
           <option value="category14">Cuarto de juegos</option>
           <option value="category15">Cuarto de estudio</option>
-          
+
 
         </select>
       </div>
@@ -69,18 +69,29 @@
 
       <div class="form-group-2">
         <input
-          class="file-form"
-          type="file"
-          name="demo[]"
-          accept="*/*"
-          id="fileUpload"
-          style="display: none"
-          multiple
-        />
-        <label for="fileUpload" class="file-upload-label"
-          >Add File <i class="pi pi-file"></i>
-        </label>
+      class="file-form"
+      type="file"
+      name="demo"
+      accept="*/*"
+      id="fileUpload"
+      style="display: none"
+      @change="handleFileUpload"
+    />
+    <label for="fileUpload" class="file-upload-label">
+      Add File <i class="pi pi-file"></i>
+    </label>
       </div>
+
+      <div v-if="request.files">
+      <label for="filePreview">File Preview:</label>
+      <img
+        v-if="isImage(request.files)"
+        :src="previewImage"
+        alt="File Preview"
+        style="max-width: 100%;"
+      />
+      <p v-else>No se puede mostrar la vista previa. El archivo no es una imagen.</p>
+    </div>
 
       <div class="submit-button">
         <button class="submit-button-form" type="submit">
@@ -107,7 +118,8 @@ export default {
         budget: '',
         category: '',
         location: '',
-        description: ''
+        description: '',
+        files: ''
       },
       showDialog: false,
       businessId: null
@@ -123,6 +135,26 @@ export default {
         description: ''
       }
     },
+
+    handleFileUpload(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Lee el contenido del archivo como una URL de datos
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.request.files = file;
+        this.previewImage = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  },
+
+  isImage(file) {
+    // Verifica si el archivo es una imagen según la extensión o tipo MIME
+    return file && file.type.startsWith('image/');
+  },
+
 
     created() {
       this.businessId = this.$route.params.businessId
@@ -140,7 +172,8 @@ export default {
           estimatedBudget: this.request.estimatedBudget,
           category: this.request.category,
           location: this.request.location,
-          description: this.request.description
+          description: this.request.description,
+          files: this.request.files
         }
         const response = await requestService.sendRequest(userId, businessId, requestData)
         console.log('Response:', response.status)
@@ -248,6 +281,7 @@ select {
 .submit-button {
   display: flex;
   justify-content: center;
+  margin: 30px;
 }
 .submit-button-form {
   cursor: pointer;
