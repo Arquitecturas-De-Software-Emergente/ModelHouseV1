@@ -31,7 +31,8 @@
                 </div>
                 <div v-for="proposal in pendingProposals" :key="proposal.id" class="proposal-card">
                     <div class="card-body">
-                        <span>{{ proposal.description }}</span>
+                        <span class="proposal-title">{{ proposal.title }}</span>
+                        <span class="proposal-description">{{ proposal.description }}</span>
                     </div>
                     <div class="proposal-button-container">
                         <router-link :to ="'/proposal-form/' + proposal.id">
