@@ -9,12 +9,12 @@
 
       <div class="form-group">
         <label for="title">Area : </label>
-        <InputText id="title" class="custom-input" type="text" v-model="title" placeholder="Area" />
+        <InputText id="title" class="custom-input" type="text" v-model="request.area" placeholder="Area" />
       </div>
 
       <div class="form-group">
-        <label for="budget">Estimated Budget:</label>
-        <select id="budget" v-model="request.budget">
+        <label for="estimatedBudget">Estimated Budget:</label>
+        <select id="estimatedBudget" v-model="request.estimatedBudget">
           <option value="0 - 500">0 - 500</option>
           <option value="500 - 1000">500 - 1000</option>
           <option value="1000 - 1500">1000 - 1500</option>
@@ -37,21 +37,21 @@
       <div class="form-group">
         <label for="category">Category:</label>
         <select id="category" v-model="request.category">
-          <option value="category1">Cocina</option>
-          <option value="category2">Baño</option>
-          <option value="category3">Patio</option>
-          <option value="category4">Sala</option>
-          <option value="category5">Habitación</option>
-          <option value="category6">Comedor</option>
-          <option value="category7">Jardín</option>
-          <option value="category8">Garaje</option>
-          <option value="category9">Piscina</option>
-          <option value="category10">Terraza</option>
-          <option value="category11">Oficina</option>
-          <option value="category12">Bodega</option>
-          <option value="category13">Cuarto de lavado</option>
-          <option value="category14">Cuarto de juegos</option>
-          <option value="category15">Cuarto de estudio</option>
+          <option value="Cocina">Cocina</option>
+          <option value="Cocina">Cocina</option>
+          <option value="Patio">Patio</option>
+          <option value="Sala">Sala</option>
+          <option value="Habitación">Habitación</option>
+          <option value="Comedor">Comedor</option>
+          <option value="Jardín">Jardín</option>
+          <option value="Garaje">Garaje</option>
+          <option value="Piscina">Piscina</option>
+          <option value="Terraza">Terraza</option>
+          <option value="Oficina">Oficina</option>
+          <option value="Bodega">Bodega</option>
+          <option value="Cuarto de lavado">Cuarto de lavado</option>
+          <option value="Cuarto de juegos">Cuarto de juegos</option>
+          <option value="Cuarto de estudio">Cuarto de estudio</option>
 
 
         </select>
@@ -67,31 +67,6 @@
         <textarea id="description" v-model="request.description"></textarea>
       </div>
 
-      <div class="form-group-2">
-        <input
-      class="file-form"
-      type="file"
-      name="demo"
-      accept="*/*"
-      id="fileUpload"
-      style="display: none"
-      @change="handleFileUpload"
-    />
-    <label for="fileUpload" class="file-upload-label">
-      Add File <i class="pi pi-file"></i>
-    </label>
-      </div>
-
-      <div v-if="request.files">
-      <label for="filePreview">File Preview:</label>
-      <img
-        v-if="isImage(request.files)"
-        :src="previewImage"
-        alt="File Preview"
-        style="max-width: 100%;"
-      />
-      <p v-else>No se puede mostrar la vista previa. El archivo no es una imagen.</p>
-    </div>
 
       <div class="submit-button">
         <button class="submit-button-form" type="submit">
@@ -115,7 +90,7 @@ export default {
     return {
       request: {
         area: '',
-        budget: '',
+        estimatedBudget: '',
         category: '',
         location: '',
         description: '',
@@ -129,7 +104,7 @@ export default {
     resetForm() {
       this.request = {
         area: '',
-        budget: '',
+        estimatedBudget: '',
         category: '',
         location: '',
         description: ''
@@ -176,6 +151,7 @@ export default {
           files: this.request.files
         }
         const response = await requestService.sendRequest(userId, businessId, requestData)
+        console.log("estimatedBudget", this.estimatedBudget)
         console.log('Response:', response.status)
         if (response.status === 200) {
           console.log('Solicitud enviada con éxito:', response)

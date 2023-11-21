@@ -13,11 +13,6 @@
           <Textarea-v id="description" class="custom-input" autoResize v-model="description" rows="5" cols="30" placeholder="Description"/>
         </div>
         <div class="form-group-2">
-          <input class="file-form" type="file" name="demo[]" accept="*/*" id="fileUpload" style="display: none;" multiple>
-          <label for="fileUpload" class="file-upload-label">Add File <i class="pi pi-file"></i>
-          </label>
-        </div>
-        <div class="form-group-2">
           <label for="activities">Activities</label>
           <div v-for="(activity, index) in activities" :key="index" class="input-with-button">
             <InputText id="activityInput" class="custom-input-2" type="text" v-model="activities[index].description" placeholder="Activity" />

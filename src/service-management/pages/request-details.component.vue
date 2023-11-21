@@ -1,30 +1,33 @@
 <template>
-  <div>
-    <h1>Request to {{ requests.user.firstName }} {{ requests.user.lastName }}</h1>
-    <div class="request-details">
-      <div class="detail"><strong>Category:</strong> {{ requests.category }}</div>
-      <div class="detail"><strong>Estimated Budget:</strong> {{ requests.estimatedBudget }}</div>
-      <div class="detail"><strong>Area (m2):</strong> {{ requests.area }}</div>
-      <div class="detail"><strong>Location :</strong> {{ requests.location }}</div>
-      <div class="detail">
-        <strong>Files :</strong>
-        <div v-if="requests.file">
-          <img
-            v-if="isImage(requests.file)"
-            :src="requests.file"
-            alt="File Preview"
-            style="max-width: 100px; max-height: 100px"
-          />
-          <a v-else :href="requests.file" target="_blank" rel="noopener noreferrer">{{
-            requests.file
-          }}</a>
-        </div>
-        <span v-else>No hay documentos</span>
-      </div>
-      <div class="detail"><strong>Description:</strong> {{ requests.description }}</div>
-    </div>
+  <h1 class="request-title">Request to {{ requests.user.firstName }} {{ requests.user.lastName }}</h1>
+
+  <div class="request-container">
+    
+    <table class="request-table">
+      <tr>
+        <td><strong>Category:</strong></td>
+        <td>{{ requests.category }}</td>
+      </tr>
+      <tr>
+        <td><strong>Estimated Budget:</strong></td>
+        <td>Entre  {{ requests.estimatedBudget }}  soles.</td>
+      </tr>
+      <tr>
+        <td><strong>Area (m2):</strong></td>
+        <td>{{ requests.area }}</td>
+      </tr>
+      <tr>
+        <td><strong>Location :</strong></td>
+        <td>{{ requests.location }}</td>
+      </tr>
+      <tr>
+        <td><strong>Description:</strong></td>
+        <td>{{ requests.description }}</td>
+      </tr>
+    </table>
   </div>
 </template>
+
 <script>
 import { RequestService } from '../service/request.service'
 
@@ -36,7 +39,7 @@ export default {
       requests: {
         category: null,
         estimatedBudget: null,
-        area: null,
+        area: 0,
         file: null,
         description: null,
         location: null,
@@ -106,53 +109,44 @@ export default {
 }
 </script>
 <style scoped>
-body {
-  font-family: 'Helvetica', sans-serif;
-  background-color: #f5f5f5;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  max-width: 600px;
-  margin: 20px auto;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
 
 h1 {
-  color: #333;
   text-align: center;
-  padding: 20px 0;
-  margin: 0;
+  
 }
-
-.request-details {
+.request-container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
+  border: 1px solid#004A63;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ecf0f1;
 }
 
-.detail {
-  margin-bottom: 15px;
+.request-title {
+  color: #004A63;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.strong {
-  font-weight: bold;
+.request-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.detail strong {
-  display: inline-block;
-  width: 150px;
-  color: #555;
+td {
+  border: 2px solid #004A63;
+  padding: 15px;
 }
 
-.detail a {
-  color: #3498db;
-  text-decoration: none;
+.label {
+  background-color: #004A63;
+  color: #fff;
 }
 
-.detail a:hover {
-  text-decoration: underline;
+strong {
+  color: #004A63;
 }
 </style>
