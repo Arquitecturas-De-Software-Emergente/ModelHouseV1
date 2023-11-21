@@ -1,95 +1,113 @@
 <template>
-    <!-- <div>
-        <div class="navbar-link sign-out" v-if='this.account' @click="signOut()">
-            <i class="pi pi-sign-out"></i>
-            <span>Sign Out</span>
-        </div>
-      <button @click="openSubscriptionComponent()">Open Subscription</button>
-    </div> -->
-
-    <div>
-        <div class="buttons-configuration">
-
-  <button @click="openSubscriptionComponent()">Open Subscription</button>
-  <button class="button-sign-out" v-if='this.account' @click="signOut()">
-    <i class="pi pi-sign-out"></i>
-    <span>Log Out</span>
-  </button>
-</div>
-</div>
-
+  <h1>  Settings </h1>
+  <div class="body-buttons">
+    
+    <div class="buttons-configuration">
+      <h2> Subscription </h2>
+      <button @click="openSubscriptionComponent()">View Plans</button>
+      <div v-if="this.account">
+      <h2> Account </h2>
+      <router-link to="/profile">
+      <button class="button-Profile">
+        <span>View Profile</span>
+      </button>
+    </router-link>
+      <button class="button-sign-out"  @click="signOut()">
+        <i class="pi pi-sign-out"></i>
+        <span>Log Out</span>
+      </button>
+    </div>
+    </div>
+  </div>
 </template>
 
 <script>
-
 export default {
-    name: "SignOut",
-    data() {
-        return {
-            account: null,
-        }
+  name: 'SignOut',
+  data() {
+    return {
+      account: null
+    }
+  },
+  created() {
+    this.account = JSON.parse(localStorage.getItem('account'))
+  },
+  methods: {
+    signOut() {
+      localStorage.removeItem('account')
+      this.$store.commit('setUserLoggedIn', false)
+      this.$router.push('/home')
     },
-    created() {
-        this.account = JSON.parse(localStorage.getItem("account"));
-    },
-    methods: {
-        signOut() {
-            localStorage.removeItem("account");
-            this.$store.commit("setUserLoggedIn", false);
-            this.$router.push('/home');
-        },
-        openSubscriptionComponent() {
-        // Navigate to the Subscription component
-        this.$router.push('/subscription');
-        }
-    },
-
-    
+    openSubscriptionComponent() {
+      // Navigate to the Subscription component
+      this.$router.push('/subscription')
+    }
+  }
 }
-
 </script>
 
 <style>
-.sign-out {
- cursor: pointer;
-}
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
 
-/* Estilos para el contenedor de los botones */
-.buttons-configuration {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 10px;
-}
+  h1 {
+    color: #333;
+    text-align: left; /* Cambiado a alineación a la izquierda */
+    padding: 20px 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+  }
 
-/* Estilos para los botones */
-.buttons-configuration button {
-  display: inline-flex;
-  align-items:center;
-  padding: 10px 20px;
-  background-color: #e9e9e9;
-  color: #000000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-  font-size: 16px;
-}
+  h2 {
+    color: #666;
+    margin-bottom: 25px;
+  }
+  
+  .buttons-configuration {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: left; /* Cambiado a alineación a la izquierda */
+  }
 
-.buttons-configuration button:hover {
-  background-color: #969696;
-}
-/* Estilos para el ícono dentro del botón */
-.buttons-configuration button i {
-  margin-right: 5px;
-  font-size: 20px;
-}
+  button {
+    background-color: #004A63;
+    color: #fff;
+    padding: 10px 20px;
+    border: none ;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+    transition: background-color 0.3s;
+  }
 
-/* Estilos para el texto dentro del botón */
-.buttons-configuration .button-sign-out {
-  background-color: #48b9a5;
-}
-.buttons-configuration .button-sign-out:hover {
-  background-color: #49dabf;
-}
+  button:hover {
+    background-color:#004A63;
+  }
+
+  .button-Profile {
+    background-color: #004A63;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .button-Profile:hover {
+    background-color: #004A63;
+  }
+
+  .button-sign-out {
+    background-color: #e74c3c;
+  }
+
+  .button-sign-out:hover {
+    background-color: #c0392b;
+  }
 </style>
