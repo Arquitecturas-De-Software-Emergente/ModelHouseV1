@@ -20,20 +20,19 @@
         <div class="form-group-2">
           <label for="activities">Activities</label>
           <div v-for="(activity, index) in activities" :key="index" class="input-with-button">
-            <InputText id="activities" class="custom-input-2" type="text" v-model="activities[index]" placeholder="Activity" />
+            <InputText id="activityInput" class="custom-input-2" type="text" v-model="activities[index].description" placeholder="Activity" />
             <button class="remove-button" @click="removeActivity(index)"><i class="pi pi-trash"></i></button>
           </div>
           <button class="add-button" type="button" @click="addActivity"><i class="pi pi-plus-circle"></i></button> <!-- Agrega type="button" aquí -->
         </div>
         <div class="form-group-2">
-          <label for ="resources">Resources</label>
+          <label for="resources">Resources</label>
           <div v-for="(resource, index) in resources" :key="index" class="input-with-button">
-            <InputText class="custom-input-2" type="text" v-model="resources[index]" placeholder="Resource" />
-            <input id="quantityForm" class="quantity-form" type="number" v-model="quantityForm" step="any" min="0" max="999999">
+            <InputText class="custom-input-2" type="text" v-model="resources[index].name" placeholder="Resource" />
+            <input class="quantity-form" type="number" v-model="resources[index].quantity" step="any" min="0" max="999999">
             <button class="remove-button" @click="removeResource(index)"><i class="pi pi-trash"></i></button>
           </div>
-          <button class="add-button" type="button" @click="addResource"><i class="pi pi-plus-circle"></i>
-          </button>
+          <button class="add-button" type="button" @click="addResource"><i class="pi pi-plus-circle"></i></button>
         </div>
         <div class="submit-button">
           <button class="submit-button-form" @click.prevent="submitProposal">
@@ -46,8 +45,9 @@
   
 <script>
   import { ProposalService } from "../service/proposal.service";
-  // import { ProjectResourceService } from "../service/project-resource.service";
-  // import { ProjectActivityService } from "../service/project-activity.service";
+  import { ProjectResourceService } from "../service/project-resource.service";
+  import { ProjectActivityService } from "../service/project-activity.service";
+  
   export default {
     name: "Proposal-Form-Page",
     props: ['proposalId'],
@@ -57,40 +57,110 @@
         description: "",
         quantityForm: 0,
         file: "",
-        activities: [""],
-        resources: [""],
+        activities: [{ description: "", isChecked: false }],
+        resources: [{ name: "", quantity: 0 }],
       };
     },
     methods: {
       addActivity() {
-        this.activities.push(""); // Agregar un nuevo campo vacío para Activities
+        this.activities.push({ description: "", isChecked: false });
       },
       removeActivity(index) {
         this.activities.splice(index, 1); // Eliminar el campo de Activities en el índice especificado
       },
       addResource() {
-        this.resources.push(""); // Agregar un nuevo campo vacío para Resources
+      this.resources.push({ name: "", quantity: 0 }); // Ahora cada nuevo recurso tiene su propia variable quantity
       },
       removeResource(index) {
         this.resources.splice(index, 1); // Eliminar el campo de Resources en el índice especificado
       },
       
-      submitProposal() {
+      async submitProposal() {
         const proposalService = new ProposalService();
-        console.log('Proposal-Form-Page created')
-          const proposalData = {
-            title: this.title,
-            description: this.description,
-            file: this.file,
-            // activities: this.activities,
-            // resources: this.resources,
-          };
-          console.log(proposalData)
-          const response = proposalService.updateProposal(this.proposalId, proposalData)
-          console.log('Response:', response.status)
-          if (response.status === 200) {
-            console.log('Proposal sent successfully', response)
-          } 
+        const activityService = new ProjectActivityService();
+        const resourceService = new ProjectResourceService(); // Importa el servicio de recursos
+      
+        const proposalData = {
+          title: this.title,
+          description: this.description,
+          file: this.file,
+        };
+      
+        try {
+          // Enviar la propuesta y obtener la respuesta
+          const proposalResponse = await proposalService.updateProposal(
+            this.proposalId,
+            proposalData
+          );
+      
+          if (proposalResponse.status === 200) {
+            console.log("Proposal sent successfully", proposalResponse);
+      
+            // Crear un array de actividades con el formato correcto
+            const validActivities = this.activities
+              ? this.activities
+                .filter((activity) => activity && activity.description)
+                .map((activity) => ({
+                  description: activity.description,
+                  isChecked: activity.isChecked,
+                }))
+              : [];
+      
+            if (validActivities.length === 0) {
+              // Si no hay actividades, agregar una actividad predeterminada
+              validActivities.push({ description: "", isChecked: false });
+            }
+      
+            // Enviar las actividades solo con descripciones válidas
+            const activityData = {
+              activities: validActivities,
+            };
+      
+            const activityResponse = await activityService.createProjectActivity(
+              this.proposalId,
+              activityData
+            );
+      
+            if (activityResponse.status === 200) {
+              console.log("Activities sent successfully", activityResponse);
+      
+              // Enviar los recursos al backend
+              const resourceResponses = await Promise.all(
+                this.resources.map(async (resource) => {
+                  const resourceData = {
+                    quantity: resource.quantity,
+                    description: resource.name,
+                    image: "string",
+                    isChecked: false,
+                  };
+      
+                  return await resourceService.createProjectResource(
+                    this.proposalId,
+                    resourceData
+                  );
+                })
+              );
+      
+              // Verifica si todas las respuestas de recursos fueron exitosas
+              const allResourcesSentSuccessfully = resourceResponses.every(
+                (response) => response.status === 200
+              );
+      
+              if (allResourcesSentSuccessfully) {
+                console.log("All resources sent successfully");
+                // Puedes realizar más acciones después de enviar los recursos si es necesario.
+              } else {
+                console.error("Failed to send one or more resources");
+              }
+            } else {
+              console.error("Failed to send activities", activityResponse);
+            }
+          } else {
+            console.error("Failed to send proposal", proposalResponse);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
       },
     },
   };
