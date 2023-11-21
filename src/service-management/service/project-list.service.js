@@ -9,4 +9,10 @@ export class ProjectListService {
     geteProjects() {
         return http.securityApi.get(`/project`);
     }
+    getProjectsBusinessProfile(businessId) {
+        return http.securityApi.get(`/project/${businessId}/business_profile`);
+    }
+    getProjectsUserProfile(userId) {
+        return http.securityApi.get(`/project/${userId}/user_profile`);
+    }
 }

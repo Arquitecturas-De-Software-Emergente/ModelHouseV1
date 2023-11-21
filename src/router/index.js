@@ -13,6 +13,9 @@ import Cart from "@/payment-and-subscription-management/Cart.vue";
 import projectProgressView from "@/service-management/pages/project-progress-view.component.vue";
 import porjectDetails from "@/service-management/pages/project-details.component.vue";
 import requestDetails from "@/service-management/pages/request-details.component.vue";
+import userType from "@/identity-and-access-management/pages/user-type.component.vue";
+import formUserProfile from "@/identity-and-access-management/pages/form-user-profile.component.vue";
+import formBusinessProfile from "@/identity-and-access-management/pages/form-business-profile.component.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,12 +71,25 @@ const router = createRouter({
         component: configurationContent,
     },
     {
+        path: "/form-user-profile",
+        name: "form-user-profile",
+        component: formUserProfile,
+    },
+    {
+        path: "/form-business-profile",
+        name: "form-business-profile",
+        component: formBusinessProfile,
+    },
+    {
         path: "/profile",
         name: "Profile-Page",
         component: profile,
     },
-    
-    
+    {
+        path:"/user-type",
+        name:"user-type",
+        component: userType
+    },
     {
         path:"/subscription",
         name:"cartSubscription",

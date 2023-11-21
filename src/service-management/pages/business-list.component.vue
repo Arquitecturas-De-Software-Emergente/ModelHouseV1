@@ -27,7 +27,7 @@
   <div class="List">
     <div class="business-card" v-for="(business, index) in businesses" :key="index">
       <div class="business-card__column">
-        <div class="business-card__logo">
+        <div class="business-card-logo">
           <img :src="business.image" alt="Business logo" class="small-image" />
         </div>
       </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="business-card__button">
           <router-link :to="{ name: 'business-content', params: { id: business.id } }">
-            Read More
+            <button class="custom-button">Read More</button>
           </router-link>
         </div>
       </div>
@@ -144,19 +144,38 @@ export default {
   justify-content: center;
   padding: 1rem;
 }
+.business-card__info{
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.custom-button {
+  background-color: #004a63; /* Color de fondo */
+  color: #ffffff; /* Color del texto */
+  padding: 10px 15px; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar el ratón */
+  font-size: 16px; /* Tamaño del texto */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 15px;
+}
+.custom-button:hover {
+  background-color: #003142;
+  transform: scale(1.05);
+}
 .business-card {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 1rem;
   width: 900px;
-}
-.business-card__column {
-  margin-right: 40px;
+  gap: 15px;
 }
 .small-image {
   width: 300px;
@@ -242,5 +261,14 @@ export default {
 .user-name {
   font-size: 18px;
   font-weight: bold;
+}
+
+.business-card-logo img{
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.business-card-logo {
+  border-radius: 20px;
 }
 </style>

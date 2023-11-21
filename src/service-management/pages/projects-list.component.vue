@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { ProposalService } from '../service/proposal.service';
+import {ProjectListService} from "@/service-management/service/project-list.service";
 
     export default {
         name: 'Projects-List-Page',
@@ -37,26 +37,39 @@ import { ProposalService } from '../service/proposal.service';
             }
         },
         created(){
+          this.getAccoundId();
             this.loadAprovedProposal();
-            this.getAccoundId();
             const storedProposals = localStorage.getItem('proposals')
             console.log(storedProposals)
         },
         methods: {
             loadAprovedProposal() {
-                const proposalService = new ProposalService();
-                proposalService.getProposal()
-                    .then(response => {
-                        this.proposals = response.data;
-                        localStorage.setItem('proposals', JSON.stringify(this.projects));
-                        this.aprovedProposal = this.proposals.filter((proposal) => proposal.status === 'Aprobado');
-                        console.log('Propuestas:', this.proposals);
-                        console.log('Propuestas aprobadas:', this.aprovedProposal);
-                    }
-                ).catch(error => {
-                     console.log('Error al obtener las propuestas:', error);
-                });
-                
+              const projectService = new ProjectListService()
+                if(this.userProfileId){
+                  projectService.getProjectsUserProfile(this.userProfileId)
+                      .then(response => {
+                            this.proposals = response.data;
+                            localStorage.setItem('proposals', JSON.stringify(this.projects));
+                            this.aprovedProposal = this.proposals.filter((proposal) => proposal.status === 'Pendiente');
+                            console.log('Propuestas:', this.proposals);
+                            console.log('Propuestas aprobadas:', this.aprovedProposal);
+                          }
+                      ).catch(error => {
+                    console.log('Error al obtener las propuestas:', error);
+                  });
+                }else if(this.businessProfileId){
+                  projectService.getProjectsBusinessProfile(this.businessProfileId)
+                      .then(response => {
+                            this.proposals = response.data;
+                            localStorage.setItem('proposals', JSON.stringify(this.projects));
+                            this.aprovedProposal = this.proposals.filter((proposal) => proposal.status === 'Pendiente');
+                            console.log('Propuestas:', this.proposals);
+                            console.log('Propuestas aprobadas:', this.aprovedProposal);
+                          }
+                      ).catch(error => {
+                    console.log('Error al obtener las propuestas:', error);
+                  });
+              }
             },
             getAccoundId(){
                 this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
