@@ -1,4 +1,5 @@
 <template>
+
   <div v-if="!userIsLoggedIn">
     <div class="Buttons">
       <div class="button-container">
@@ -24,8 +25,12 @@
     </div>
   </div>
 
+  <div class="Search">
+      <input v-model="searchTerm" type="text" placeholder="Search businesses" @input="searchBusinesses" />
+    </div>
+
   <div class="List">
-    <div class="business-card" v-for="(business, index) in businesses" :key="index">
+    <div class="business-card" v-for="(business, index) in filteredBusinesses" :key="index">
       <div class="business-card__column">
         <div class="business-card-logo">
           <img :src="business.image" alt="Business logo" class="small-image" />
@@ -74,6 +79,8 @@ export default {
   },
   data() {
     return {
+      searchTerm: '',
+      filteredBusinesses: [],
       businesses: [],
       account: {
         id: null,
@@ -88,55 +95,88 @@ export default {
     }
   },
 
+  methods: {
+    // Función para buscar negocios al cambiar el término de búsqueda
+    searchBusinesses() {
+      const filter = this.searchTerm.toLowerCase();
+
+      // Filtrar la lista de negocios en función del término de búsqueda
+      this.filteredBusinesses = this.businesses.filter(business =>
+        business.name.toLowerCase().includes(filter)
+      );
+    },
+  },
+
   created() {
-    const businessService = new BusinessListService()
-    const userProfileService = new UserListService()
+    const businessService = new BusinessListService();
+    const userProfileService = new UserListService();
 
     businessService.searchRemodeler().then((response) => {
-      this.businesses = response.data
-    })
+      this.businesses = response.data;
+      this.filteredBusinesses = response.data; // Inicialmente, la lista filtrada es la misma que la lista completa
+    });
 
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem('userId');
     if (userId) {
-      this.userIsLoggedIn = true
+      this.userIsLoggedIn = true;
     }
 
     if (userId) {
-      businessService
-        .searchBusinessProfile(userId)
-        .then((response) => {
-          if (response.data != null) {
-            this.account.name = response.data.name
-            this.account.image = response.data.image
-            this.account.id = response.data.id
-            //this.account.userType = "business";
-            console.log('es empresa: ', response.data.id)
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 500) {
-            console.log('Business profile not found. Switching to searchUserProfile.')
-            userProfileService
-              .searchUserProfile(userId)
-              .then((userProfile) => {
-                this.account.name = userProfile.data.firstName
-                this.account.image = userProfile.data.image
-                this.account.id = userProfile.data.id
-                //this.account.userType = "user";
-                console.log('es usuario: ', this.account)
-              })
-              .catch((userProfileError) => {
-                console.error('Error in searchUserProfile:', userProfileError)
-                // Handle the error from searchUserProfile if needed
-              })
-          }
-        })
+      businessService.searchBusinessProfile(userId).then((response) => {
+        if (response.data != null) {
+          this.account.name = response.data.name;
+          this.account.image = response.data.image;
+          this.account.id = response.data.id;
+          //this.account.userType = "business";
+          console.log('es empresa: ', response.data.id);
+        }
+      }).catch((error) => {
+        if (error.response && error.response.status === 500) {
+          console.log('Business profile not found. Switching to searchUserProfile.');
+          userProfileService.searchUserProfile(userId).then((userProfile) => {
+            this.account.name = userProfile.data.firstName;
+            this.account.image = userProfile.data.image;
+            this.account.id = userProfile.data.id;
+            //this.account.userType = "user";
+            console.log('es usuario: ', this.account);
+          }).catch((userProfileError) => {
+            console.error('Error in searchUserProfile:', userProfileError);
+            // Handle the error from searchUserProfile if needed
+          });
+        }
+      });
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
+
+  .Search {
+    margin: 20px 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .Search input {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .Search input:focus {
+    border-color: #004A63; /* Cambia el color del borde al enfocar el input */
+  }
+
+  .Search input::placeholder {
+    color: #aaa;
+  }
+
 .List {
   display: flex;
   flex-direction: column;
