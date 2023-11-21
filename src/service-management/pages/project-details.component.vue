@@ -16,6 +16,11 @@
         <p>{{ review.comment }}</p>
       </div>
     </div>
+     <div v-if="review.score == null" class="project-progress-leave-comment">
+                  <button class="leave-comment-button" @click="leaveComment">
+                    <span>Leave Comment</span>
+                  </button>
+      </div>
   </div>
 </template>
 <script>

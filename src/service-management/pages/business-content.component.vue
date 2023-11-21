@@ -7,7 +7,7 @@
         </div>
         <div class="business-rating">
           <Rating-v
-            :modelValue="businessReview"
+            :modelValue="promReview"
             :cancel="false"
             :stars="5"
             :pt="{ onIcon: { class: 'text-orange-400' } }"
@@ -20,9 +20,9 @@
         <p>Service Area: {{ business.address }}</p>
         <p>Category:</p>
         <p>Social Media:</p>
-        <div v-if = 'this.businessProfileId == null'>
-        <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
-      </div>
+        <div v-if="this.businessProfileId == null">
+          <button class="send-button" @click="navigateToRequestForm()">Send Request</button>
+        </div>
       </div>
     </div>
     <div class="column-2">
@@ -33,7 +33,7 @@
         <p>{{ business.especialization }}</p>
         <div>
           <h2>Projects</h2>
-          <div class="carousel" v-if="projects.length>0">
+          <div class="carousel" v-if="projects.length > 0">
             <Carousel-v
               :value="projects"
               :numVisible="1"
@@ -47,8 +47,7 @@
                   <div class="project-image">
                     <router-link :to="'/project-details/' + slotProps.data.id">
                       <img
-                        :src="slotProps.data.image
-                        "
+                        :src="slotProps.data.image"
                         :alt="slotProps.data.title"
                         class="project-image"
                       />
@@ -79,12 +78,12 @@
       <button>Cambiar de cuenta</button>
     </router-link>
   </Dialog-v> -->
-
 </template>
 
 <script>
 import { BusinessDetailService } from '../service/business-detail.service'
 import { ProjectListService } from '../service/project-list.service'
+import { ReviewService } from '../service/review-service'
 
 export default {
   name: 'Business-Conent-Page',
@@ -93,11 +92,12 @@ export default {
       business: null,
       projectId: null,
       projects: [],
+      reviewsProject: [],
       projectsLoaded: false,
       showDialog: false,
       showButton: false,
-      businessReview: 4,
-      businessProfileId : JSON.parse(localStorage.getItem('account'))?.businessProfileId,
+      promReview: 0,
+      businessProfileId: JSON.parse(localStorage.getItem('account'))?.businessProfileId,
       responsiveOptions: [
         {
           breakpoint: '1024px',
@@ -144,6 +144,7 @@ export default {
   created() {
     const businessService = new BusinessDetailService()
     const projectService = new ProjectListService()
+    const reviewService = new ReviewService()
 
     businessService
       .getBusinessByID(this.$route.params.id)
@@ -158,10 +159,46 @@ export default {
       .getProjectListByBusinessId(this.$route.params.id)
       .then((response) => {
         this.projects = response.data
-        localStorage.setItem('projects', JSON.stringify(this.projects));
-        this.projects = this.projects.filter((projects) => projects.status === 'Completado');
-        console.log('Propuestas:', this.projects);
-        console.log('Propuestas completadas:', this.completedProposal);
+        localStorage.setItem('projects', JSON.stringify(this.projects))
+
+        // Filtrar los proyectos completados
+        this.projects = this.projects.filter((project) => project.status === 'Completado')
+
+        // Almacenar los reviews de cada proyecto
+        const reviewPromises = this.projects.map((project) => {
+          return reviewService
+            .getReviewProjectId(project.id)
+            .then((reviewResponse) => {
+              // Almacenar los reviews en el proyecto
+              project.reviews = reviewResponse.data
+              this.reviewsProject = this.reviewsProject.concat(reviewResponse.data)
+              console.log('Promesas de reviews:', this.reviewsProject)
+              
+            })
+            .catch((reviewError) => {
+              console.error('Error al obtener el review del proyecto:', reviewError)
+            })
+        })
+
+        // Esperar a que todas las solicitudes de revisión se completen
+        return Promise.all(reviewPromises)
+        
+      })
+      .then(() => {
+        // Calcular el promedio de los reviews
+        
+        if (this.reviewsProject.length > 0) {
+          const totalReviews = this.reviewsProject.length
+          const sumOfReviews = this.reviewsProject.reduce((sum, review) => sum + review.score, 0)
+          const averageRating = sumOfReviews / totalReviews
+          this.promReview = averageRating
+          console.log('Promedio de reviews:', this.promReview)
+        } else {
+          console.log('No hay reviews disponibles.')
+        }
+
+        console.log('Propuestas completadas:', this.projects)
+        console.log('Reviews de proyectos:', this.reviewsProject)
         console.log('Projects: ', this.projects)
         this.projectsLoaded = true // Marca los proyectos como cargados
       })
@@ -258,7 +295,7 @@ p {
   max-width: 60%;
   height: auto;
 }
-.project-details{
+.project-details {
   text-align: center;
 }
 .project-details a {

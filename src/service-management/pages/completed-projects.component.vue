@@ -54,7 +54,6 @@
 
 <script>
 import { ProjectListService } from '../service/project-list.service'
-import { ReviewService } from '../service/review-service'
 
 export default {
   name: 'Completed-Projects-Page',
@@ -65,7 +64,6 @@ export default {
       showDialog: false,
       businessValueSend: 0,
       commentText: '', 
-      projectId: 1,
       review : {
         score: 4,
         comment: null
@@ -85,22 +83,9 @@ export default {
     },
 
     sendComment(){
-      const reviewService = new ReviewService()
-      const businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
       console.log('Score:', this.businessValueSend);
       console.log('Comment:', this.commentText);
-      const reviewData = {
-        score: this.businessValueSend,
-        comment: this.commentText
-      }
-      reviewService
-        .createReview(this.projectId, businessProfileId, reviewData)
-        .then((response) => {
-          console.log('review', response)
-        })
-        .catch((error) => {
-          console.error('Error al obtener puntaje de proyecto', error)
-        })
+
     
     },
 
