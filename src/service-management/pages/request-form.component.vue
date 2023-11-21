@@ -22,6 +22,15 @@
           <option value="2000 - 2500">2000 - 2500</option>
           <option value="2500 - 3000">2500 - 3000</option>
           <option value="2500 - 3000">3000 - 3500</option>
+          <option value="2500 - 3000">3500 - 4000</option>
+          <option value="2500 - 3000">4000 - 4500</option>
+          <option value="2500 - 3000">4500 - 5000</option>
+          <option value="2500 - 3000">5000 - 5500</option>
+          <option value="2500 - 3000">5500 - 6000</option>
+          <option value="2500 - 3000">6000 - 6500</option>
+          <option value="2500 - 3000">6500 - 7000</option>
+          <option value="2500 - 3000">7000 - 7500</option>
+          <option value="2500 - 3000">7500 - ...</option>
         </select>
       </div>
 
@@ -31,6 +40,20 @@
           <option value="category1">Cocina</option>
           <option value="category2">Baño</option>
           <option value="category3">Patio</option>
+          <option value="category4">Sala</option>
+          <option value="category5">Habitación</option>
+          <option value="category6">Comedor</option>
+          <option value="category7">Jardín</option>
+          <option value="category8">Garaje</option>
+          <option value="category9">Piscina</option>
+          <option value="category10">Terraza</option>
+          <option value="category11">Oficina</option>
+          <option value="category12">Bodega</option>
+          <option value="category13">Cuarto de lavado</option>
+          <option value="category14">Cuarto de juegos</option>
+          <option value="category15">Cuarto de estudio</option>
+          
+
         </select>
       </div>
 
