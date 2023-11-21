@@ -1,5 +1,10 @@
 <template>
-  <h1>  Settings </h1>
+  
+    <div class="setitng">
+      <h1 style="border-bottom: 1px solid #ccc;">Settings</h1>
+      
+    </div> 
+
   <div class="body-buttons">
     
     <div class="buttons-configuration">
@@ -59,7 +64,7 @@ export default {
     text-align: left; /* Cambiado a alineación a la izquierda */
     padding: 20px 0;
     margin: 0;
-    border-bottom: 1px solid #ccc;
+    
   }
 
   h2 {
