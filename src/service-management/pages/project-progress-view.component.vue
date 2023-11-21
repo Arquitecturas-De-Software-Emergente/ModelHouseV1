@@ -32,12 +32,16 @@
                     <Checkbox-v v-model="resourcesChecked" :binary="true" @change="updateResourcesProgress" />
                 </div>
             </div>
+            <div class="button-container-client">
+                <button @click="completeProject(proposal)" class="accept-button">Complete Project</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import  { ref } from 'vue';
+import {ProjectListService} from '../service/project-list.service';
     export default {
         name: 'Project-Progress-View-Page',
         props: ['proposalId'],
@@ -82,8 +86,35 @@ import  { ref } from 'vue';
               resourcesChecked,
               updateActivitiesProgress,
               updateResourcesProgress,
+              proposal: []
             };
         },
+        created() {
+            const storedProposals = localStorage.getItem('proposals')
+            console.log(storedProposals);
+        },
+        methods: {
+        completeProject(proposal) {
+          console.log('Projecto completado:', proposal)
+          proposal.status = 'Completado'
+          this.updateProjectByStatus(proposal.id, proposal.status, { status: 'Completado' })
+        },
+        updateProjectByStatus(id, status) {
+          const projectListService = new ProjectListService()
+          projectListService
+            .updateProjectByStatus(id, status)
+            .then(() => {
+              if (status === 'Completado') {
+                const message = 'Cambio de estado a Aprobado exitoso.'
+                window.alert(message)
+              } 
+              window.location.reload()
+            })
+            .catch((error) => {
+              console.error('Error al cambiar el estado de la propuesta:', error)
+            })
+        },
+        }
     }
 </script>
 

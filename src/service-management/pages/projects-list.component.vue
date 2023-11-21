@@ -61,7 +61,8 @@ import { ProposalService } from '../service/proposal.service';
             getAccoundId(){
                 this.businessProfileId = JSON.parse(localStorage.getItem('account'))?.businessProfileId;
                 this.userProfileId = JSON.parse(localStorage.getItem('account'))?.userProfileId;
-            }
+            },
+
         }
     }
 </script>

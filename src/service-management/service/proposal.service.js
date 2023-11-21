@@ -10,6 +10,6 @@ export class ProposalService {
         return http.serviceManagementApi.put(`/proposal/${id}`, data);
     }
     updateProposalByStatus(id, data) {
-        return http.serviceManagementApi.put(`/proposal/${id}/status`, data);
+        return http.serviceManagementApi.put(`/request/${id}/status`, data);
     }
 }
