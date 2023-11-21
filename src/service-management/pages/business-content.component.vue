@@ -292,8 +292,8 @@ p {
 }
 
 .project-image img {
-  max-width: 60%;
-  height: auto;
+  width: 65%;
+  height: 400px;
 }
 .project-details {
   text-align: center;

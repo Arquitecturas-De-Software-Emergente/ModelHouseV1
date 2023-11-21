@@ -39,14 +39,14 @@
       <div class="business-card__column">
         <div class="business-card__info">
           <h3>{{ business.name }}</h3>
-          <div class="business-card__rating">
+          <!-- <div class="business-card__rating">
             <Rating-v
-              :modelValue= "businessReview"
+              :modelValue= "promReview"
               :cancel="false"
               :stars="5"
               :readonly="true"
             ></Rating-v>
-          </div>
+          </div> -->
           <p>{{ business.description }}</p>
         </div>
         <div class="business-card__button">
@@ -82,6 +82,7 @@ export default {
       searchTerm: '',
       filteredBusinesses: [],
       businesses: [],
+      promReview: 0,
       account: {
         id: null,
         name: null,
