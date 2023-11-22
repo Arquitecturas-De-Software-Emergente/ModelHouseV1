@@ -15,4 +15,7 @@ export class ProjectListService {
     getProjectsUserProfile(userId) {
         return http.securityApi.get(`/project/${userId}/user_profile`);
     }
+    updateProjectByStatus(id, status) {
+        return http.securityApi.put(`/project/${id}/status/${status}`);
+    }
 }

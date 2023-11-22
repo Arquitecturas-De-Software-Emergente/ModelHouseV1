@@ -9,7 +9,7 @@
             </div>
 
             <div class="description">
-                <span>{{projects.title}}</span>
+                <h2>{{projects.title}}</h2>
             </div>
 
             <div class="description">
@@ -110,13 +110,13 @@ import {ProjectListService} from '../service/project-list.service';
 
             const projectListService = new ProjectListService()
             projectListService.geteProjects().then((response) => {
-                const allProjects = response.data
+                const allProjects = response.data[this.$route.params.proposalId - 1]
                 console.log('Todos los proyectos:', allProjects)
-                this.project = allProjects.find((project) => project.id == this.$route.params.projectId)
-                this.projects.title = this.project.title
-                this.projects.description = this.project.description
-                this.projects.status = this.project.status
-                console.log('Proyecto:', this.project)
+                console.log("ewfhewg",allProjects.title)
+                this.projects.title = allProjects.title
+                this.projects.description = allProjects.description
+                //this.project = allProjects.find((project) => project.id == this.$route.params.projectId)
+                //console.log('Proyecto:', this.project)
             }).catch((error) => {
                 console.error('Error al obtener los proyectos:', error)
             })
@@ -125,22 +125,29 @@ import {ProjectListService} from '../service/project-list.service';
         completeProject(proposal) {
           console.log('Projecto completado:', proposal)
           proposal.status = 'Completado'
-          this.updateProjectByStatus(proposal.id, proposal.status, { status: 'Completado' })
+          this.updateProjectByStatus(this.$route.params.proposalId, proposal.status, "Completado")
         },
         updateProjectByStatus(id, status) {
-          const projectListService = new ProjectListService()
+          const projectListService = new ProjectListService();
           projectListService
             .updateProjectByStatus(id, status)
             .then(() => {
               if (status === 'Completado') {
-                const message = 'Cambio de estado a Aprobado exitoso.'
+                const message = 'Cambio de estado a Completado exitoso.'
                 window.alert(message)
-              } 
+              }
               window.location.reload()
+              this.redirectToHome();
             })
             .catch((error) => {
               console.error('Error al cambiar el estado de la propuesta:', error)
             })
+        },
+
+        redirectToHome() {
+            this.$router.push({
+                        name: "Home-Page"
+                    })
         },
 
         getAccoundId(){
